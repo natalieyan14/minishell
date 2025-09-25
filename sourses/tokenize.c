@@ -6,13 +6,13 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 18:40:24 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/09/06 13:24:51 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/09/23 21:05:09 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-extern int			g_exit_status;
+int					g_exit_status;
 
 static t_toktype	find_type(char *str, t_token *tokens, int i)
 {
@@ -91,7 +91,7 @@ int	if_invalid_input(t_token *t, int count, int i)
 		if (check_next(t, i) < 0)
 			return (-1);
 		if (t[i].type == T_PIPE && (i == 0 || i + 1 == count || t[i
-				+ 1].type == T_PIPE))
+					+ 1].type == T_PIPE))
 			return (err_message("syntax error near unexpected token `|'\n", "",
 					""), g_exit_status = 2, -1);
 	}

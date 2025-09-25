@@ -1,40 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/21 14:21:14 by vapoghos          #+#    #+#             */
-/*   Updated: 2025/09/23 21:04:46 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/09/23 21:01:51 by natalieyan        #+#    #+#             */
+/*   Updated: 2025/09/23 21:02:37 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atoi(const char *str)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	int	i;
-	int	num;
-	int	sign;
+	size_t	i;
 
-	sign = 1;
+	if (!s1 || !s2)
+		return (-1);
 	i = 0;
-	num = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || str[i] == '\v'
-		|| str[i] == '\f' || str[i] == '\r')
-		i++;
-	if (str[i] == '+')
-		i++;
-	else if (str[i] == '-')
+	while (s1[i] || s2[i])
 	{
-		sign *= -1;
+		if ((unsigned char)s1[i] > (unsigned char)s2[i])
+			return (1);
+		if ((unsigned char)s1[i] < (unsigned char)s2[i])
+			return (-1);
 		i++;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		num = (num * 10) + (str[i] - 48);
-		i++;
-	}
-	return (sign * num);
+	return (0);
 }
