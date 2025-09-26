@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 19:30:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/09/25 14:16:55 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/09/26 20:54:54 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 
 int			g_exit_status = 0;
 
-static int	handle_input(char *line, t_env *env_list)
+static int	handle_input(char *line, t_env **env_list)
 {
 	t_token		*tokens;
 	t_command	*cmd_list;
 	char		**env_array;
+	t_command	*tmp_cmd;
 	int			count;
 
 	count = count_tokens(line);
@@ -30,9 +31,19 @@ static int	handle_input(char *line, t_env *env_list)
 		return (0);
 	}
 	cmd_list = parse_tokens(tokens, count);
-	env_array = list_to_array(env_list);
-	exec_cmd_list(cmd_list, env_array);
-	free(env_array);
+	tmp_cmd = cmd_list;
+	while (tmp_cmd)
+	{
+		if (is_builtin(tmp_cmd))
+			exec_builtin(tmp_cmd, env_list);
+		else
+		{
+			env_array = list_to_array(*env_list);
+			exec_command(tmp_cmd->argc[0], env_array);
+			free(env_array);
+		}
+		tmp_cmd = tmp_cmd->next;
+	}
 	free_tokens(tokens);
 	free_cmd_list(cmd_list);
 	free(line);
@@ -50,7 +61,7 @@ static void	run_shell(t_env *env_list)
 			break ;
 		if (*line)
 			add_history(line);
-		if (!handle_input(line, env_list))
+		if (!handle_input(line, &env_list))
 			continue ;
 	}
 }

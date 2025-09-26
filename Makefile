@@ -7,7 +7,8 @@ LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline
 LIBFT_DIR = Libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-SRC = sourses/tokenize.c sourses/env.c sourses/main.c sourses/pars.c sourses/utils.c sourses/cmd_exec.c sourses/exec_cmd.c
+SRC = sourses/tokenize.c sourses/env.c sourses/env_2.c sourses/main.c sourses/pars.c \
+      sourses/utils.c sourses/cmd_exec.c sourses/exec_cmd.c sourses/bulitin.c sourses/bulitin_2.c
 
 OBJ = $(SRC:.c=.o)
 

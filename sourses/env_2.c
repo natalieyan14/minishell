@@ -1,36 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_cmd.c                                         :+:      :+:    :+:   */
+/*   env_2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/25 13:50:28 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/09/26 21:02:08 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/09/26 20:24:37 by natalieyan        #+#    #+#             */
+/*   Updated: 2025/09/26 20:25:07 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-void	exec_command(char *cmd, char **envp)
+void	free_env_list(t_env *env_list)
 {
-	pid_t	pid;
-	char	*argv[2];
+	t_env	*tmp;
 
-	argv[0] = cmd;
-	argv[1] = NULL;
-	pid = fork();
-	if (pid < 0)
-		perror("fork failed");
-	else if (pid == 0)
+	while (env_list)
 	{
-		if (execve(cmd, argv, envp) == -1)
-		{
-			perror("execve failed");
-			exit(EXIT_FAILURE);
-		}
+		tmp = env_list->next;
+		free(env_list->key);
+		free(env_list->value);
+		free(env_list);
+		env_list = tmp;
 	}
-	else
-		waitpid(pid, NULL, 0);
 }
 
+t_env	*init_env(char **envp)
+{
+	t_env	*env_list;
+	int		i;
+
+	env_list = NULL;
+	i = 0;
+	while (envp[i])
+	{
+		add_env_node(&env_list, envp[i]);
+		i++;
+	}
+	return (env_list);
+}
+
+char	**list_to_array(t_env *env_list)
+{
+	return (env_to_array(env_list));
+}

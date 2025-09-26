@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 18:40:24 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/09/23 21:05:09 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/09/26 20:18:03 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static t_toktype	find_type(char *str, t_token *tokens, int i)
 	return (T_WORD);
 }
 
-t_token	*tokenisation(char **args, int count)
+t_token	*tokenisation(char **argc, int count)
 {
 	t_token	*tokens;
 	int		i;
@@ -51,7 +51,7 @@ t_token	*tokenisation(char **args, int count)
 	i = 0;
 	while (i < count)
 	{
-		tokens[i].str = ft_strdup(args[i]);
+		tokens[i].str = ft_strdup(argc[i]);
 		if (!tokens[i].str)
 		{
 			while (i-- > 0)
@@ -59,7 +59,7 @@ t_token	*tokenisation(char **args, int count)
 			free(tokens);
 			return (NULL);
 		}
-		tokens[i].type = find_type(args[i], tokens, i);
+		tokens[i].type = find_type(argc[i], tokens, i);
 		i++;
 	}
 	return (tokens);

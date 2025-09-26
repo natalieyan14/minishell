@@ -6,13 +6,13 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 01:53:46 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/09/25 01:53:46 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/09/26 20:17:50 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-static int	count_args(t_token *tokens, int start, int end)
+static int	count_argc(t_token *tokens, int start, int end)
 {
 	int	count;
 	int	i;
@@ -36,7 +36,7 @@ static void	fill_command(t_command *cmd, t_token *tokens, int start, int end)
 	while (start < end)
 	{
 		if (tokens[start].type == T_WORD)
-			cmd->args[j++] = ft_strdup(tokens[start].str);
+			cmd->argc[j++] = ft_strdup(tokens[start].str);
 		else if (tokens[start].type == T_IN_FILE)
 			cmd->input = ft_strdup(tokens[start].str);
 		else if (tokens[start].type == T_OUT_FILE)
@@ -51,7 +51,7 @@ static void	fill_command(t_command *cmd, t_token *tokens, int start, int end)
 		}
 		start++;
 	}
-	cmd->args[j] = NULL;
+	cmd->argc[j] = NULL;
 }
 
 static t_command	*create_command(t_token *tokens, int start, int end)
@@ -62,14 +62,14 @@ static t_command	*create_command(t_token *tokens, int start, int end)
 	cmd = malloc(sizeof(t_command));
 	if (!cmd)
 		return (NULL);
-	cmd->args = NULL;
+	cmd->argc = NULL;
 	cmd->input = NULL;
 	cmd->output = NULL;
 	cmd->append = 0;
 	cmd->next = NULL;
-	arg_count = count_args(tokens, start, end);
-	cmd->args = malloc(sizeof(char *) * (arg_count + 1));
-	if (!cmd->args)
+	arg_count = count_argc(tokens, start, end);
+	cmd->argc = malloc(sizeof(char *) * (arg_count + 1));
+	if (!cmd->argc)
 		return (NULL);
 	fill_command(cmd, tokens, start, end);
 	return (cmd);

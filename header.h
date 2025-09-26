@@ -14,7 +14,6 @@
 
 extern int				g_exit_status;
 
-
 typedef enum e_toktype
 {
 	T_PIPE,
@@ -44,7 +43,7 @@ typedef struct s_env
 
 typedef struct s_command
 {
-	char				**args;
+	char				**argc;
 	char				*input;
 	char				*output;
 	int					append;
@@ -62,7 +61,7 @@ void					free_env_list(t_env *env_list);
 t_env					*init_env(char **envp);
 
 int						if_invalid_input(t_token *t, int count, int i);
-t_token					*tokenisation(char **args, int count);
+t_token					*tokenisation(char **argc, int count);
 int						count_tokens(char *line);
 char					**ft_split_input(char *line);
 void					free_tokens(t_token *tokens);
@@ -70,12 +69,21 @@ void					free_tokens(t_token *tokens);
 t_command				*parse_tokens(t_token *tokens, int count);
 void					free_cmd_list(t_command *cmd_list);
 void					exec_cmd_list(t_command *cmd_list, char **env);
+void					exec_command(char *cmd, char **envp);
 
 int						ft_strcmp(const char *s1, const char *s2);
 size_t					ft_strlen(const char *s);
 int						ft_atoi(const char *str);
 int						err_message(const char *m1, const char *m2,
 							const char *m3);
-void					exec_command(char *cmd, char **envp);
+int						is_builtin(t_command *cmd);
+void					exec_builtin(t_command *cmd, t_env **env);
+void					ft_echo(char **argc);
+void					ft_cd(t_command *cmd, t_env *env);
+void					ft_pwd(void);
+void					ft_export(t_env **env, char **argc);
+void					ft_unset(t_env **env, char **argc);
+void					ft_env(t_env *env);
+void					ft_exit(t_command *cmd);
 
 #endif
