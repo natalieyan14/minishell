@@ -5,14 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/26 18:46:56 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/09/26 20:41:03 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/10/25 02:04:20 by natalieyan        #+#    #+#             */
+/*   Updated: 2025/10/25 02:57:24 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
-
-extern int	g_exit_status;
 
 void	ft_echo(char **argc)
 {
@@ -35,7 +33,7 @@ void	ft_echo(char **argc)
 	}
 	if (!n_flag)
 		write(1, "\n", 1);
-	g_exit_status = 0;
+	SET_EXIT_STATUS(0);
 }
 
 void	ft_pwd(void)
@@ -46,7 +44,7 @@ void	ft_pwd(void)
 		printf("%s\n", cwd);
 	else
 		perror("pwd");
-	g_exit_status = 0;
+	SET_EXIT_STATUS(0);
 }
 
 void	ft_cd(t_command *cmd, t_env *env)
@@ -61,10 +59,10 @@ void	ft_cd(t_command *cmd, t_env *env)
 	if (!path || chdir(path) != 0)
 	{
 		perror("cd");
-		g_exit_status = 1;
+		SET_EXIT_STATUS(1);
 	}
 	else
-		g_exit_status = 0;
+		SET_EXIT_STATUS(0);
 }
 
 void	ft_exit(t_command *cmd)
@@ -89,7 +87,7 @@ void	ft_env(t_env *env)
 			printf("%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
-	g_exit_status = 0;
+	SET_EXIT_STATUS(0);
 }
 
 void	ft_export(t_env **env, char **argc)
@@ -137,5 +135,5 @@ void	ft_export(t_env **env, char **argc)
 			free(key);
 		i++;
 	}
-	g_exit_status = 0;
+	SET_EXIT_STATUS(0);
 }

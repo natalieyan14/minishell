@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/25 13:34:27 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/09/25 13:35:10 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/10/25 02:06:39 by natalieyan        #+#    #+#             */
+/*   Updated: 2025/10/25 02:06:39 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,19 @@ char	**ft_split_input(char *line)
 	return (res);
 }
 
-void	free_tokens(t_token *tokens)
+void	free_tokens(t_token *tokens, int count)
 {
 	int	i;
 
 	i = 0;
 	if (!tokens)
 		return ;
-	while (tokens[i].str)
-		free(tokens[i++].str);
+	while (i < count)
+	{
+		if (tokens[i].str)
+			free(tokens[i].str);
+		i++;
+	}
 	free(tokens);
 }
 

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/26 19:54:52 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/09/26 20:49:59 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/10/25 02:04:13 by natalieyan        #+#    #+#             */
+/*   Updated: 2025/10/25 02:57:30 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	ft_unset(t_env **env, char **argc)
 		}
 		i++;
 	}
-	g_exit_status = 0;
+	SET_EXIT_STATUS(0);
 }
 
 int	is_builtin(t_command *cmd)

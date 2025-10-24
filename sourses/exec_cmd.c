@@ -1,30 +1,16 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_cmd.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/25 13:50:28 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/09/26 21:02:08 by natalieyan       ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "header.h"
 
-void	exec_command(char *cmd, char **envp)
+void	exec_command(char **cmd, char **envp)
 {
 	pid_t	pid;
-	char	*argv[2];
 
-	argv[0] = cmd;
-	argv[1] = NULL;
+	(void)envp;
 	pid = fork();
 	if (pid < 0)
 		perror("fork failed");
 	else if (pid == 0)
 	{
-		if (execve(cmd, argv, envp) == -1)
+		if (execvp(cmd[0], cmd) == -1)
 		{
 			perror("execve failed");
 			exit(EXIT_FAILURE);
@@ -33,4 +19,3 @@ void	exec_command(char *cmd, char **envp)
 	else
 		waitpid(pid, NULL, 0);
 }
-
