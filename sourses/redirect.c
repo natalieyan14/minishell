@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:09 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/25 02:57:33 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/25 03:23:59 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,33 +36,58 @@ static int	setup_input_redirection(char *filename)
 	return (0);
 }
 
-static int	setup_output_redirection(char *filename, int append)
+static int	setup_output_redirections(t_redir *redir_list)
 {
-	int	fd;
-	int	flags;
+	t_redir	*curr;
+	int		fd;
+	int		flags;
+	int		*fds;
+	int		count;
+	int		i;
 
-	if (!filename)
+	if (!redir_list)
 		return (0);
-	flags = O_CREAT | O_WRONLY;
-	if (append)
-		flags |= O_APPEND;
-	else
-		flags |= O_TRUNC;
-	fd = open(filename, flags, 0644);
-	if (fd < 0)
-	{
-		perror(filename);
-		SET_EXIT_STATUS(1);
+	count = 0;
+	curr = redir_list;
+	while (curr && count++, curr = curr->next)
+		;
+	fds = malloc(sizeof(int) * count);
+	if (!fds)
 		return (-1);
+	i = 0;
+	curr = redir_list;
+	while (curr)
+	{
+		flags = O_CREAT | O_WRONLY;
+		if (curr->append)
+			flags |= O_APPEND;
+		else
+			flags |= O_TRUNC;
+		fd = open(curr->filename, flags, 0644);
+		if (fd < 0)
+		{
+			perror(curr->filename);
+			while (--i >= 0)
+				close(fds[i]);
+			free(fds);
+			SET_EXIT_STATUS(1);
+			return (-1);
+		}
+		fds[i++] = fd;
+		curr = curr->next;
 	}
-	if (dup2(fd, STDOUT_FILENO) < 0)
+	for (i = 0; i < count - 1; i++)
+		close(fds[i]);
+	if (dup2(fds[count - 1], STDOUT_FILENO) < 0)
 	{
 		perror("dup2");
-		close(fd);
+		close(fds[count - 1]);
+		free(fds);
 		SET_EXIT_STATUS(1);
 		return (-1);
 	}
-	close(fd);
+	close(fds[count - 1]);
+	free(fds);
 	return (0);
 }
 
@@ -70,7 +95,7 @@ int	setup_redirections(t_command *cmd)
 {
 	if (setup_input_redirection(cmd->input) < 0)
 		return (-1);
-	if (setup_output_redirection(cmd->output, cmd->append) < 0)
+	if (setup_output_redirections(cmd->output_list) < 0)
 		return (-1);
 	return (0);
 }

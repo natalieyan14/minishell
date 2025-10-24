@@ -54,12 +54,18 @@ typedef struct s_env
 	struct s_env				*next;
 }								t_env;
 
+typedef struct s_redir
+{
+	char						*filename;
+	int							append;
+	struct s_redir				*next;
+}								t_redir;
+
 typedef struct s_command
 {
 	char						**argc;
 	char						*input;
-	char						*output;
-	int							append;
+	t_redir						*output_list;
 	struct s_command			*next;
 }								t_command;
 
@@ -88,6 +94,9 @@ void							process_heredocs(t_token *tokens, int count);
 int								setup_redirections(t_command *cmd);
 void							exec_command_with_redirections(t_command *cmd,
 									char **envp);
+t_redir							*add_output_redir(t_redir **head,
+									char *filename, int append);
+void							free_redir_list(t_redir *head);
 
 t_command						*parse_tokens(t_token *tokens, int count);
 void							free_cmd_list(t_command *cmd_list);

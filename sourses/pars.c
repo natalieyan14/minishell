@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:25 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/25 02:57:32 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/25 03:23:58 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,45 +28,51 @@ static int	count_argc(t_token *tokens, int start, int end)
 	return (count);
 }
 
-static int	validate_redirections(t_token *tokens, int start, int end)
+t_redir	*add_output_redir(t_redir **head, char *filename, int append)
 {
-	int	i;
-	int	output_count;
+	t_redir	*new_redir;
+	t_redir	*curr;
 
-	output_count = 0;
-	i = start;
-	while (i < end)
+	new_redir = malloc(sizeof(t_redir));
+	if (!new_redir)
+		return (NULL);
+	new_redir->filename = ft_strdup(filename);
+	if (!new_redir->filename)
 	{
-		if (tokens[i].type == T_OUT_FILE || tokens[i].type == T_APPEND_FILE)
-			output_count++;
-		i++;
+		free(new_redir);
+		return (NULL);
 	}
-	if (output_count <= 1)
-		return (0);
-	i = start;
-	while (i < end)
+	new_redir->append = append;
+	new_redir->next = NULL;
+	if (!*head)
+		*head = new_redir;
+	else
 	{
-		if (tokens[i].type == T_OUT_FILE || tokens[i].type == T_APPEND_FILE)
-		{
-			if (access(tokens[i].str, F_OK) == 0 && access(tokens[i].str,
-					W_OK) != 0)
-			{
-				perror(tokens[i].str);
-				SET_EXIT_STATUS(1);
-				return (-1);
-			}
-		}
-		i++;
+		curr = *head;
+		while (curr->next)
+			curr = curr->next;
+		curr->next = new_redir;
 	}
-	return (0);
+	return (new_redir);
+}
+
+void	free_redir_list(t_redir *head)
+{
+	t_redir	*tmp;
+
+	while (head)
+	{
+		tmp = head;
+		head = head->next;
+		free(tmp->filename);
+		free(tmp);
+	}
 }
 
 static int	fill_command(t_command *cmd, t_token *tokens, int start, int end)
 {
 	int	j;
 
-	if (validate_redirections(tokens, start, end) < 0)
-		return (-1);
 	j = 0;
 	while (start < end)
 	{
@@ -87,17 +93,13 @@ static int	fill_command(t_command *cmd, t_token *tokens, int start, int end)
 		}
 		else if (tokens[start].type == T_OUT_FILE)
 		{
-			if (cmd->output)
-				free(cmd->output);
-			cmd->output = ft_strdup(tokens[start].str);
-			cmd->append = 0;
+			if (!add_output_redir(&cmd->output_list, tokens[start].str, 0))
+				return (-1);
 		}
 		else if (tokens[start].type == T_APPEND_FILE)
 		{
-			if (cmd->output)
-				free(cmd->output);
-			cmd->output = ft_strdup(tokens[start].str);
-			cmd->append = 1;
+			if (!add_output_redir(&cmd->output_list, tokens[start].str, 1))
+				return (-1);
 		}
 		start++;
 	}
@@ -115,8 +117,7 @@ static t_command	*create_command(t_token *tokens, int start, int end)
 		return (NULL);
 	cmd->argc = NULL;
 	cmd->input = NULL;
-	cmd->output = NULL;
-	cmd->append = 0;
+	cmd->output_list = NULL;
 	cmd->next = NULL;
 	arg_count = count_argc(tokens, start, end);
 	cmd->argc = malloc(sizeof(char *) * (arg_count + 1));
