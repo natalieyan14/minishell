@@ -10,11 +10,6 @@
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdio.h>
-
-extern void						rl_replace_line(const char *, int);
-extern int						rl_on_new_line(void);
-extern void						rl_redisplay(void);
-# include <signal.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/stat.h>
@@ -22,7 +17,8 @@ extern void						rl_redisplay(void);
 # include <unistd.h>
 
 extern volatile sig_atomic_t	g_signal_received;
-
+extern int						rl_on_new_line(void);
+extern void						rl_redisplay(void);
 # define SET_EXIT_STATUS(x) set_exit_status(x)
 # define GET_EXIT_STATUS() get_current_exit_status()
 

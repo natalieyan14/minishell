@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:09 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/25 03:23:59 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/25 16:12:18 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,14 @@ static int	setup_output_redirections(t_redir *redir_list)
 
 int	setup_redirections(t_command *cmd)
 {
-	if (setup_input_redirection(cmd->input) < 0)
+	int	input_result;
+	int	output_result;
+
+	input_result = setup_input_redirection(cmd->input);
+	if (input_result < 0)
 		return (-1);
-	if (setup_output_redirections(cmd->output_list) < 0)
+	output_result = setup_output_redirections(cmd->output_list);
+	if (output_result < 0)
 		return (-1);
 	return (0);
 }
