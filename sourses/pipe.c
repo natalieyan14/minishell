@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipeline.c                                         :+:      :+:    :+:   */
+/*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:02 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/25 02:57:33 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/25 23:34:35 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 				{
 					if (S_ISDIR(st.st_mode))
 					{
-						fprintf(stderr, "%s: is a directory\n", cmd->argc[0]);
+						ft_putstr_fd(cmd->argc[0], STDERR_FILENO);
+						ft_putstr_fd(": is a directory\n", STDERR_FILENO);
 						exit(126);
 					}
 					else if (access(cmd->argc[0], X_OK) != 0)
@@ -70,7 +71,8 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 			{
 				if (errno == ENOENT)
 				{
-					fprintf(stderr, "%s: command not found\n", cmd->argc[0]);
+					ft_putstr_fd(cmd->argc[0], STDERR_FILENO);
+					ft_putstr_fd(": command not found\n", STDERR_FILENO);
 					exit(127);
 				}
 				else if (errno == EACCES)
@@ -209,8 +211,8 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 					{
 						if (S_ISDIR(st.st_mode))
 						{
-							fprintf(stderr, "%s: is a directory\n",
-								current->argc[0]);
+							ft_putstr_fd(current->argc[0], STDERR_FILENO);
+							ft_putstr_fd(": is a directory\n", STDERR_FILENO);
 							exit(126);
 						}
 						else if (access(current->argc[0], X_OK) != 0)
@@ -229,8 +231,8 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 				{
 					if (errno == ENOENT)
 					{
-						fprintf(stderr, "%s: command not found\n",
-							current->argc[0]);
+						ft_putstr_fd(current->argc[0], STDERR_FILENO);
+						ft_putstr_fd(": command not found\n", STDERR_FILENO);
 						exit(127);
 					}
 					else if (errno == EACCES)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   header.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/26 03:53:16 by natalieyan        #+#    #+#             */
+/*   Updated: 2025/10/26 03:53:18 by natalieyan       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef HEADER_H
 # define HEADER_H
 # define PATH_MAX 4096
@@ -57,6 +69,16 @@ typedef struct s_redir
 	struct s_redir				*next;
 }								t_redir;
 
+typedef struct s_tokenizer
+{
+	t_token						*tokens;
+	char						*buf;
+	int							count;
+	int							i;
+	int							sq;
+	int							dq;
+	int							quote_type;
+}								t_tokenizer;
 typedef struct s_command
 {
 	char						**argc;
@@ -83,6 +105,20 @@ char							**ft_split_input(char *line);
 void							free_tokens(t_token *tokens, int count);
 void							expand_dollar_vars(t_token *tokens, int count,
 									t_env *env_list);
+
+/* Tokenizer utility functions */
+int								is_special_char(char c);
+void							append_char(char **buf, char c);
+void							add_token_with_quotes(t_token **tokens,
+									int *count, char *str, int quote_type);
+void							add_token(t_token **tokens, int *count,
+									char *str);
+void							init_tokenizer(t_tokenizer *tok);
+
+/* Tokenizer handler functions */
+void							handle_special_chars(t_tokenizer *tok,
+									char *input);
+void							handle_quotes(t_tokenizer *tok, char c);
 
 int								handle_heredoc(char *limiter);
 void							process_heredocs(t_token *tokens, int count);

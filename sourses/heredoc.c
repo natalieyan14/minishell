@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:10 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/25 02:57:33 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/25 23:34:35 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ static void	run_heredoc(int pipe_fd, char *limiter)
 		str = readline("> ");
 		if (!str)
 		{
-			fprintf(stderr,
-				"minishell: warning: here-document delimited by end-of-file (wanted `%s')\n",
-				limiter);
+			write(STDERR_FILENO,
+				"minishell: warning: here-document delimited by end-of-file\n",
+				60);
 			break ;
 		}
 		if (ft_strcmp(str, limiter) == 0)

@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:17 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/25 02:48:23 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/25 23:34:35 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ static int	has_syntax_errors(char *str)
 			if (str[i] == '(' || str[i] == ')' || str[i] == '{'
 				|| str[i] == '}')
 			{
-				fprintf(stderr,
-					"minishell: syntax error near unexpected token `%c'\n",
-					str[i]);
+				write(STDERR_FILENO, "minishell: syntax error near unexpected token\n", 46);
 				SET_EXIT_STATUS(2);
 				return (1);
 			}
@@ -117,8 +115,7 @@ static char	*read_multiline_input(void)
 	{
 		if (!is_interactive)
 		{
-			fprintf(stderr,
-				"minishell: unexpected EOF while looking for matching quote\n");
+			write(STDERR_FILENO, "minishell: unexpected EOF while looking for matching quote\n", 59);
 			SET_EXIT_STATUS(2);
 			free(full_line);
 			return (NULL);
@@ -126,8 +123,7 @@ static char	*read_multiline_input(void)
 		continuation = readline("> ");
 		if (!continuation)
 		{
-			fprintf(stderr,
-				"minishell: unexpected EOF while looking for matching quote\n");
+			write(STDERR_FILENO, "minishell: unexpected EOF while looking for matching quote\n", 59);
 			SET_EXIT_STATUS(2);
 			free(full_line);
 			return (NULL);
