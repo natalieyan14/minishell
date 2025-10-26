@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:53:16 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/26 03:53:18 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/26 04:00:39 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void							add_token_with_quotes(t_token **tokens,
 void							add_token(t_token **tokens, int *count,
 									char *str);
 void							init_tokenizer(t_tokenizer *tok);
+void							flush_buffer(t_tokenizer *tok);
 
 /* Tokenizer handler functions */
 void							handle_special_chars(t_tokenizer *tok,

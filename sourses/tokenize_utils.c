@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:50:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/26 03:50:33 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/26 04:01:21 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,3 +65,4 @@ void	init_tokenizer(t_tokenizer *tok)
 	tok->dq = 0;
 	tok->quote_type = 0;
 }
+
