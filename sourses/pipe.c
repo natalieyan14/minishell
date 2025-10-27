@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:02 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/25 23:34:35 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/27 12:18:08 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 static int	exec_single_command(t_command *cmd, t_env **env_list)
 {
-	char	**env_array;
-	int		status;
-	pid_t	pid;
-				struct stat st;
+	char		**env_array;
+	int			status;
+	pid_t		pid;
+	struct stat	st;
 
 	if (!cmd->argc || !cmd->argc[0] || ft_strlen(cmd->argc[0]) == 0)
 	{
@@ -38,7 +38,7 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 		if (pid < 0)
 		{
 			perror("fork failed");
-			free(env_array);
+			free_string_array(env_array);
 			return (1);
 		}
 		else if (pid == 0)
@@ -95,7 +95,7 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 			else if (WIFSIGNALED(status))
 				SET_EXIT_STATUS(128 + WTERMSIG(status));
 		}
-		free(env_array);
+		free_string_array(env_array);
 	}
 	return (GET_EXIT_STATUS());
 }
@@ -121,7 +121,7 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 	int			i;
 	t_command	*current;
 	int			status;
-					struct stat st;
+	struct stat	st;
 
 	if (!cmd_list)
 		return (0);

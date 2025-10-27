@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:54 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/25 02:04:55 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/27 12:16:48 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,21 @@ void	free_env_list(t_env *env_list)
 		free(env_list);
 		env_list = tmp;
 	}
+}
+
+void	free_string_array(char **array)
+{
+	int	i;
+
+	if (!array)
+		return ;
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
 }
 
 t_env	*init_env(char **envp)

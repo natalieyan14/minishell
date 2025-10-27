@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:53:16 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/26 04:00:39 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/27 12:18:40 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ char							**list_to_array(t_env *env_list);
 void							print_env(char **env);
 void							add_env_node(t_env **env_list, char *env_line);
 void							free_env_list(t_env *env_list);
+void							free_string_array(char **array);
 t_env							*init_env(char **envp);
 
 t_toktype						find_type(char *str, t_token *tokens, int i);
@@ -106,7 +107,6 @@ void							free_tokens(t_token *tokens, int count);
 void							expand_dollar_vars(t_token *tokens, int count,
 									t_env *env_list);
 
-/* Tokenizer utility functions */
 int								is_special_char(char c);
 void							append_char(char **buf, char c);
 void							add_token_with_quotes(t_token **tokens,
@@ -116,7 +116,6 @@ void							add_token(t_token **tokens, int *count,
 void							init_tokenizer(t_tokenizer *tok);
 void							flush_buffer(t_tokenizer *tok);
 
-/* Tokenizer handler functions */
 void							handle_special_chars(t_tokenizer *tok,
 									char *input);
 void							handle_quotes(t_tokenizer *tok, char c);
