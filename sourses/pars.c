@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:25 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/25 03:23:58 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/29 00:34:55 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,46 @@ void	free_redir_list(t_redir *head)
 	}
 }
 
+t_input_redir	*add_input_redir(t_input_redir **head, char *filename)
+{
+	t_input_redir	*new_redir;
+	t_input_redir	*curr;
+
+	new_redir = malloc(sizeof(t_input_redir));
+	if (!new_redir)
+		return (NULL);
+	new_redir->filename = ft_strdup(filename);
+	if (!new_redir->filename)
+	{
+		free(new_redir);
+		return (NULL);
+	}
+	new_redir->next = NULL;
+	if (!*head)
+		*head = new_redir;
+	else
+	{
+		curr = *head;
+		while (curr->next)
+			curr = curr->next;
+		curr->next = new_redir;
+	}
+	return (new_redir);
+}
+
+void	free_input_redir_list(t_input_redir *head)
+{
+	t_input_redir	*tmp;
+
+	while (head)
+	{
+		tmp = head;
+		head = head->next;
+		free(tmp->filename);
+		free(tmp);
+	}
+}
+
 static int	fill_command(t_command *cmd, t_token *tokens, int start, int end)
 {
 	int	j;
@@ -87,6 +127,10 @@ static int	fill_command(t_command *cmd, t_token *tokens, int start, int end)
 		}
 		else if (tokens[start].type == T_IN_FILE)
 		{
+			if (!add_input_redir(&cmd->input_list, tokens[start].str))
+				return (-1);
+			if (!add_ordered_redir(&cmd->ordered_redirs, REDIR_INPUT, tokens[start].str, start))
+				return (-1);
 			if (cmd->input)
 				free(cmd->input);
 			cmd->input = ft_strdup(tokens[start].str);
@@ -95,10 +139,14 @@ static int	fill_command(t_command *cmd, t_token *tokens, int start, int end)
 		{
 			if (!add_output_redir(&cmd->output_list, tokens[start].str, 0))
 				return (-1);
+			if (!add_ordered_redir(&cmd->ordered_redirs, REDIR_OUTPUT, tokens[start].str, start))
+				return (-1);
 		}
 		else if (tokens[start].type == T_APPEND_FILE)
 		{
 			if (!add_output_redir(&cmd->output_list, tokens[start].str, 1))
+				return (-1);
+			if (!add_ordered_redir(&cmd->ordered_redirs, REDIR_APPEND, tokens[start].str, start))
 				return (-1);
 		}
 		start++;
@@ -117,7 +165,9 @@ static t_command	*create_command(t_token *tokens, int start, int end)
 		return (NULL);
 	cmd->argc = NULL;
 	cmd->input = NULL;
+	cmd->input_list = NULL;
 	cmd->output_list = NULL;
+	cmd->ordered_redirs = NULL;
 	cmd->next = NULL;
 	arg_count = count_argc(tokens, start, end);
 	cmd->argc = malloc(sizeof(char *) * (arg_count + 1));
@@ -167,4 +217,46 @@ t_command	*parse_tokens(t_token *tokens, int count)
 			i++;
 	}
 	return (head);
+}
+
+t_ordered_redir	*add_ordered_redir(t_ordered_redir **head, t_redir_type type, char *filename, int order)
+{
+	t_ordered_redir	*new_redir;
+	t_ordered_redir	*curr;
+
+	new_redir = malloc(sizeof(t_ordered_redir));
+	if (!new_redir)
+		return (NULL);
+	new_redir->type = type;
+	new_redir->filename = ft_strdup(filename);
+	if (!new_redir->filename)
+	{
+		free(new_redir);
+		return (NULL);
+	}
+	new_redir->order = order;
+	new_redir->next = NULL;
+	if (!*head)
+		*head = new_redir;
+	else
+	{
+		curr = *head;
+		while (curr->next)
+			curr = curr->next;
+		curr->next = new_redir;
+	}
+	return (new_redir);
+}
+
+void	free_ordered_redir_list(t_ordered_redir *head)
+{
+	t_ordered_redir	*tmp;
+
+	while (head)
+	{
+		tmp = head;
+		head = head->next;
+		free(tmp->filename);
+		free(tmp);
+	}
 }

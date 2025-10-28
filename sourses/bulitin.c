@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:20 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/28 23:31:52 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/29 00:02:22 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,50 +139,90 @@ void	ft_env(t_env *env)
 	set_exit_status(0);
 }
 
+static int	is_valid_identifier(char *str)
+{
+	int	i;
+
+	if (!str || str[0] == '\0')
+		return (0);
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (0);
+	i = 1;
+	while (str[i] && str[i] != '=')
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+static void	export_variable(t_env **env, char *key, char *val)
+{
+	t_env	*tmp;
+	int		found;
+
+	tmp = *env;
+	found = 0;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->key, key))
+		{
+			if (val)
+			{
+				free(tmp->value);
+				tmp->value = ft_strdup(val);
+			}
+			found = 1;
+			break ;
+		}
+		tmp = tmp->next;
+	}
+	if (!found)
+	{
+		tmp = malloc(sizeof(t_env));
+		tmp->key = ft_strdup(key);
+		tmp->value = val ? ft_strdup(val) : ft_strdup("");
+		tmp->next = *env;
+		*env = tmp;
+	}
+}
+
 void	ft_export(t_env **env, char **argc)
 {
 	int		i;
 	char	*eq;
 	char	*key;
 	char	*val;
-	t_env	*tmp;
-	int		found;
+	int		exit_code;
 
 	i = 1;
+	exit_code = 0;
 	while (argc[i])
 	{
-		eq = ft_strchr(argc[i], '=');
-		if (!eq)
+		if (!is_valid_identifier(argc[i]))
 		{
+			ft_putstr_fd("minishell: export: `", STDERR_FILENO);
+			ft_putstr_fd(argc[i], STDERR_FILENO);
+			ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+			exit_code = 1;
 			i++;
 			continue ;
 		}
-		key = ft_substr(argc[i], 0, eq - argc[i]);
-		val = ft_strdup(eq + 1);
-		tmp = *env;
-		found = 0;
-		while (tmp)
+		eq = ft_strchr(argc[i], '=');
+		if (eq)
 		{
-			if (!ft_strcmp(tmp->key, key))
-			{
-				free(tmp->value);
-				tmp->value = val;
-				found = 1;
-				break ;
-			}
-			tmp = tmp->next;
-		}
-		if (!found)
-		{
-			tmp = malloc(sizeof(t_env));
-			tmp->key = key;
-			tmp->value = val;
-			tmp->next = *env;
-			*env = tmp;
+			key = ft_substr(argc[i], 0, eq - argc[i]);
+			val = eq + 1;
 		}
 		else
-			free(key);
+		{
+			key = ft_strdup(argc[i]);
+			val = NULL;
+		}
+		export_variable(env, key, val);
+		free(key);
 		i++;
 	}
-	set_exit_status(0);
+	set_exit_status(exit_code);
 }

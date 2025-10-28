@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:02 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/27 23:59:16 by armtoros         ###   ########.fr       */
+/*   Updated: 2025/10/29 00:34:55 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 	int			status;
 	pid_t		pid;
 	struct stat	st;
+	int			saved_stdin;
+	int			saved_stdout;
 
 	if (!cmd->argc || !cmd->argc[0] || ft_strlen(cmd->argc[0]) == 0)
 	{
@@ -26,7 +28,19 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 	}
 	if (is_builtin(cmd))
 	{
+		saved_stdin = dup(STDIN_FILENO);
+		saved_stdout = dup(STDOUT_FILENO);
+		if (setup_ordered_redirections(cmd) < 0)
+		{
+			close(saved_stdin);
+			close(saved_stdout);
+			return (1);
+		}
 		exec_builtin(cmd, env_list);
+		dup2(saved_stdin, STDIN_FILENO);
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdin);
+		close(saved_stdout);
 		return (get_current_exit_status());
 	}
 	else
@@ -46,7 +60,7 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 		else if (pid == 0)
 		{
 			setup_child_signals();
-			if (setup_redirections(cmd) < 0)
+			if (setup_ordered_redirections(cmd) < 0)
 				exit(1);
 			if (ft_strchr(cmd->argc[0], '/'))
 			{
@@ -116,13 +130,13 @@ static int	count_commands(t_command *cmd_list)
 
 int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 {
-	int			cmd_count;
-	int			**pipes;
-	pid_t		*pids;
-	int			i;
-	t_command	*current;
-	int			status;
-	struct stat	st;
+	int cmd_count;
+	int **pipes;
+	pid_t *pids;
+	int i;
+	t_command *current;
+	int status;
+	struct stat st;
 
 	if (!cmd_list)
 		return (0);
@@ -197,7 +211,7 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 				close(pipes[j][0]);
 				close(pipes[j][1]);
 			}
-			if (setup_redirections(current) < 0)
+			if (setup_ordered_redirections(current) < 0)
 				exit(1);
 			if (!current->argc || !current->argc[0]
 				|| ft_strlen(current->argc[0]) == 0)
