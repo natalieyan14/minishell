@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:39 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/25 02:57:31 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/28 23:22:04 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,28 +80,6 @@ static char	*replace_dollar_var(char *str, int start, int end,
 	return (result);
 }
 
-static int	find_dollar_outside_quotes(char *str)
-{
-	int	i;
-	int	in_single_quote;
-	int	in_double_quote;
-
-	i = 0;
-	in_single_quote = 0;
-	in_double_quote = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'' && !in_double_quote)
-			in_single_quote = !in_single_quote;
-		else if (str[i] == '"' && !in_single_quote)
-			in_double_quote = !in_double_quote;
-		else if (str[i] == '$' && !in_single_quote)
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
 void	expand_dollar_vars(t_token *tokens, int count, t_env *env_list)
 {
 	int		i;
@@ -119,32 +97,37 @@ void	expand_dollar_vars(t_token *tokens, int count, t_env *env_list)
 				|| tokens[i].type == T_APPEND_FILE)
 			&& tokens[i].quote_type != 1)
 		{
-			while ((dollar_pos = find_dollar_outside_quotes(tokens[i].str)) !=
-				-1)
+			dollar_pos = 0;
+			while (dollar_pos < (int)ft_strlen(tokens[i].str))
 			{
-				var_name = get_var_name(tokens[i].str, dollar_pos, &var_end);
-				if (!var_name)
-					break ;
-				if (ft_strlen(var_name) == 0)
+				if (tokens[i].str[dollar_pos] == '$')
 				{
+					var_name = get_var_name(tokens[i].str, dollar_pos,
+							&var_end);
+					if (!var_name || ft_strlen(var_name) == 0)
+					{
+						if (var_name)
+							free(var_name);
+						dollar_pos++;
+						continue ;
+					}
+					if (ft_strcmp(var_name, "?") == 0)
+						var_value = ft_itoa(get_current_exit_status());
+					else
+						var_value = get_env_value(env_list, var_name);
+					new_str = replace_dollar_var(tokens[i].str, dollar_pos,
+							var_end, var_value);
+					free(tokens[i].str);
 					free(var_name);
-					break ;
-				}
-				if (ft_strcmp(var_name, "?") == 0)
-				{
-					var_value = ft_itoa(GET_EXIT_STATUS());
+					if (var_value)
+						free(var_value);
+					if (!new_str)
+						break ;
+					tokens[i].str = new_str;
+					dollar_pos += ft_strlen(var_value ? var_value : "");
 				}
 				else
-					var_value = get_env_value(env_list, var_name);
-				new_str = replace_dollar_var(tokens[i].str, dollar_pos, var_end,
-						var_value);
-				free(tokens[i].str);
-				free(var_name);
-				if (var_value)
-					free(var_value);
-				if (!new_str)
-					break ;
-				tokens[i].str = new_str;
+					dollar_pos++;
 			}
 		}
 		i++;

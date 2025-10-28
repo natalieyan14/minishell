@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:17 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/25 23:34:35 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/28 23:31:52 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ static int	has_syntax_errors(char *str)
 			if (str[i] == '(' || str[i] == ')' || str[i] == '{'
 				|| str[i] == '}')
 			{
-				write(STDERR_FILENO, "minishell: syntax error near unexpected token\n", 46);
-				SET_EXIT_STATUS(2);
+				write(STDERR_FILENO,
+					"minishell: syntax error near unexpected token\n", 46);
+				set_exit_status(2);
 				return (1);
 			}
 		}
@@ -115,16 +116,20 @@ static char	*read_multiline_input(void)
 	{
 		if (!is_interactive)
 		{
-			write(STDERR_FILENO, "minishell: unexpected EOF while looking for matching quote\n", 59);
-			SET_EXIT_STATUS(2);
+			write(STDERR_FILENO,
+				"minishell: unexpected EOF while looking for matching quote\n",
+				59);
+			set_exit_status(2);
 			free(full_line);
 			return (NULL);
 		}
 		continuation = readline("> ");
 		if (!continuation)
 		{
-			write(STDERR_FILENO, "minishell: unexpected EOF while looking for matching quote\n", 59);
-			SET_EXIT_STATUS(2);
+			write(STDERR_FILENO,
+				"minishell: unexpected EOF while looking for matching quote\n",
+				59);
+			set_exit_status(2);
 			free(full_line);
 			return (NULL);
 		}
@@ -140,31 +145,34 @@ static char	*read_multiline_input(void)
 static int	run_shell(t_env *env_list)
 {
 	char	*line;
-	int		exit_status;
-	int		signal_status;
 
-	exit_status = 0;
 	setup_interactive_signals();
 	while (1)
 	{
-		signal_status = check_signal_status();
-		if (signal_status)
-			exit_status = signal_status;
 		line = read_multiline_input();
+		/* ---- HANDLE CTRL-D (EOF) ---- */
 		if (!line)
+		{
+			if (isatty(STDIN_FILENO))
+				write(1, "exit\n", 5);
 			break ;
+		}
+		/* ---- HANDLE NON-EMPTY INPUT ---- */
 		if (*line)
+		{
 			add_history(line);
-		if (!handle_input(line, &env_list))
-			continue ;
+			handle_input(line, &env_list);
+		}
+		else
+			free(line);
 	}
-	return (exit_status);
+	return (get_current_exit_status());
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_env	*env_list;
-	int		exit_status;
+	t_env *env_list;
+	int exit_status;
 
 	(void)argc;
 	(void)argv;

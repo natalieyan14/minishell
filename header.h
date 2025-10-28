@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:53:16 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/27 12:18:40 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/28 23:17:19 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,6 @@
 # include <unistd.h>
 
 extern volatile sig_atomic_t	g_signal_received;
-extern int						rl_on_new_line(void);
-extern void						rl_redisplay(void);
-# define SET_EXIT_STATUS(x) set_exit_status(x)
-# define GET_EXIT_STATUS() get_current_exit_status()
 
 typedef enum e_toktype
 {
@@ -158,5 +154,7 @@ void							setup_execution_signals(void);
 int								check_signal_status(void);
 void							set_exit_status(int status);
 int								get_current_exit_status(void);
+void							setup_child_signals(void);
+void							handle_child_signal_exit(int status);
 
 #endif

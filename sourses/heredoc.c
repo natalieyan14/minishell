@@ -84,7 +84,7 @@ int	handle_heredoc(char *limiter)
 	if (pipe(pipe_fd) == -1)
 	{
 		perror("minishell: pipe error");
-		SET_EXIT_STATUS(1);
+		set_exit_status(1);
 		return (-1);
 	}
 	original_stdin = dup(STDIN_FILENO);
@@ -106,7 +106,7 @@ void	process_heredocs(t_token *tokens, int count)
 		{
 			if (handle_heredoc(tokens[i + 1].str) < 0)
 			{
-				SET_EXIT_STATUS(1);
+				set_exit_status(1);
 				return ;
 			}
 			i += 2;

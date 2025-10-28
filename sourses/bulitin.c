@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:20 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/25 23:30:21 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/28 23:31:52 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_echo(char **argc)
 	}
 	if (!n_flag)
 		write(1, "\n", 1);
-	SET_EXIT_STATUS(0);
+	set_exit_status(0);
 }
 
 void	ft_pwd(void)
@@ -47,7 +47,7 @@ void	ft_pwd(void)
 	}
 	else
 		perror("pwd");
-	SET_EXIT_STATUS(0);
+	set_exit_status(0);
 }
 
 void	ft_cd(t_command *cmd, t_env *env)
@@ -62,10 +62,10 @@ void	ft_cd(t_command *cmd, t_env *env)
 	if (!path || chdir(path) != 0)
 	{
 		perror("cd");
-		SET_EXIT_STATUS(1);
+		set_exit_status(1);
 	}
 	else
-		SET_EXIT_STATUS(0);
+		set_exit_status(0);
 }
 
 static int	is_numeric(char *str)
@@ -97,7 +97,10 @@ void	ft_exit(t_command *cmd)
 	while (cmd->argc[arg_count])
 		arg_count++;
 	arg_count--;
-	printf("exit\n");
+	if (isatty(STDIN_FILENO))
+		write(1, "exit\n", 5);
+	else
+		write(1, "minishell> \n", 12);
 	if (arg_count == 0)
 	{
 		exit(0);
@@ -117,7 +120,7 @@ void	ft_exit(t_command *cmd)
 	else
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
-		SET_EXIT_STATUS(1);
+		set_exit_status(1);
 		return ;
 	}
 }
@@ -133,7 +136,7 @@ void	ft_env(t_env *env)
 			printf("%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
-	SET_EXIT_STATUS(0);
+	set_exit_status(0);
 }
 
 void	ft_export(t_env **env, char **argc)
@@ -181,5 +184,5 @@ void	ft_export(t_env **env, char **argc)
 			free(key);
 		i++;
 	}
-	SET_EXIT_STATUS(0);
+	set_exit_status(0);
 }

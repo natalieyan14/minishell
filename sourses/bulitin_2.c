@@ -41,7 +41,7 @@ void	ft_unset(t_env **env, char **argc)
 		}
 		i++;
 	}
-	SET_EXIT_STATUS(0);
+	set_exit_status(0);
 }
 
 int	is_builtin(t_command *cmd)

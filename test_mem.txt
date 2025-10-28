@@ -1,9 +1,0 @@
-echo "Memory test 1"
-pwd
-ls > /dev/null
-echo "Memory test 2"
-export TEST_VAR=hello
-echo $TEST_VAR
-unset TEST_VAR
-echo "Memory test 3"
-exit

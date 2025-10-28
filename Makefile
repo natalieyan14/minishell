@@ -10,14 +10,15 @@ LIBFT = $(LIBFT_DIR)/libft.a
 SRC = sourses/tokenize.c sourses/tokenize_utils.c sourses/tokenize_handlers.c sourses/validation.c \
       sourses/env.c sourses/env_2.c sourses/main.c sourses/pars.c \
       sourses/utils.c sourses/cmd_exec.c sourses/exec_cmd.c sourses/bulitin.c sourses/bulitin_2.c \
-      sourses/dollar.c sourses/heredoc.c sourses/redirect.c sourses/pipe.c sourses/signals.c
+      sourses/dollar.c sourses/heredoc.c sourses/redirect.c sourses/pipe.c sourses/signals.c \
+      sourses/exit_status.c
 
 OBJ = $(SRC:.c=.o)
 
 all: $(LIBFT) $(NAME)
 
 $(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+	make -C $(LIBFT_DIR)
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) -o $(NAME)

@@ -22,14 +22,14 @@ static int	setup_input_redirection(char *filename)
 	if (fd < 0)
 	{
 		perror(filename);
-		SET_EXIT_STATUS(1);
+		set_exit_status(1);
 		return (-1);
 	}
 	if (dup2(fd, STDIN_FILENO) < 0)
 	{
 		perror("dup2");
 		close(fd);
-		SET_EXIT_STATUS(1);
+		set_exit_status(1);
 		return (-1);
 	}
 	close(fd);
@@ -70,7 +70,7 @@ static int	setup_output_redirections(t_redir *redir_list)
 			while (--i >= 0)
 				close(fds[i]);
 			free(fds);
-			SET_EXIT_STATUS(1);
+			set_exit_status(1);
 			return (-1);
 		}
 		fds[i++] = fd;
@@ -83,7 +83,7 @@ static int	setup_output_redirections(t_redir *redir_list)
 		perror("dup2");
 		close(fds[count - 1]);
 		free(fds);
-		SET_EXIT_STATUS(1);
+		set_exit_status(1);
 		return (-1);
 	}
 	close(fds[count - 1]);
@@ -117,7 +117,7 @@ void	exec_command_with_redirections(t_command *cmd, char **envp)
 	if (pid < 0)
 	{
 		perror("fork failed");
-		SET_EXIT_STATUS(1);
+		set_exit_status(1);
 		return ;
 	}
 	else if (pid == 0)
@@ -134,8 +134,8 @@ void	exec_command_with_redirections(t_command *cmd, char **envp)
 	{
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
-			SET_EXIT_STATUS(WEXITSTATUS(status));
+			set_exit_status(WEXITSTATUS(status));
 		else if (WIFSIGNALED(status))
-			SET_EXIT_STATUS(128 + WTERMSIG(status));
+			set_exit_status(128 + WTERMSIG(status));
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:02 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/27 12:18:08 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/27 23:59:16 by armtoros         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,31 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 
 	if (!cmd->argc || !cmd->argc[0] || ft_strlen(cmd->argc[0]) == 0)
 	{
-		SET_EXIT_STATUS(0);
+		set_exit_status(0);
 		return (0);
 	}
 	if (is_builtin(cmd))
 	{
 		exec_builtin(cmd, env_list);
-		return (GET_EXIT_STATUS());
+		return (get_current_exit_status());
 	}
 	else
 	{
 		env_array = list_to_array(*env_list);
 		if (!env_array)
 			return (1);
+		setup_execution_signals();
 		pid = fork();
 		if (pid < 0)
 		{
 			perror("fork failed");
 			free_string_array(env_array);
+			setup_interactive_signals();
 			return (1);
 		}
 		else if (pid == 0)
 		{
+			setup_child_signals();
 			if (setup_redirections(cmd) < 0)
 				exit(1);
 			if (ft_strchr(cmd->argc[0], '/'))
@@ -90,14 +93,12 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 		else
 		{
 			waitpid(pid, &status, 0);
-			if (WIFEXITED(status))
-				SET_EXIT_STATUS(WEXITSTATUS(status));
-			else if (WIFSIGNALED(status))
-				SET_EXIT_STATUS(128 + WTERMSIG(status));
+			handle_child_signal_exit(status);
+			setup_interactive_signals();
 		}
 		free_string_array(env_array);
 	}
-	return (GET_EXIT_STATUS());
+	return (get_current_exit_status());
 }
 
 static int	count_commands(t_command *cmd_list)
@@ -153,6 +154,7 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 			return (1);
 		}
 	}
+	setup_execution_signals();
 	current = cmd_list;
 	for (i = 0; i < cmd_count; i++)
 	{
@@ -168,10 +170,12 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 			}
 			free(pipes);
 			free(pids);
+			setup_interactive_signals();
 			return (1);
 		}
 		else if (pids[i] == 0)
 		{
+			setup_child_signals();
 			if (i > 0)
 			{
 				if (dup2(pipes[i - 1][0], STDIN_FILENO) < 0)
@@ -201,7 +205,7 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 			if (is_builtin(current))
 			{
 				exec_builtin(current, env_list);
-				exit(GET_EXIT_STATUS());
+				exit(get_current_exit_status());
 			}
 			else
 			{
@@ -261,13 +265,9 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 	{
 		waitpid(pids[i], &status, 0);
 		if (i == cmd_count - 1)
-		{
-			if (WIFEXITED(status))
-				SET_EXIT_STATUS(WEXITSTATUS(status));
-			else if (WIFSIGNALED(status))
-				SET_EXIT_STATUS(128 + WTERMSIG(status));
-		}
+			handle_child_signal_exit(status);
 	}
 	free(pids);
-	return (GET_EXIT_STATUS());
+	setup_interactive_signals();
+	return (get_current_exit_status());
 }
