@@ -6,13 +6,13 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 04:10:44 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/28 22:44:57 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/29 03:42:56 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-/* External readline functions */
+
 extern int				rl_on_new_line(void);
 
 volatile sig_atomic_t	g_signal_received = 0;

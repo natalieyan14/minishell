@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:33:09 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/25 16:33:10 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/29 00:52:55 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,22 @@
 void	exec_command(char **cmd, char **envp)
 {
 	pid_t	pid;
+	char	*executable;
 
-	(void)envp;
 	pid = fork();
 	if (pid < 0)
 		perror("fork failed");
 	else if (pid == 0)
 	{
-		if (execvp(cmd[0], cmd) == -1)
+		executable = find_executable_in_path(cmd[0]);
+		if (!executable)
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(cmd[0], STDERR_FILENO);
+			ft_putstr_fd(": command not found\n", STDERR_FILENO);
+			exit(127);
+		}
+		if (execve(executable, cmd, envp) == -1)
 		{
 			perror("execve failed");
 			exit(EXIT_FAILURE);

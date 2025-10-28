@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:53:16 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 00:36:36 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/29 00:52:55 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ void							exec_cmd_list(t_command *cmd_list, char **env);
 void							exec_command(char **cmd, char **envp);
 int								execute_pipeline(t_command *cmd_list,
 									t_env **env_list);
+char							*find_executable_in_path(char *cmd);
 
 int								ft_strcmp(const char *s1, const char *s2);
 size_t							ft_strlen(const char *s);

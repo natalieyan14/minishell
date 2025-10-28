@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:09 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 00:34:55 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/29 00:52:55 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,8 +141,7 @@ void	exec_command_with_redirections(t_command *cmd, char **envp)
 {
 	pid_t	pid;
 	int		status;
-
-	(void)envp;
+	char	*executable;
 	if (!cmd || !cmd->argc || !cmd->argc[0])
 		return ;
 	pid = fork();
@@ -156,7 +155,15 @@ void	exec_command_with_redirections(t_command *cmd, char **envp)
 	{
 		if (setup_redirections(cmd) < 0)
 			exit(1);
-		if (execvp(cmd->argc[0], cmd->argc) == -1)
+		executable = find_executable_in_path(cmd->argc[0]);
+		if (!executable)
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(cmd->argc[0], STDERR_FILENO);
+			ft_putstr_fd(": command not found\n", STDERR_FILENO);
+			exit(127);
+		}
+		if (execve(executable, cmd->argc, envp) == -1)
 		{
 			perror("execve failed");
 			exit(127);

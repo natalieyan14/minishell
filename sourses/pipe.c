@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:02 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 00:34:55 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/29 00:52:55 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 	struct stat	st;
 	int			saved_stdin;
 	int			saved_stdout;
+	char		*executable;
 
 	if (!cmd->argc || !cmd->argc[0] || ft_strlen(cmd->argc[0]) == 0)
 	{
@@ -84,24 +85,18 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 					exit(127);
 				}
 			}
-			if (execvp(cmd->argc[0], cmd->argc) == -1)
+			executable = find_executable_in_path(cmd->argc[0]);
+			if (!executable)
 			{
-				if (errno == ENOENT)
-				{
-					ft_putstr_fd(cmd->argc[0], STDERR_FILENO);
-					ft_putstr_fd(": command not found\n", STDERR_FILENO);
-					exit(127);
-				}
-				else if (errno == EACCES)
-				{
-					perror(cmd->argc[0]);
-					exit(126);
-				}
-				else
-				{
-					perror(cmd->argc[0]);
-					exit(127);
-				}
+				ft_putstr_fd("minishell: ", STDERR_FILENO);
+				ft_putstr_fd(cmd->argc[0], STDERR_FILENO);
+				ft_putstr_fd(": command not found\n", STDERR_FILENO);
+				exit(127);
+			}
+			if (execve(executable, cmd->argc, env_array) == -1)
+			{
+				perror("execve failed");
+				exit(EXIT_FAILURE);
 			}
 		}
 		else
@@ -137,6 +132,8 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 	t_command *current;
 	int status;
 	struct stat st;
+	char *executable;
+	char **envp;
 
 	if (!cmd_list)
 		return (0);
@@ -245,24 +242,19 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 						exit(127);
 					}
 				}
-				if (execvp(current->argc[0], current->argc) == -1)
+				executable = find_executable_in_path(current->argc[0]);
+				if (!executable)
 				{
-					if (errno == ENOENT)
-					{
-						ft_putstr_fd(current->argc[0], STDERR_FILENO);
-						ft_putstr_fd(": command not found\n", STDERR_FILENO);
-						exit(127);
-					}
-					else if (errno == EACCES)
-					{
-						perror(current->argc[0]);
-						exit(126);
-					}
-					else
-					{
-						perror(current->argc[0]);
-						exit(127);
-					}
+					ft_putstr_fd("minishell: ", STDERR_FILENO);
+					ft_putstr_fd(current->argc[0], STDERR_FILENO);
+					ft_putstr_fd(": command not found\n", STDERR_FILENO);
+					exit(127);
+				}
+				envp = list_to_array(*env_list);
+				if (execve(executable, current->argc, envp) == -1)
+				{
+					perror("execve failed");
+					exit(EXIT_FAILURE);
 				}
 			}
 		}
