@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:53:16 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 21:33:10 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/30 00:03:52 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,15 @@ typedef struct s_command
 	struct s_command			*next;
 }								t_command;
 
+typedef struct s_append_data
+{
+	t_command					**curr;
+	t_command					**head;
+	t_token						*tokens;
+	int							start;
+	int							end;
+}								t_append_data;
+
 int								ft_env_lstsize(t_env *lst);
 char							*ft_strjoin_env(const char *s1, const char *s2,
 									char sep);
@@ -144,8 +153,7 @@ void							process_heredocs(t_token *tokens, int count);
 
 int								setup_redirections(t_command *cmd);
 int								validate_redir(t_input_redir *input_list);
-void							exec_cmd(t_command *cmd,
-									char **envp);
+void							exec_cmd(t_command *cmd, char **envp);
 t_redir							*add_output_redir(t_redir **head,
 									char *filename, int append);
 void							free_redir_list(t_redir *head);
@@ -157,6 +165,16 @@ t_ordered_redir					*add_ordered_redir(t_ordered_redir **head,
 									int order);
 void							free_ordered_redir_list(t_ordered_redir *head);
 int								setup_ordered_redirections(t_command *cmd);
+int								handle_input_redir(t_command *cmd,
+									t_token *token, int pos);
+int								handle_output_redir(t_command *cmd,
+									t_token *token, int pos);
+int								handle_append_redir(t_command *cmd,
+									t_token *token, int pos);
+int								count_argc(t_token *tokens, int start, int end);
+void							init_command(t_command *cmd);
+int								fill_command(t_command *cmd, t_token *tokens,
+									int start, int end);
 
 t_command						*parse_tokens(t_token *tokens, int count);
 void							free_cmd_list(t_command *cmd_list);
@@ -190,5 +208,7 @@ int								get_current_exit_status(void);
 void							setup_child_signals(void);
 void							handle_child_signal_exit(int status);
 void							sigint_heredoc(int sig);
+t_ordered_redir					*new_ordered_redir(t_redir_type type,
+									char *filename, int order);
 
 #endif

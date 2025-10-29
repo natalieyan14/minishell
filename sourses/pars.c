@@ -6,13 +6,13 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:25 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 21:31:59 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/30 00:02:17 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-static int	count_argc(t_token *tokens, int start, int end)
+int	count_argc(t_token *tokens, int start, int end)
 {
 	int	count;
 	int	i;
@@ -28,136 +28,6 @@ static int	count_argc(t_token *tokens, int start, int end)
 	return (count);
 }
 
-t_redir	*add_output_redir(t_redir **head, char *filename, int append)
-{
-	t_redir	*new_redir;
-	t_redir	*curr;
-
-	new_redir = malloc(sizeof(t_redir));
-	if (!new_redir)
-		return (NULL);
-	new_redir->filename = ft_strdup(filename);
-	if (!new_redir->filename)
-	{
-		free(new_redir);
-		return (NULL);
-	}
-	new_redir->append = append;
-	new_redir->next = NULL;
-	if (!*head)
-		*head = new_redir;
-	else
-	{
-		curr = *head;
-		while (curr->next)
-			curr = curr->next;
-		curr->next = new_redir;
-	}
-	return (new_redir);
-}
-
-void	free_redir_list(t_redir *head)
-{
-	t_redir	*tmp;
-
-	while (head)
-	{
-		tmp = head;
-		head = head->next;
-		free(tmp->filename);
-		free(tmp);
-	}
-}
-
-t_input_redir	*add_input_redir(t_input_redir **head, char *filename)
-{
-	t_input_redir	*new_redir;
-	t_input_redir	*curr;
-
-	new_redir = malloc(sizeof(t_input_redir));
-	if (!new_redir)
-		return (NULL);
-	new_redir->filename = ft_strdup(filename);
-	if (!new_redir->filename)
-	{
-		free(new_redir);
-		return (NULL);
-	}
-	new_redir->next = NULL;
-	if (!*head)
-		*head = new_redir;
-	else
-	{
-		curr = *head;
-		while (curr->next)
-			curr = curr->next;
-		curr->next = new_redir;
-	}
-	return (new_redir);
-}
-
-void	free_input_redir_list(t_input_redir *head)
-{
-	t_input_redir	*tmp;
-
-	while (head)
-	{
-		tmp = head;
-		head = head->next;
-		free(tmp->filename);
-		free(tmp);
-	}
-}
-
-static int	fill_command(t_command *cmd, t_token *tokens, int start, int end)
-{
-	int	j;
-
-	j = 0;
-	while (start < end)
-	{
-		if (tokens[start].type == T_WORD)
-		{
-			if (tokens[start].str && ft_strlen(tokens[start].str) > 0)
-			{
-				cmd->argc[j] = ft_strdup(tokens[start].str);
-				if (cmd->argc[j])
-					j++;
-			}
-		}
-		else if (tokens[start].type == T_IN_FILE)
-		{
-			if (!add_input_redir(&cmd->input_list, tokens[start].str))
-				return (-1);
-			if (!add_ordered_redir(&cmd->ordered_redirs, REDIR_INPUT,
-					tokens[start].str, start))
-				return (-1);
-			if (cmd->input)
-				free(cmd->input);
-			cmd->input = ft_strdup(tokens[start].str);
-		}
-		else if (tokens[start].type == T_OUT_FILE)
-		{
-			if (!add_output_redir(&cmd->output_list, tokens[start].str, 0))
-				return (-1);
-			if (!add_ordered_redir(&cmd->ordered_redirs, REDIR_OUTPUT,
-					tokens[start].str, start))
-				return (-1);
-		}
-		else if (tokens[start].type == T_APPEND_FILE)
-		{
-			if (!add_output_redir(&cmd->output_list, tokens[start].str, 1))
-				return (-1);
-			if (!add_ordered_redir(&cmd->ordered_redirs, REDIR_APPEND,
-					tokens[start].str, start))
-				return (-1);
-		}
-		start++;
-	}
-	cmd->argc[j] = NULL;
-	return (0);
-}
-
 static t_command	*create_command(t_token *tokens, int start, int end)
 {
 	t_command	*cmd;
@@ -166,12 +36,7 @@ static t_command	*create_command(t_token *tokens, int start, int end)
 	cmd = malloc(sizeof(t_command));
 	if (!cmd)
 		return (NULL);
-	cmd->argc = NULL;
-	cmd->input = NULL;
-	cmd->input_list = NULL;
-	cmd->output_list = NULL;
-	cmd->ordered_redirs = NULL;
-	cmd->next = NULL;
+	init_command(cmd);
 	arg_count = count_argc(tokens, start, end);
 	cmd->argc = malloc(sizeof(char *) * (arg_count + 1));
 	if (!cmd->argc)
@@ -188,12 +53,33 @@ static t_command	*create_command(t_token *tokens, int start, int end)
 	return (cmd);
 }
 
+static t_command	*append_command(t_append_data *data)
+{
+	t_command	*cmd;
+
+	cmd = create_command(data->tokens, data->start, data->end);
+	if (!cmd)
+		return (NULL);
+	if (!*(data->head))
+	{
+		*(data->head) = cmd;
+		*(data->curr) = cmd;
+	}
+	else
+	{
+		(*(data->curr))->next = cmd;
+		*(data->curr) = cmd;
+	}
+	return (cmd);
+}
+
 t_command	*parse_tokens(t_token *tokens, int count)
 {
-	t_command	*head;
-	t_command	*curr;
-	int			i;
-	int			start;
+	t_command		*head;
+	t_command		*curr;
+	int				i;
+	int				start;
+	t_append_data	data;
 
 	head = NULL;
 	curr = NULL;
@@ -203,64 +89,34 @@ t_command	*parse_tokens(t_token *tokens, int count)
 		start = i;
 		while (i < count && tokens[i].type != T_PIPE)
 			i++;
-		if (!head)
-		{
-			head = create_command(tokens, start, i);
-			curr = head;
-			if (!head)
-				return (NULL);
-		}
-		else
-		{
-			curr->next = create_command(tokens, start, i);
-			if (curr->next)
-				curr = curr->next;
-		}
+		data.curr = &curr;
+		data.head = &head;
+		data.tokens = tokens;
+		data.start = start;
+		data.end = i;
+		if (!append_command(&data))
+			return (NULL);
 		if (i < count && tokens[i].type == T_PIPE)
 			i++;
 	}
 	return (head);
 }
 
-t_ordered_redir	*add_ordered_redir(t_ordered_redir **head, t_redir_type type,
-		char *filename, int order)
+t_ordered_redir	*new_ordered_redir(t_redir_type type, char *filename, int order)
 {
-	t_ordered_redir	*new_redir;
-	t_ordered_redir	*curr;
+	t_ordered_redir	*redir;
 
-	new_redir = malloc(sizeof(t_ordered_redir));
-	if (!new_redir)
+	redir = malloc(sizeof(t_ordered_redir));
+	if (!redir)
 		return (NULL);
-	new_redir->type = type;
-	new_redir->filename = ft_strdup(filename);
-	if (!new_redir->filename)
+	redir->type = type;
+	redir->filename = ft_strdup(filename);
+	if (!redir->filename)
 	{
-		free(new_redir);
+		free(redir);
 		return (NULL);
 	}
-	new_redir->order = order;
-	new_redir->next = NULL;
-	if (!*head)
-		*head = new_redir;
-	else
-	{
-		curr = *head;
-		while (curr->next)
-			curr = curr->next;
-		curr->next = new_redir;
-	}
-	return (new_redir);
-}
-
-void	free_ordered_redir_list(t_ordered_redir *head)
-{
-	t_ordered_redir	*tmp;
-
-	while (head)
-	{
-		tmp = head;
-		head = head->next;
-		free(tmp->filename);
-		free(tmp);
-	}
+	redir->order = order;
+	redir->next = NULL;
+	return (redir);
 }
