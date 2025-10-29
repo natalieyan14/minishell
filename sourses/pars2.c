@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 23:46:05 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 23:48:33 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/30 00:09:42 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,3 @@ int	handle_input_redir(t_command *cmd, t_token *token, int pos)
 	cmd->input = ft_strdup(token->str);
 	return (0);
 }
-
-

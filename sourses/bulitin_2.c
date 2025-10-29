@@ -6,39 +6,45 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:13 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 21:07:13 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/30 00:08:07 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-void	ft_unset(t_env **env, char **argc)
+static void	remove_env_var(t_env **env, char *key)
 {
-	int		i;
 	t_env	*tmp;
 	t_env	*prev;
+
+	tmp = *env;
+	prev = NULL;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->key, key))
+		{
+			if (!prev)
+				*env = tmp->next;
+			else
+				prev->next = tmp->next;
+			free(tmp->key);
+			free(tmp->value);
+			free(tmp);
+			return ;
+		}
+		prev = tmp;
+		tmp = tmp->next;
+	}
+}
+
+void	ft_unset(t_env **env, char **argc)
+{
+	int	i;
 
 	i = 1;
 	while (argc[i])
 	{
-		tmp = *env;
-		prev = NULL;
-		while (tmp)
-		{
-			if (!ft_strcmp(tmp->key, argc[i]))
-			{
-				if (!prev)
-					*env = tmp->next;
-				else
-					prev->next = tmp->next;
-				free(tmp->key);
-				free(tmp->value);
-				free(tmp);
-				break ;
-			}
-			prev = tmp;
-			tmp = tmp->next;
-		}
+		remove_env_var(env, argc[i]);
 		i++;
 	}
 	set_exit_status(0);

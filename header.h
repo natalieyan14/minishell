@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:53:16 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 00:03:52 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/30 00:51:11 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,5 +210,11 @@ void							handle_child_signal_exit(int status);
 void							sigint_heredoc(int sig);
 t_ordered_redir					*new_ordered_redir(t_redir_type type,
 									char *filename, int order);
+char							*get_env_value(t_env *env_list, char *key);
+char							*get_var_name(char *str, int start, int *end);
+char							*replace_dollar_var(char *str, int start,
+									int end, char *replacement);
+void							expand_dollar_vars(t_token *tokens, int count,
+									t_env *env_list);
 
 #endif
