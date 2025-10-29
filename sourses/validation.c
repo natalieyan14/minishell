@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 04:00:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/26 04:03:09 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/29 21:22:44 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ int	if_invalid_input(t_token *t, int count)
 		if (i + 1 < count && check_next(t, i) < 0)
 			return (-1);
 		if (t[i].type == T_PIPE && (i == 0 || i + 1 == count || t[i
-			    	+ 1].type == T_PIPE))
-			return (err_message("syntax error near unexpected token'\n", "",
+					+ 1].type == T_PIPE))
+			return (err_message("syntax error near unexpected token `|'\n", "",
 					""), set_exit_status(2), -1);
 		i++;
 	}

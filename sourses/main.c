@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:17 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/28 23:31:52 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/29 21:24:42 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,14 +150,12 @@ static int	run_shell(t_env *env_list)
 	while (1)
 	{
 		line = read_multiline_input();
-		/* ---- HANDLE CTRL-D (EOF) ---- */
 		if (!line)
 		{
 			if (isatty(STDIN_FILENO))
 				write(1, "exit\n", 5);
 			break ;
 		}
-		/* ---- HANDLE NON-EMPTY INPUT ---- */
 		if (*line)
 		{
 			add_history(line);

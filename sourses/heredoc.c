@@ -5,20 +5,38 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/25 02:05:10 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/25 23:34:35 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/10/29 21:19:54 by natalieyan        #+#    #+#             */
+/*   Updated: 2025/10/29 21:21:21 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
+
+static void	copy_strings(char *dest, char *s1, char *s2)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (s1[i])
+	{
+		dest[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2[j])
+	{
+		dest[i + j] = s2[j];
+		j++;
+	}
+	dest[i + j] = '\0';
+}
 
 static char	*ft_strjoin_heredoc(char *s1, char *s2)
 {
 	size_t	s1_size;
 	size_t	s2_size;
 	char	*s3;
-	int		i;
-	int		j;
 
 	if (!s1 || !s2)
 		return (NULL);
@@ -27,21 +45,25 @@ static char	*ft_strjoin_heredoc(char *s1, char *s2)
 	s3 = malloc(sizeof(char) * (s1_size + s2_size + 1));
 	if (!s3)
 		return (NULL);
-	i = 0;
-	while (s1[i])
-	{
-		s3[i] = s1[i];
-		i++;
-	}
-	j = 0;
-	while (s2[j])
-	{
-		s3[i + j] = s2[j];
-		j++;
-	}
-	s3[i + j] = '\0';
+	copy_strings(s3, s1, s2);
 	free(s1);
 	return (s3);
+}
+
+static int	check_limiter(char *str, char *limiter)
+{
+	if (!str)
+	{
+		write(STDERR_FILENO,
+			"minishell: warning: here-document delimited by end-of-file\n", 60);
+		return (1);
+	}
+	if (ft_strcmp(str, limiter) == 0)
+	{
+		free(str);
+		return (1);
+	}
+	return (0);
 }
 
 static void	run_heredoc(int pipe_fd, char *limiter)
@@ -52,18 +74,8 @@ static void	run_heredoc(int pipe_fd, char *limiter)
 	while (1)
 	{
 		str = readline("> ");
-		if (!str)
-		{
-			write(STDERR_FILENO,
-				"minishell: warning: here-document delimited by end-of-file\n",
-				60);
+		if (check_limiter(str, limiter))
 			break ;
-		}
-		if (ft_strcmp(str, limiter) == 0)
-		{
-			free(str);
-			break ;
-		}
 		line_with_newline = ft_strjoin_heredoc(ft_strdup(str), "\n");
 		if (line_with_newline)
 		{
@@ -93,27 +105,4 @@ int	handle_heredoc(char *limiter)
 	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);
 	return (original_stdin);
-}
-
-void	process_heredocs(t_token *tokens, int count)
-{
-	int	i;
-
-	i = 0;
-	while (i < count - 1)
-	{
-		if (tokens[i].type == T_HEREDOC && tokens[i + 1].type == T_LIMITER)
-		{
-			if (handle_heredoc(tokens[i + 1].str) < 0)
-			{
-				set_exit_status(1);
-				return ;
-			}
-			i += 2;
-		}
-		else
-		{
-			i++;
-		}
-	}
 }

@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:39 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 00:52:55 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/29 21:21:36 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,4 +128,25 @@ char	*find_executable_in_path(char *cmd)
 	}
 	free_string_array(paths);
 	return (NULL);
+}
+
+void	process_heredocs(t_token *tokens, int count)
+{
+	int i;
+
+	i = 0;
+	while (i < count - 1)
+	{
+		if (tokens[i].type == T_HEREDOC && tokens[i + 1].type == T_LIMITER)
+		{
+			if (handle_heredoc(tokens[i + 1].str) < 0)
+			{
+				set_exit_status(1);
+				return ;
+			}
+			i += 2;
+		}
+		else
+			i++;
+	}
 }

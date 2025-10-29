@@ -6,13 +6,13 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:09 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 00:52:55 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/29 21:34:12 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-static int	setup_input_redirection(char *filename)
+static int	setup_input(char *filename)
 {
 	int	fd;
 
@@ -36,7 +36,7 @@ static int	setup_input_redirection(char *filename)
 	return (0);
 }
 
-static int	setup_output_redirections(t_redir *redir_list)
+static int	setup_output(t_redir *redir_list)
 {
 	t_redir	*curr;
 	int		fd;
@@ -91,7 +91,7 @@ static int	setup_output_redirections(t_redir *redir_list)
 	return (0);
 }
 
-int	validate_all_input_redirections(t_input_redir *input_list)
+int	validate_redir(t_input_redir *input_list)
 {
 	t_input_redir	*curr;
 	int				fd;
@@ -120,28 +120,24 @@ int	setup_redirections(t_command *cmd)
 	int	output_result;
 	int	validation_result;
 
-	/* Validate all input redirections first - this handles most cases correctly */
-	validation_result = validate_all_input_redirections(cmd->input_list);
+	validation_result = validate_redir(cmd->input_list);
 	if (validation_result < 0)
 		return (-1);
-	
-	/* Then process output redirections */
-	output_result = setup_output_redirections(cmd->output_list);
+	output_result = setup_output(cmd->output_list);
 	if (output_result < 0)
 		return (-1);
-	
-	/* Finally set up the actual input redirection */
-	input_result = setup_input_redirection(cmd->input);
+	input_result = setup_input(cmd->input);
 	if (input_result < 0)
 		return (-1);
 	return (0);
 }
 
-void	exec_command_with_redirections(t_command *cmd, char **envp)
+void	exec_cmd(t_command *cmd, char **envp)
 {
 	pid_t	pid;
 	int		status;
 	char	*executable;
+
 	if (!cmd || !cmd->argc || !cmd->argc[0])
 		return ;
 	pid = fork();
@@ -187,11 +183,8 @@ int	setup_ordered_redirections(t_command *cmd)
 
 	if (!cmd->ordered_redirs)
 	{
-		/* Fallback to old method if no ordered redirections */
 		return (setup_redirections(cmd));
 	}
-	
-	/* First pass: validate inputs and handle redirections in order */
 	curr = cmd->ordered_redirs;
 	while (curr)
 	{
@@ -208,7 +201,6 @@ int	setup_ordered_redirections(t_command *cmd)
 		}
 		else if (curr->type == REDIR_OUTPUT || curr->type == REDIR_APPEND)
 		{
-			/* Create output files as we encounter them */
 			flags = O_CREAT | O_WRONLY;
 			if (curr->type == REDIR_APPEND)
 				flags |= O_APPEND;
@@ -232,8 +224,6 @@ int	setup_ordered_redirections(t_command *cmd)
 		}
 		curr = curr->next;
 	}
-	
-	/* Second pass: set up input redirections */
 	curr = cmd->ordered_redirs;
 	while (curr)
 	{

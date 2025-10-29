@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:25 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 00:34:55 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/29 21:31:59 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,8 @@ static int	fill_command(t_command *cmd, t_token *tokens, int start, int end)
 		{
 			if (!add_input_redir(&cmd->input_list, tokens[start].str))
 				return (-1);
-			if (!add_ordered_redir(&cmd->ordered_redirs, REDIR_INPUT, tokens[start].str, start))
+			if (!add_ordered_redir(&cmd->ordered_redirs, REDIR_INPUT,
+					tokens[start].str, start))
 				return (-1);
 			if (cmd->input)
 				free(cmd->input);
@@ -139,14 +140,16 @@ static int	fill_command(t_command *cmd, t_token *tokens, int start, int end)
 		{
 			if (!add_output_redir(&cmd->output_list, tokens[start].str, 0))
 				return (-1);
-			if (!add_ordered_redir(&cmd->ordered_redirs, REDIR_OUTPUT, tokens[start].str, start))
+			if (!add_ordered_redir(&cmd->ordered_redirs, REDIR_OUTPUT,
+					tokens[start].str, start))
 				return (-1);
 		}
 		else if (tokens[start].type == T_APPEND_FILE)
 		{
 			if (!add_output_redir(&cmd->output_list, tokens[start].str, 1))
 				return (-1);
-			if (!add_ordered_redir(&cmd->ordered_redirs, REDIR_APPEND, tokens[start].str, start))
+			if (!add_ordered_redir(&cmd->ordered_redirs, REDIR_APPEND,
+					tokens[start].str, start))
 				return (-1);
 		}
 		start++;
@@ -219,7 +222,8 @@ t_command	*parse_tokens(t_token *tokens, int count)
 	return (head);
 }
 
-t_ordered_redir	*add_ordered_redir(t_ordered_redir **head, t_redir_type type, char *filename, int order)
+t_ordered_redir	*add_ordered_redir(t_ordered_redir **head, t_redir_type type,
+		char *filename, int order)
 {
 	t_ordered_redir	*new_redir;
 	t_ordered_redir	*curr;
