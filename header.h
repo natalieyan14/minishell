@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:53:16 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 00:52:55 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/29 21:13:34 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,5 +189,6 @@ void							set_exit_status(int status);
 int								get_current_exit_status(void);
 void							setup_child_signals(void);
 void							handle_child_signal_exit(int status);
+void							sigint_heredoc(int sig);
 
 #endif

@@ -5,39 +5,45 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/25 02:04:28 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 00:34:55 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/10/29 21:09:04 by natalieyan        #+#    #+#             */
+/*   Updated: 2025/10/29 21:09:05 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
+static void	free_single_command(t_command *cmd)
+{
+	int	i;
+
+	if (cmd->argc)
+	{
+		i = 0;
+		while (cmd->argc[i])
+		{
+			free(cmd->argc[i]);
+			i++;
+		}
+		free(cmd->argc);
+	}
+	if (cmd->input)
+		free(cmd->input);
+	if (cmd->input_list)
+		free_input_redir_list(cmd->input_list);
+	if (cmd->output_list)
+		free_redir_list(cmd->output_list);
+	if (cmd->ordered_redirs)
+		free_ordered_redir_list(cmd->ordered_redirs);
+}
+
 void	free_cmd_list(t_command *cmd_list)
 {
 	t_command	*tmp;
-	int			i;
 
 	while (cmd_list)
 	{
 		tmp = cmd_list->next;
-		if (cmd_list->argc)
-		{
-			i = 0;
-			while (cmd_list->argc[i])
-			{
-				free(cmd_list->argc[i]);
-				i++;
-			}
-			free(cmd_list->argc);
-		}
-		if (cmd_list->input)
-			free(cmd_list->input);
-		if (cmd_list->input_list)
-			free_input_redir_list(cmd_list->input_list);
-		if (cmd_list->output_list)
-			free_redir_list(cmd_list->output_list);
-		if (cmd_list->ordered_redirs)
-			free_ordered_redir_list(cmd_list->ordered_redirs);
+		free_single_command(cmd_list);
 		free(cmd_list);
 		cmd_list = tmp;
 	}
