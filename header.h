@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:53:16 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 00:51:11 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/30 05:32:55 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,15 @@ void							process_heredocs(t_token *tokens, int count);
 
 int								setup_redirections(t_command *cmd);
 int								validate_redir(t_input_redir *input_list);
+int								setup_output_redirect(t_redir *redir_list);
+int								setup_input_redirect(char *filename);
+void							exec_cmd_helper(t_command *cmd, char **envp);
+int								validate_helper(t_ordered_redir *redirs);
+int								process_single_redir(t_ordered_redir *redir);
+int								validate_and_setup(t_ordered_redir *redirs);
+int								setup_input(t_ordered_redir *redirs);
+void							cleanup_fds(int *fds, int count);
+
 void							exec_cmd(t_command *cmd, char **envp);
 t_redir							*add_output_redir(t_redir **head,
 									char *filename, int append);

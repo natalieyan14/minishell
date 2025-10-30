@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:02 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 00:52:55 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/30 05:21:44 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,15 +125,15 @@ static int	count_commands(t_command *cmd_list)
 
 int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 {
-	int cmd_count;
-	int **pipes;
-	pid_t *pids;
-	int i;
-	t_command *current;
-	int status;
-	struct stat st;
-	char *executable;
-	char **envp;
+	int			cmd_count;
+	int			**pipes;
+	pid_t		*pids;
+	int			i;
+	t_command	*current;
+	int			status;
+	struct stat	st;
+	char		*executable;
+	char		**envp;
 
 	if (!cmd_list)
 		return (0);
