@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:53:16 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 05:32:55 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/10/30 05:42:25 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,8 +158,10 @@ int								setup_input_redirect(char *filename);
 void							exec_cmd_helper(t_command *cmd, char **envp);
 int								validate_helper(t_ordered_redir *redirs);
 int								process_single_redir(t_ordered_redir *redir);
-int								validate_and_setup(t_ordered_redir *redirs);
-int								setup_input(t_ordered_redir *redirs);
+int								validate_and_setup_outputs_helper(
+									t_ordered_redir *redirs);
+int								setup_input_redirections_helper(
+									t_ordered_redir *redirs);
 void							cleanup_fds(int *fds, int count);
 
 void							exec_cmd(t_command *cmd, char **envp);
