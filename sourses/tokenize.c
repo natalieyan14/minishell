@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:31 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/26 03:52:38 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/01 21:34:06 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@ t_toktype	find_type(char *str, t_token *tokens, int i)
 {
 	if (!ft_strcmp(str, "|"))
 		return (T_PIPE);
+	if (!ft_strcmp(str, "||"))
+		return (T_OR);
+	if (!ft_strcmp(str, "&&"))
+		return (T_AND);
 	if (!ft_strcmp(str, "<"))
 		return (T_IN_REDIR);
 	if (!ft_strcmp(str, ">"))

@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:25 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 00:02:17 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/02 03:53:20 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ t_command	*parse_tokens(t_token *tokens, int count)
 	while (i < count)
 	{
 		start = i;
-		while (i < count && tokens[i].type != T_PIPE)
+		while (i < count && tokens[i].type != T_PIPE && tokens[i].type != T_OR
+			&& tokens[i].type != T_AND)
 			i++;
 		data.curr = &curr;
 		data.head = &head;
@@ -96,7 +97,8 @@ t_command	*parse_tokens(t_token *tokens, int count)
 		data.end = i;
 		if (!append_command(&data))
 			return (NULL);
-		if (i < count && tokens[i].type == T_PIPE)
+		if (i < count && (tokens[i].type == T_PIPE || tokens[i].type == T_OR
+				|| tokens[i].type == T_AND))
 			i++;
 	}
 	return (head);

@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:17 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 21:24:42 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/02 03:53:31 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static int	handle_input(char *line, t_env **env_list)
 	t_token		*tokens;
 	t_command	*cmd_list;
 	int			token_count;
+	int			original_stdin;
 
 	if (has_syntax_errors(line))
 	{
@@ -63,7 +64,7 @@ static int	handle_input(char *line, t_env **env_list)
 		return (0);
 	}
 	expand_dollar_vars(tokens, token_count, *env_list);
-	process_heredocs(tokens, token_count);
+	original_stdin = process_heredocs(tokens, token_count);
 	cmd_list = parse_tokens(tokens, token_count);
 	if (!cmd_list)
 	{
@@ -72,6 +73,11 @@ static int	handle_input(char *line, t_env **env_list)
 		return (0);
 	}
 	execute_pipeline(cmd_list, env_list);
+	if (original_stdin >= 0)
+	{
+		dup2(original_stdin, STDIN_FILENO);
+		close(original_stdin);
+	}
 	free_tokens(tokens, token_count);
 	free_cmd_list(cmd_list);
 	free(line);

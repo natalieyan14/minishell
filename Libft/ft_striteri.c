@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vapoghos <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/27 11:32:15 by vapoghos          #+#    #+#             */
-/*   Updated: 2025/01/27 11:32:44 by vapoghos         ###   ########.fr       */
+/*   Created: 2025/10/30 23:48:58 by natalieyan        #+#    #+#             */
+/*   Updated: 2025/10/30 23:49:13 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	ft_striteri(char *s, void (*f)(unsigned int, char*))
+#include "libft.h"
+
+void	ft_striteri(char *s, void (*f)(unsigned int, char *))
 {
 	unsigned int	i;
 
@@ -19,6 +21,6 @@ void	ft_striteri(char *s, void (*f)(unsigned int, char*))
 	i = 0;
 	while (*s)
 	{
-		f (i++, s++);
+		f(i++, s++);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:50:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/26 04:01:37 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/02 03:52:51 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ void	handle_special_chars(t_tokenizer *tok, char *input)
 	c = input[tok->i];
 	flush_buffer(tok);
 	if ((c == '<' && input[tok->i + 1] == '<') || (c == '>' && input[tok->i
-				+ 1] == '>'))
+				+ 1] == '>') || (c == '|' && input[tok->i + 1] == '|') || (c == '&'
+			&& input[tok->i + 1] == '&'))
 		process_double_char(tok, input, c);
 	else
 		process_single_char(tok, c);

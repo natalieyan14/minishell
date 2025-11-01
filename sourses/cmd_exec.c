@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 21:09:04 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 21:09:05 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/02 03:53:38 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ void	exec_cmd_list(t_command *cmd_list, char **env)
 {
 	while (cmd_list)
 	{
-		exec_command(cmd_list->argc, env);
+		if (cmd_list->argc && cmd_list->argc[0])
+			exec_command(cmd_list->argc, env);
 		cmd_list = cmd_list->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:20 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 00:02:22 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/02 03:49:47 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,13 +178,38 @@ static void	export_variable(t_env **env, char *key, char *val)
 		}
 		tmp = tmp->next;
 	}
-	if (!found)
+	if (!found && val)
 	{
 		tmp = malloc(sizeof(t_env));
 		tmp->key = ft_strdup(key);
-		tmp->value = val ? ft_strdup(val) : ft_strdup("");
+		tmp->value = ft_strdup(val);
 		tmp->next = *env;
 		*env = tmp;
+	}
+}
+
+static void	print_exported_vars(t_env *env)
+{
+	t_env	*tmp;
+
+	tmp = env;
+	while (tmp)
+	{
+		if (tmp->value && ft_strlen(tmp->value) > 0)
+		{
+			ft_putstr_fd("declare -x ", STDOUT_FILENO);
+			ft_putstr_fd(tmp->key, STDOUT_FILENO);
+			ft_putstr_fd("=\"", STDOUT_FILENO);
+			ft_putstr_fd(tmp->value, STDOUT_FILENO);
+			ft_putstr_fd("\"\n", STDOUT_FILENO);
+		}
+		else
+		{
+			ft_putstr_fd("declare -x ", STDOUT_FILENO);
+			ft_putstr_fd(tmp->key, STDOUT_FILENO);
+			ft_putstr_fd("\n", STDOUT_FILENO);
+		}
+		tmp = tmp->next;
 	}
 }
 
@@ -198,6 +223,12 @@ void	ft_export(t_env **env, char **argc)
 
 	i = 1;
 	exit_code = 0;
+	if (!argc[1])
+	{
+		print_exported_vars(*env);
+		set_exit_status(0);
+		return ;
+	}
 	while (argc[i])
 	{
 		if (!is_valid_identifier(argc[i]))

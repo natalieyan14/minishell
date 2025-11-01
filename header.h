@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:53:16 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 05:42:25 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/02 03:29:34 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ extern volatile sig_atomic_t	g_signal_received;
 typedef enum e_toktype
 {
 	T_PIPE,
+	T_AND,
+	T_OR,
 	T_IN_REDIR,
 	T_OUT_REDIR,
 	T_APPEND_REDIR,
@@ -149,7 +151,7 @@ void							handle_special_chars(t_tokenizer *tok,
 void							handle_quotes(t_tokenizer *tok, char c);
 
 int								handle_heredoc(char *limiter);
-void							process_heredocs(t_token *tokens, int count);
+int								process_heredocs(t_token *tokens, int count);
 
 int								setup_redirections(t_command *cmd);
 int								validate_redir(t_input_redir *input_list);
@@ -158,10 +160,8 @@ int								setup_input_redirect(char *filename);
 void							exec_cmd_helper(t_command *cmd, char **envp);
 int								validate_helper(t_ordered_redir *redirs);
 int								process_single_redir(t_ordered_redir *redir);
-int								validate_and_setup_outputs_helper(
-									t_ordered_redir *redirs);
-int								setup_input_redirections_helper(
-									t_ordered_redir *redirs);
+int								validate_and_setup_outputs_helper(t_ordered_redir *redirs);
+int								setup_input_redirections_helper(t_ordered_redir *redirs);
 void							cleanup_fds(int *fds, int count);
 
 void							exec_cmd(t_command *cmd, char **envp);
