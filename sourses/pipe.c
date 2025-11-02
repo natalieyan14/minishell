@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:02 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/02 16:54:43 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/02 22:46:58 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 					exit(127);
 				}
 			}
-			executable = find_executable_in_path(cmd->argc[0]);
+			executable = find_executable_in_path(cmd->argc[0], *env_list);
 			if (!executable)
 			{
 				ft_putstr_fd("minishell: ", STDERR_FILENO);
@@ -257,7 +257,7 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 						exit(127);
 					}
 				}
-				executable = find_executable_in_path(current->argc[0]);
+				executable = find_executable_in_path(current->argc[0], *env_list);
 				if (!executable)
 				{
 					ft_putstr_fd("minishell: ", STDERR_FILENO);

@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:33:09 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 00:52:55 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/02 22:46:58 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	exec_command(char **cmd, char **envp)
 		perror("fork failed");
 	else if (pid == 0)
 	{
-		executable = find_executable_in_path(cmd[0]);
+		executable = find_executable_in_envp(cmd[0], envp);
 		if (!executable)
 		{
 			ft_putstr_fd("minishell: ", STDERR_FILENO);

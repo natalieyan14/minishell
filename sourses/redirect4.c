@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 01:50:33 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 05:40:49 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/02 22:46:58 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	exec_child_process(t_command *cmd, char **envp)
 	input_result = setup_input_redirect(cmd->input);
 	if (input_result < 0)
 		exit(1);
-	executable = find_executable_in_path(cmd->argc[0]);
+	executable = find_executable_in_envp(cmd->argc[0], envp);
 	if (!executable)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
