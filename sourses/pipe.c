@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:02 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 05:21:44 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/02 16:54:43 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,21 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 
 	if (!cmd->argc || !cmd->argc[0] || ft_strlen(cmd->argc[0]) == 0)
 	{
+		if (cmd->output_list || cmd->input_list || cmd->ordered_redirs)
+		{
+			saved_stdin = dup(STDIN_FILENO);
+			saved_stdout = dup(STDOUT_FILENO);
+			if (setup_ordered_redirections(cmd) < 0)
+			{
+				close(saved_stdin);
+				close(saved_stdout);
+				return (1);
+			}
+			dup2(saved_stdin, STDIN_FILENO);
+			dup2(saved_stdout, STDOUT_FILENO);
+			close(saved_stdin);
+			close(saved_stdout);
+		}
 		set_exit_status(0);
 		return (0);
 	}

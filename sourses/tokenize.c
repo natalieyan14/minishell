@@ -6,41 +6,11 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:31 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/01 21:34:06 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/02 17:19:56 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
-
-t_toktype	find_type(char *str, t_token *tokens, int i)
-{
-	if (!ft_strcmp(str, "|"))
-		return (T_PIPE);
-	if (!ft_strcmp(str, "||"))
-		return (T_OR);
-	if (!ft_strcmp(str, "&&"))
-		return (T_AND);
-	if (!ft_strcmp(str, "<"))
-		return (T_IN_REDIR);
-	if (!ft_strcmp(str, ">"))
-		return (T_OUT_REDIR);
-	if (!ft_strcmp(str, ">>"))
-		return (T_APPEND_REDIR);
-	if (!ft_strcmp(str, "<<"))
-		return (T_HEREDOC);
-	if (i > 0)
-	{
-		if (tokens[i - 1].type == T_IN_REDIR)
-			return (T_IN_FILE);
-		if (tokens[i - 1].type == T_OUT_REDIR)
-			return (T_OUT_FILE);
-		if (tokens[i - 1].type == T_APPEND_REDIR)
-			return (T_APPEND_FILE);
-		if (tokens[i - 1].type == T_HEREDOC)
-			return (T_LIMITER);
-	}
-	return (T_WORD);
-}
 
 static void	handle_whitespace(t_tokenizer *tok)
 {
