@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_handlers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:50:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/02 03:52:51 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/03 22:41:52 by armtoros         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ void	handle_special_chars(t_tokenizer *tok, char *input)
 	c = input[tok->i];
 	flush_buffer(tok);
 	if ((c == '<' && input[tok->i + 1] == '<') || (c == '>' && input[tok->i
-				+ 1] == '>') || (c == '|' && input[tok->i + 1] == '|') || (c == '&'
+				+ 1] == '>') || (c == '|'
+			&& input[tok->i + 1] == '|') || (c == '&'
 			&& input[tok->i + 1] == '&'))
 		process_double_char(tok, input, c);
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:25 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/02 03:53:20 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/03 22:47:54 by armtoros         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,17 @@ static t_command	*append_command(t_append_data *data)
 	return (cmd);
 }
 
+static int	find_command_end(t_token *tokens, int count, int start)
+{
+	int	i;
+
+	i = start;
+	while (i < count && tokens[i].type != T_PIPE && tokens[i].type != T_OR
+		&& tokens[i].type != T_AND)
+		i++;
+	return (i);
+}
+
 t_command	*parse_tokens(t_token *tokens, int count)
 {
 	t_command		*head;
@@ -87,9 +98,7 @@ t_command	*parse_tokens(t_token *tokens, int count)
 	while (i < count)
 	{
 		start = i;
-		while (i < count && tokens[i].type != T_PIPE && tokens[i].type != T_OR
-			&& tokens[i].type != T_AND)
-			i++;
+		i = find_command_end(tokens, count, start);
 		data.curr = &curr;
 		data.head = &head;
 		data.tokens = tokens;
@@ -102,23 +111,4 @@ t_command	*parse_tokens(t_token *tokens, int count)
 			i++;
 	}
 	return (head);
-}
-
-t_ordered_redir	*new_ordered_redir(t_redir_type type, char *filename, int order)
-{
-	t_ordered_redir	*redir;
-
-	redir = malloc(sizeof(t_ordered_redir));
-	if (!redir)
-		return (NULL);
-	redir->type = type;
-	redir->filename = ft_strdup(filename);
-	if (!redir->filename)
-	{
-		free(redir);
-		return (NULL);
-	}
-	redir->order = order;
-	redir->next = NULL;
-	return (redir);
 }

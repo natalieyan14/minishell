@@ -8,11 +8,12 @@ LIBFT_DIR = Libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 SRC = sourses/tokenize.c sourses/tokenize_utils.c sourses/tokenize_handlers.c sourses/validation.c \
-      sourses/env.c sourses/env_2.c sourses/main.c sourses/pars.c sourses/pars2.c \
+      sourses/env.c sourses/env_2.c sourses/main.c sourses/pars.c sourses/pars2.c sourses/pars3.c  \
       sourses/pars_cmd.c sourses/pars_redir.c sourses/pars_utils.c \
       sourses/utils.c sourses/utils_2.c sourses/utils_3.c sourses/cmd_exec.c sourses/exec_cmd.c sourses/bulitin.c sourses/bulitin_2.c \
       sourses/dollar.c sourses/dollar_utils.c sourses/heredoc.c sourses/redirect.c sourses/redirect2.c sourses/redirect3.c sourses/redirect4.c sourses/redirect5.c sourses/pipe.c sourses/signals.c \
-      sourses/signals2.c sourses/exit_status.c
+      sourses/signals2.c sourses/exit_status.c sourses/builtin_3.c sourses/builtin_4.c \
+	  sourses/main_utils1.c sourses/main_utils2.c sourses/main_utils3.c
 
 OBJ = $(SRC:.c=.o)
 

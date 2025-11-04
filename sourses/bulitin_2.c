@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bulitin_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:13 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 00:08:07 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/03 22:35:54 by armtoros         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,29 @@ void	exec_builtin(t_command *cmd, t_env **env)
 		ft_env(*env);
 	else if (!ft_strcmp(cmd->argc[0], "exit"))
 		ft_exit(cmd);
+}
+
+void	print_exported_vars(t_env *env)
+{
+	t_env	*tmp;
+
+	tmp = env;
+	while (tmp)
+	{
+		if (tmp->value && ft_strlen(tmp->value) > 0)
+		{
+			ft_putstr_fd("declare -x ", STDOUT_FILENO);
+			ft_putstr_fd(tmp->key, STDOUT_FILENO);
+			ft_putstr_fd("=\"", STDOUT_FILENO);
+			ft_putstr_fd(tmp->value, STDOUT_FILENO);
+			ft_putstr_fd("\"\n", STDOUT_FILENO);
+		}
+		else
+		{
+			ft_putstr_fd("declare -x ", STDOUT_FILENO);
+			ft_putstr_fd(tmp->key, STDOUT_FILENO);
+			ft_putstr_fd("\n", STDOUT_FILENO);
+		}
+		tmp = tmp->next;
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 00:55:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/02 22:46:58 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/03 22:41:02 by armtoros         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,29 +101,4 @@ char	*find_executable_in_envp(char *cmd, char **envp)
 	if (!paths)
 		return (NULL);
 	return (search_in_paths(paths, cmd));
-}
-
-int	process_heredocs(t_token *tokens, int count)
-{
-	int	i;
-	int	original_stdin;
-
-	i = 0;
-	original_stdin = -1;
-	while (i < count - 1)
-	{
-		if (tokens[i].type == T_HEREDOC && tokens[i + 1].type == T_LIMITER)
-		{
-			original_stdin = handle_heredoc(tokens[i + 1].str);
-			if (original_stdin < 0)
-			{
-				set_exit_status(1);
-				return (-1);
-			}
-			i += 2;
-		}
-		else
-			i++;
-	}
-	return (original_stdin);
 }
