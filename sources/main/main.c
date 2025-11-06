@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:17 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/03 23:26:44 by armtoros         ###   ########.fr       */
+/*   Updated: 2025/11/06 20:54:53 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,15 @@ char	*read_multiline_input(void)
 	char	*full_line;
 	int		is_interactive;
 
-	line = readline("minishell$ ");
+	is_interactive = isatty(STDIN_FILENO);
+	if (is_interactive)
+		line = readline("minishell$ ");
+	else
+		line = readline("");
 	if (!line)
 		return (NULL);
 	full_line = ft_strdup(line);
 	free(line);
-	is_interactive = isatty(STDIN_FILENO);
 	while (has_unclosed_quotes(full_line))
 	{
 		full_line = read_continuation_line(full_line, is_interactive);
