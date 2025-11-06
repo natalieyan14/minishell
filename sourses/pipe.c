@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:02 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/02 22:46:58 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/06 14:39:31 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 					if (S_ISDIR(st.st_mode))
 					{
 						ft_putstr_fd(cmd->argc[0], STDERR_FILENO);
-						ft_putstr_fd(": is a directory\n", STDERR_FILENO);
+						ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
 						exit(126);
 					}
 					else if (access(cmd->argc[0], X_OK) != 0)
@@ -242,7 +242,7 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 						if (S_ISDIR(st.st_mode))
 						{
 							ft_putstr_fd(current->argc[0], STDERR_FILENO);
-							ft_putstr_fd(": is a directory\n", STDERR_FILENO);
+							ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
 							exit(126);
 						}
 						else if (access(current->argc[0], X_OK) != 0)

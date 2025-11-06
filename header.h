@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:53:16 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/03 23:27:04 by armtoros         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:31:54 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,8 @@ void							ft_export(t_env **env, char **argc);
 void							ft_unset(t_env **env, char **argc);
 void							ft_env(t_env *env);
 void							ft_exit(t_command *cmd);
-
+void    set_exit_status(int status);
+int     get_exit_status(void);
 void							setup_interactive_signals(void);
 void							setup_execution_signals(void);
 int								check_signal_status(void);
