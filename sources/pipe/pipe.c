@@ -6,7 +6,7 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:02 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/06 14:39:31 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/06 22:07:14 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,11 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 				ft_putstr_fd("minishell: ", STDERR_FILENO);
 				ft_putstr_fd(cmd->argc[0], STDERR_FILENO);
 				ft_putstr_fd(": command not found\n", STDERR_FILENO);
+	
+				free_cmd_list(cmd);
+				free_env_list(*env_list);
+				free_string_array(env_array);
+
 				exit(127);
 			}
 			if (execve(executable, cmd->argc, env_array) == -1)
@@ -263,6 +268,14 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 					ft_putstr_fd("minishell: ", STDERR_FILENO);
 					ft_putstr_fd(current->argc[0], STDERR_FILENO);
 					ft_putstr_fd(": command not found\n", STDERR_FILENO);
+	
+					free_cmd_list(cmd_list);
+					free_env_list(*env_list);
+					for (int k = 0; k < cmd_count - 1; k++)
+						free(pipes[k]);
+					free(pipes);
+					free(pids);
+
 					exit(127);
 				}
 				envp = list_to_array(*env_list);

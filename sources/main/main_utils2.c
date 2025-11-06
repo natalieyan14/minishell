@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 23:16:29 by armtoros          #+#    #+#             */
-/*   Updated: 2025/11/06 20:10:14 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/06 21:51:00 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,17 +64,13 @@ int	handle_input(char *line, t_env **env_list)
 		return (0);
 	cmd_list = prepare_commands(tokens, token_count, *env_list,
 			&original_stdin);
+	free_tokens(tokens, token_count);
+	free(line);
 	if (!cmd_list)
-	{
-		free_tokens(tokens, token_count);
-		free(line);
 		return (0);
-	}
 	execute_pipeline(cmd_list, env_list);
 	restore_stdin(original_stdin);
-	free_tokens(tokens, token_count);
 	free_cmd_list(cmd_list);
-	free(line);
 	return (1);
 }
 
