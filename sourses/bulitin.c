@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bulitin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:20 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/03 22:35:13 by armtoros         ###   ########.fr       */
+/*   Updated: 2025/11/06 15:27:48 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,12 @@ void	ft_cd(t_command *cmd, t_env *env)
 	char	*path;
 
 	(void)env;
+	if (cmd->argc[1] && cmd->argc[2])
+	{
+		ft_putstr_fd("cd: too many arguments\n", 2);
+		set_exit_status(1);
+		return ;
+	}
 	if (!cmd->argc[1])
 		path = getenv("HOME");
 	else
