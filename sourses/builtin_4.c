@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_4.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 22:33:35 by armtoros          #+#    #+#             */
-/*   Updated: 2025/11/03 22:34:14 by armtoros         ###   ########.fr       */
+/*   Updated: 2025/11/06 13:55:29 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ void	ft_exit(t_command *cmd)
 	arg_count--;
 	if (isatty(STDIN_FILENO))
 		write(1, "exit\n", 5);
-	else
-		write(1, "minishell> \n", 12);
 	if (arg_count == 0)
 		exit(0);
 	if (arg_count == 1 && !is_numeric(cmd->argc[1]))
