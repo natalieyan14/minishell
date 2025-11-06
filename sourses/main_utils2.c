@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 23:16:29 by armtoros          #+#    #+#             */
-/*   Updated: 2025/11/03 23:26:13 by armtoros         ###   ########.fr       */
+/*   Updated: 2025/11/06 20:10:14 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ t_token	*tokenize_and_validate(char *line, int *token_count)
 	return (tokens);
 }
 
-t_command	*prepare_commands(t_token *tokens, int token_count,
-					t_env *env_list, int *original_stdin)
+t_command	*prepare_commands(t_token *tokens, int token_count, t_env *env_list,
+		int *original_stdin)
 {
 	t_command	*cmd_list;
 
@@ -55,11 +55,15 @@ int	handle_input(char *line, t_env **env_list)
 	int			original_stdin;
 
 	if (!handle_syntax_check(line))
+	{
+		free(line);
 		return (0);
+	}
 	tokens = tokenize_and_validate(line, &token_count);
 	if (!tokens)
 		return (0);
-	cmd_list = prepare_commands(tokens, token_count,*env_list, &original_stdin);
+	cmd_list = prepare_commands(tokens, token_count, *env_list,
+			&original_stdin);
 	if (!cmd_list)
 	{
 		free_tokens(tokens, token_count);

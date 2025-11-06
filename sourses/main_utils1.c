@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 23:15:48 by armtoros          #+#    #+#             */
-/*   Updated: 2025/11/03 23:15:58 by armtoros         ###   ########.fr       */
+/*   Updated: 2025/11/06 20:10:14 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int	handle_syntax_check(char *line)
 {
 	if (has_syntax_errors(line))
 	{
-		free(line);
 		return (0);
 	}
 	return (1);

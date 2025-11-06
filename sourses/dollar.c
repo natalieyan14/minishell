@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 00:17:41 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 00:51:11 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/06 20:10:13 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,28 +35,34 @@ static void	replace_token_var(t_token *token, int dollar_pos, t_env *env_list)
 	}
 	var_value = get_var_value(env_list, var_name);
 	new_str = replace_dollar_var(token->str, dollar_pos, var_end, var_value);
-	free(token->str);
+	if (new_str)
+	{
+		free(token->str);
+		token->str = new_str;
+	}
 	free(var_name);
 	if (var_value)
 		free(var_value);
-	if (new_str)
-		token->str = new_str;
 }
 
 static void	expand_in_token(t_token *token, t_env *env_list)
 {
-	int	dollar_pos;
+	int		dollar_pos;
+	size_t	str_len;
 
 	dollar_pos = 0;
-	while ((size_t)dollar_pos < ft_strlen(token->str))
+	while (token->str && token->str[dollar_pos])
 	{
+		str_len = ft_strlen(token->str);
+		if ((size_t)dollar_pos >= str_len)
+			break;
 		if (token->str[dollar_pos] == '$')
 		{
 			replace_token_var(token, dollar_pos, env_list);
-			dollar_pos++;
+			if (!token->str)
+				break;
 		}
-		else
-			dollar_pos++;
+		dollar_pos++;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/25 02:05:01 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/06 20:10:14 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,11 @@ char	**env_to_array(t_env *env_list)
 	while (env_list)
 	{
 		env[i] = ft_strjoin_env(env_list->key, env_list->value, '=');
+		if (!env[i])
+		{
+			free_string_array(env);
+			return (NULL);
+		}
 		env_list = env_list->next;
 		i++;
 	}
