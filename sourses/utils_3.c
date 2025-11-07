@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 17:02:29 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/03 22:41:10 by armtoros         ###   ########.fr       */
+/*   Updated: 2025/11/07 19:34:29 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,11 @@ t_toktype	find_type(char *str, t_token *tokens, int i)
 	return (T_WORD);
 }
 
-int	process_heredocs(t_token *tokens, int count)
+int	process_heredocs(t_token *tokens, int count, t_env *env_list)
 {
 	int	i;
 	int	original_stdin;
+	int	should_expand;
 
 	i = 0;
 	original_stdin = -1;
@@ -67,7 +68,9 @@ int	process_heredocs(t_token *tokens, int count)
 	{
 		if (tokens[i].type == T_HEREDOC && tokens[i + 1].type == T_LIMITER)
 		{
-			original_stdin = handle_heredoc(tokens[i + 1].str);
+			should_expand = (tokens[i + 1].quote_type == 0);
+			original_stdin = handle_heredoc(tokens[i + 1].str, should_expand,
+					env_list);
 			if (original_stdin < 0)
 			{
 				set_exit_status(1);

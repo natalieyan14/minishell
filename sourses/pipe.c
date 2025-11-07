@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 18:29:33 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/07 18:37:25 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/07 19:34:23 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 		{
 			saved_stdin = dup(STDIN_FILENO);
 			saved_stdout = dup(STDOUT_FILENO);
-			if (setup_ordered_redirections(cwmd) < 0)
+			if (setup_ordered_redirections(cmd) < 0)
 			{
 				close(saved_stdin);
 				close(saved_stdout);
@@ -258,7 +258,8 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 						exit(127);
 					}
 				}
-				executable = find_executable_in_path(current->argc[0], *env_list);
+				executable = find_executable_in_path(current->argc[0],
+						*env_list);
 				if (!executable)
 				{
 					ft_putstr_fd("minishell: ", STDERR_FILENO);

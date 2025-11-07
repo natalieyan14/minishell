@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 21:19:54 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 21:21:21 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/07 19:34:52 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,49 @@ static int	check_limiter(char *str, char *limiter)
 	return (0);
 }
 
-static void	run_heredoc(int pipe_fd, char *limiter)
+static char	*expand_heredoc_line(char *line, t_env *env_list)
+{
+	char	*var_name;
+	char	*var_value;
+	char	*new_line;
+	int		i;
+	int		var_end;
+
+	i = 0;
+	new_line = ft_strdup(line);
+	while (new_line && (size_t)i < ft_strlen(new_line))
+	{
+		if (new_line[i] == '$')
+		{
+			var_name = get_var_name(new_line, i, &var_end);
+			if (var_name && ft_strlen(var_name) > 0)
+			{
+				if (ft_strcmp(var_name, "?") == 0)
+					var_value = ft_itoa(get_current_exit_status());
+				else
+					var_value = get_env_value(env_list, var_name);
+				if (!var_value)
+					var_value = ft_strdup("");
+				new_line = replace_dollar_var(new_line, i, var_end, var_value);
+				i += ft_strlen(var_value);
+				free(var_value);
+			}
+			else
+				i++;
+			if (var_name)
+				free(var_name);
+		}
+		else
+			i++;
+	}
+	return (new_line);
+}
+
+static void	run_heredoc(int pipe_fd, char *limiter, int should_expand,
+		t_env *env_list)
 {
 	char	*str;
+	char	*processed_line;
 	char	*line_with_newline;
 
 	while (1)
@@ -76,7 +116,11 @@ static void	run_heredoc(int pipe_fd, char *limiter)
 		str = readline("> ");
 		if (check_limiter(str, limiter))
 			break ;
-		line_with_newline = ft_strjoin_heredoc(ft_strdup(str), "\n");
+		if (should_expand)
+			processed_line = expand_heredoc_line(str, env_list);
+		else
+			processed_line = ft_strdup(str);
+		line_with_newline = ft_strjoin_heredoc(processed_line, "\n");
 		if (line_with_newline)
 		{
 			write(pipe_fd, line_with_newline, ft_strlen(line_with_newline));
@@ -86,7 +130,7 @@ static void	run_heredoc(int pipe_fd, char *limiter)
 	}
 }
 
-int	handle_heredoc(char *limiter)
+int	handle_heredoc(char *limiter, int should_expand, t_env *env_list)
 {
 	int	pipe_fd[2];
 	int	original_stdin;
@@ -100,7 +144,7 @@ int	handle_heredoc(char *limiter)
 		return (-1);
 	}
 	original_stdin = dup(STDIN_FILENO);
-	run_heredoc(pipe_fd[1], limiter);
+	run_heredoc(pipe_fd[1], limiter, should_expand, env_list);
 	close(pipe_fd[1]);
 	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);

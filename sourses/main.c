@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:17 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/05 21:27:43 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/07 19:26:09 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,22 @@
 
 char	*read_multiline_input(void)
 {
-	char	*line;
-	char	*full_line;
-	int		is_interactive;
+	char		*line;
+	char		*full_line;
+	int			is_interactive;
+	static int	first_call = 1;
 
-	// line = readline("");
-	line = readline("minishell$ ");
+	if (isatty(STDIN_FILENO))
+		line = readline("minishell$ ");
+	else
+	{
+		if (first_call)
+		{
+			write(1, "minishell$ \n", 12);
+			first_call = 0;
+		}
+		line = readline("");
+	}
 	if (!line)
 		return (NULL);
 	full_line = ft_strdup(line);
@@ -66,7 +76,8 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc > 1 && argv)
 	{
-		ft_putstr_fd("Error: too many arguments for ./minishell\n", STDERR_FILENO);
+		ft_putstr_fd("Error: too many arguments for ./minishell\n",
+			STDERR_FILENO);
 		return (3);
 	}
 	exit_status = 0;
