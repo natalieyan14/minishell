@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 21:24:38 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/07 21:52:00 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/08 01:18:30 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,15 +233,16 @@ char							*replace_dollar_var(char *str, int start,
 									int end, char *replacement);
 void							expand_dollar_vars(t_token *tokens, int count,
 									t_env *env_list);
-int	 	 export_variable(t_env **env, char *key, char *val);
-int	process_export_arg(t_env **env, char *arg);
-int								is_valid_identifier( char *str);
+int								export_variable(t_env **env, char *key,
+									char *val);
+int								process_export_arg(t_env **env, char *arg);
+int								is_valid_identifier(char *str);
 int								is_numeric(char *str);
 void							print_exported_vars(t_env *env);
 void							toggle_quotes(char c, int *sq, int *dq);
 int								is_forbidden_char(char c);
 int								report_syntax_error(void);
-int								has_syntax_errors( char *str);
+int								has_syntax_errors(char *str);
 int								handle_syntax_check(char *line);
 t_token							*tokenize_and_validate(char *line,
 									int *token_count);
