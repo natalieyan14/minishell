@@ -2,18 +2,18 @@ NAME = minishell
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline
+LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline -fsanitize=address
 
 LIBFT_DIR = Libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-SRC = sources/tokenize/tokenize.c sources/tokenize/tokenize_utils.c sources/tokenize/tokenize_handlers.c sources/pars/validation.c \
-      sources/pars/env.c sources/pars/env_2.c sources/main/main.c sources/pars/pars.c sources/pars/pars2.c sources/pars/pars3.c  \
-      sources/pars/pars_cmd.c sources/pars/pars_redir.c sources/pars/pars_utils.c \
-      sources/utils/utils.c sources/utils/utils_2.c sources/utils/utils_3.c sources/pars/cmd_exec.c sources/pars/exec_cmd.c sources/bultin/bulitin.c sources/bultin/bulitin_2.c \
-      sources/bultin/dollar.c sources/bultin/dollar_utils.c sources/redir/heredoc.c sources/redir/redirect.c sources/redir/redirect2.c sources/redir/redirect3.c sources/redir/redirect4.c sources/redir/redirect5.c sources/pipe/pipe.c sources/signals/signals.c \
-      sources/signals/signals2.c sources/pars/exit_status.c sources/bultin/builtin_3.c sources/bultin/builtin_4.c \
-	  sources/main/main_utils1.c sources/main/main_utils2.c sources/main/main_utils3.c
+SRC = sourses/tokenize.c sourses/tokenize_utils.c sourses/tokenize_handlers.c sourses/validation.c \
+      sourses/env.c sourses/env_2.c sourses/main.c sourses/pars.c sourses/pars2.c sourses/pars3.c  \
+      sourses/pars_cmd.c sourses/pars_redir.c sourses/pars_utils.c \
+      sourses/utils.c sourses/utils_2.c sourses/utils_3.c sourses/cmd_exec.c sourses/exec_cmd.c sourses/bulitin.c sourses/bulitin_2.c \
+      sourses/dollar.c sourses/dollar_utils.c sourses/heredoc.c sourses/redirect.c sourses/redirect2.c sourses/redirect3.c sourses/redirect4.c sourses/redirect5.c sourses/pipe.c sourses/signals.c \
+      sourses/signals2.c sourses/exit_status.c sourses/builtin_3.c sourses/builtin_4.c \
+	  sourses/main_utils1.c sourses/main_utils2.c sourses/main_utils3.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -25,7 +25,7 @@ $(LIBFT):
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) -o $(NAME)
 
-%.o: %.c
+sourses/%.o: sourses/%.c
 	$(CC) $(CFLAGS) -I. -I$(LIBFT_DIR) -c $< -o $@
 
 clean:
@@ -37,8 +37,5 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
-
-valgrind:
-			valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=ignore_readline.supp ./minishell
 
 .PHONY: all clean fclean re

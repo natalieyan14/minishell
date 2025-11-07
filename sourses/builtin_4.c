@@ -1,0 +1,90 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_4.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/03 22:33:35 by armtoros          #+#    #+#             */
+/*   Updated: 2025/11/05 21:28:44 by nharutyu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "header.h"
+
+void	ft_exit_error(char *arg)
+{
+	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+	exit(255);
+}
+
+void	ft_exit(t_command *cmd)
+{
+	int	status;
+	int	arg_count;
+
+	arg_count = 0;
+	while (cmd->argc[arg_count])
+		arg_count++;
+	arg_count--;
+	if (isatty(STDIN_FILENO))
+		write(1, "exit\n", 5);
+	// else
+	// 	write(1, "minishell> \n", 12);
+	if (arg_count == 0)
+		exit(0);
+	if (arg_count == 1)
+	{
+		if (!is_numeric(cmd->argc[1]))
+			ft_exit_error(cmd->argc[1]);
+		status = ft_atoi(cmd->argc[1]);
+		exit(status);
+	}
+	ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
+	set_exit_status(1);
+	return ;
+}
+
+static void	update_existing_var(t_env *env, char *key, char *val)
+{
+	while (env)
+	{
+		if (!ft_strcmp(env->key, key))
+		{
+			if (val)
+			{
+				free(env->value);
+				env->value = ft_strdup(val);
+			}
+			return ;
+		}
+		env = env->next;
+	}
+}
+
+void	export_variable(t_env **env, char *key, char *val)
+{
+	t_env	*tmp;
+	t_env	*new_node;
+
+	tmp = *env;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->key, key))
+		{
+			update_existing_var(*env, key, val);
+			return ;
+		}
+		tmp = tmp->next;
+	}
+	if (val)
+	{
+		new_node = malloc(sizeof(t_env));
+		new_node->key = ft_strdup(key);
+		new_node->value = ft_strdup(val);
+		new_node->next = *env;
+		*env = new_node;
+	}
+}

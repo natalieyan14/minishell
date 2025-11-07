@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:53:16 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/07 16:54:51 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/03 23:27:04 by armtoros         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,9 +150,8 @@ void							handle_special_chars(t_tokenizer *tok,
 									char *input);
 void							handle_quotes(t_tokenizer *tok, char c);
 
-int								handle_heredoc(char *limiter, t_env *env_list);
-int								process_heredocs(t_token *tokens, int count,
-									t_env *env_list);
+int								handle_heredoc(char *limiter);
+int								process_heredocs(t_token *tokens, int count);
 
 int								setup_redirections(t_command *cmd);
 int								validate_redir(t_input_redir *input_list);
@@ -161,8 +160,10 @@ int								setup_input_redirect(char *filename);
 void							exec_cmd_helper(t_command *cmd, char **envp);
 int								validate_helper(t_ordered_redir *redirs);
 int								process_single_redir(t_ordered_redir *redir);
-int								validate_and_setup_outputs_helper(t_ordered_redir *redirs);
-int								setup_input_redirections_helper(t_ordered_redir *redirs);
+int								validate_and_setup_outputs_helper(
+									t_ordered_redir *redirs);
+int								setup_input_redirections_helper(
+									t_ordered_redir *redirs);
 void							cleanup_fds(int *fds, int count);
 
 void							exec_cmd(t_command *cmd, char **envp);
@@ -194,10 +195,10 @@ void							exec_cmd_list(t_command *cmd_list, char **env);
 void							exec_command(char **cmd, char **envp);
 int								execute_pipeline(t_command *cmd_list,
 									t_env **env_list);
-char							*find_executable_in_path(char *cmd,
-									t_env *env_list);
-char							*find_executable_in_envp(char *cmd,
-									char **envp);
+char							*find_executable_in_path(
+									char *cmd, t_env *env_list);
+char							*find_executable_in_envp(
+									char *cmd, char **envp);
 
 int								ft_strcmp(const char *s1, const char *s2);
 size_t							ft_strlen(const char *s);
@@ -215,8 +216,7 @@ void							ft_export(t_env **env, char **argc);
 void							ft_unset(t_env **env, char **argc);
 void							ft_env(t_env *env);
 void							ft_exit(t_command *cmd);
-void							set_exit_status(int status);
-int								get_exit_status(void);
+
 void							setup_interactive_signals(void);
 void							setup_execution_signals(void);
 int								check_signal_status(void);
@@ -233,8 +233,8 @@ char							*replace_dollar_var(char *str, int start,
 									int end, char *replacement);
 void							expand_dollar_vars(t_token *tokens, int count,
 									t_env *env_list);
-void							export_variable(t_env **env, char *key,
-									char *val);
+void							export_variable(
+									t_env **env, char *key, char *val);
 int								is_valid_identifier(char *str);
 int								is_numeric(char *str);
 void							print_exported_vars(t_env *env);
@@ -243,18 +243,18 @@ int								is_forbidden_char(char c);
 int								report_syntax_error(void);
 int								has_syntax_errors(char *str);
 int								handle_syntax_check(char *line);
-t_token							*tokenize_and_validate(char *line,
-									int *token_count);
-t_command						*prepare_commands(t_token *tokens,
-									int token_count, t_env *env_list,
-									int *original_stdin);
+t_token							*tokenize_and_validate(
+									char *line, int *token_count);
+t_command						*prepare_commands(
+									t_token *tokens, int token_count,
+									t_env *env_list, int *original_stdin);
 void							restore_stdin(int original_stdin);
 int								handle_input(char *line, t_env **env_list);
 int								has_unclosed_quotes(char *str);
 int								handle_eof_error(char *full_line);
-char							*append_continuation(char *full_line,
-									char *continuation);
-char							*read_continuation_line(char *full_line,
-									int is_interactive);
+char							*append_continuation(
+									char *full_line, char *continuation);
+char							*read_continuation_line(
+									char *full_line, int is_interactive);
 
 #endif
