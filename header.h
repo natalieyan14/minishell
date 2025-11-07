@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/26 03:53:16 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/07 19:35:54 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/11/07 21:24:38 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/07 21:52:00 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ int								setup_input_redirect(char *filename);
 void							exec_cmd_helper(t_command *cmd, char **envp);
 int								validate_helper(t_ordered_redir *redirs);
 int								process_single_redir(t_ordered_redir *redir);
-int								validate_helper(t_ordered_redir *redirs);
+int								validate_setup_helper(t_ordered_redir *redirs);
 int								setup_helper(t_ordered_redir *redirs);
 void							cleanup_fds(int *fds, int count);
 
@@ -233,15 +233,15 @@ char							*replace_dollar_var(char *str, int start,
 									int end, char *replacement);
 void							expand_dollar_vars(t_token *tokens, int count,
 									t_env *env_list);
-void							export_variable(t_env **env, char *key,
-									char *val);
-int								is_valid_identifier(char *str);
+int	 	 export_variable(t_env **env, char *key, char *val);
+int	process_export_arg(t_env **env, char *arg);
+int								is_valid_identifier( char *str);
 int								is_numeric(char *str);
 void							print_exported_vars(t_env *env);
 void							toggle_quotes(char c, int *sq, int *dq);
 int								is_forbidden_char(char c);
 int								report_syntax_error(void);
-int								has_syntax_errors(char *str);
+int								has_syntax_errors( char *str);
 int								handle_syntax_check(char *line);
 t_token							*tokenize_and_validate(char *line,
 									int *token_count);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 18:29:33 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/07 19:34:23 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/07 20:32:50 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 				{
 					if (S_ISDIR(st.st_mode))
 					{
+						ft_putstr_fd("minishell:", STDERR_FILENO);
 						ft_putstr_fd(cmd->argc[0], STDERR_FILENO);
 						ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
-						perror("havayi text: ");
 						exit(126);
 					}
 					else if (access(cmd->argc[0], X_OK) != 0)

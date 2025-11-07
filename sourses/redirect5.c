@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect5.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 01:50:40 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/07 19:35:53 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/07 19:45:47 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	validate_helper(t_ordered_redir *redirs)
 	return (0);
 }
 
-int	validate_helper(t_ordered_redir *redirs)
+int	validate_setup_helper(t_ordered_redir *redirs)
 {
 	t_ordered_redir	*curr;
 
