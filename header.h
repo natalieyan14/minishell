@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:53:16 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/06 21:51:21 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/07 16:54:51 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,8 +150,9 @@ void							handle_special_chars(t_tokenizer *tok,
 									char *input);
 void							handle_quotes(t_tokenizer *tok, char c);
 
-int								handle_heredoc(char *limiter);
-int								process_heredocs(t_token *tokens, int count);
+int								handle_heredoc(char *limiter, t_env *env_list);
+int								process_heredocs(t_token *tokens, int count,
+									t_env *env_list);
 
 int								setup_redirections(t_command *cmd);
 int								validate_redir(t_input_redir *input_list);

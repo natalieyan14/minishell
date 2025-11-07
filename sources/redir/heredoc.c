@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 21:19:54 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 21:21:21 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/07 16:54:51 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,21 @@ static int	check_limiter(char *str, char *limiter)
 	return (0);
 }
 
-static void	run_heredoc(int pipe_fd, char *limiter)
+static char	*expand_heredoc_vars(char *line, t_env *env_list)
+{
+	t_token	temp_token;
+	
+	temp_token.str = ft_strdup(line);
+	temp_token.type = T_WORD;
+	temp_token.quote_type = 0;
+	expand_dollar_vars(&temp_token, 1, env_list);
+	return (temp_token.str);
+}
+
+static void	run_heredoc(int pipe_fd, char *limiter, t_env *env_list)
 {
 	char	*str;
+	char	*expanded_str;
 	char	*line_with_newline;
 
 	while (1)
@@ -76,7 +88,8 @@ static void	run_heredoc(int pipe_fd, char *limiter)
 		str = readline("> ");
 		if (check_limiter(str, limiter))
 			break ;
-		line_with_newline = ft_strjoin_heredoc(ft_strdup(str), "\n");
+		expanded_str = expand_heredoc_vars(str, env_list);
+		line_with_newline = ft_strjoin_heredoc(expanded_str, "\n");
 		if (line_with_newline)
 		{
 			write(pipe_fd, line_with_newline, ft_strlen(line_with_newline));
@@ -86,7 +99,7 @@ static void	run_heredoc(int pipe_fd, char *limiter)
 	}
 }
 
-int	handle_heredoc(char *limiter)
+int	handle_heredoc(char *limiter, t_env *env_list)
 {
 	int	pipe_fd[2];
 	int	original_stdin;
@@ -100,7 +113,7 @@ int	handle_heredoc(char *limiter)
 		return (-1);
 	}
 	original_stdin = dup(STDIN_FILENO);
-	run_heredoc(pipe_fd[1], limiter);
+	run_heredoc(pipe_fd[1], limiter, env_list);
 	close(pipe_fd[1]);
 	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);

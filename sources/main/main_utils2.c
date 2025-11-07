@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 23:16:29 by armtoros          #+#    #+#             */
-/*   Updated: 2025/11/06 21:51:00 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/07 16:54:51 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_command	*prepare_commands(t_token *tokens, int token_count, t_env *env_list,
 	t_command	*cmd_list;
 
 	expand_dollar_vars(tokens, token_count, env_list);
-	*original_stdin = process_heredocs(tokens, token_count);
+	*original_stdin = process_heredocs(tokens, token_count, env_list);
 	cmd_list = parse_tokens(tokens, token_count);
 	return (cmd_list);
 }
