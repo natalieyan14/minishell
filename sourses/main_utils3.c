@@ -6,7 +6,7 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 23:18:58 by armtoros          #+#    #+#             */
-/*   Updated: 2025/11/04 20:19:03 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/08 18:09:11 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ char	*read_continuation_line(char *full_line, int is_interactive)
 		handle_eof_error(full_line);
 		return (NULL);
 	}
-	// continuation = readline("");
 	continuation = readline("> ");
 	if (!continuation)
 	{
