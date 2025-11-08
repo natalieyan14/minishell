@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 21:12:25 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 21:15:31 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/08 20:24:04 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,11 @@ void	handle_child_signal_exit(int status)
 		{
 			write(STDERR_FILENO, "Quit (core dumped)\n", 19);
 			set_exit_status(131);
+		}
+		else if (WTERMSIG(status) == SIGSEGV)
+		{
+			write(STDERR_FILENO, "Segmentation fault: 11\n", 23);
+			set_exit_status(139);
 		}
 		else
 			set_exit_status(128 + WTERMSIG(status));

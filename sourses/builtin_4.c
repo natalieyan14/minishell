@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 22:33:35 by armtoros          #+#    #+#             */
-/*   Updated: 2025/11/08 01:17:55 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/08 20:48:14 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,15 @@ void	ft_exit(t_command *cmd)
 		write(1, "exit\n", 5);
 	if (arg_count == 0)
 		exit(0);
-	if (arg_count == 1)
+	if (arg_count >= 1)
 	{
 		if (!is_numeric(cmd->argc[1]))
 			ft_exit_error(cmd->argc[1]);
-		status = ft_atoi(cmd->argc[1]);
-		exit(status);
+		if (arg_count == 1)
+		{
+			status = ft_atoi(cmd->argc[1]);
+			exit(status);
+		}
 	}
 	ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
 	set_exit_status(1);
