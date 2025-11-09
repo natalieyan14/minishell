@@ -6,126 +6,80 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 21:19:54 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/07 19:34:52 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/09 21:24:10 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-static void	copy_strings(char *dest, char *s1, char *s2)
+static int	process_dollar_variable(char **new_line, int i, t_env *env_list)
 {
-	int	i;
-	int	j;
+	char	*var_name;
+	char	*var_value;
+	int		var_end;
+	int		new_i;
 
-	i = 0;
-	while (s1[i])
+	var_name = get_var_name(*new_line, i, &var_end);
+	if (var_name && ft_strlen(var_name) > 0)
 	{
-		dest[i] = s1[i];
-		i++;
+		var_value = get_variable_value(var_name, env_list);
+		*new_line = replace_dollar_var(*new_line, i, var_end, var_value);
+		new_i = i + ft_strlen(var_value);
+		free(var_value);
+		free(var_name);
+		return (new_i);
 	}
-	j = 0;
-	while (s2[j])
-	{
-		dest[i + j] = s2[j];
-		j++;
-	}
-	dest[i + j] = '\0';
-}
-
-static char	*ft_strjoin_heredoc(char *s1, char *s2)
-{
-	size_t	s1_size;
-	size_t	s2_size;
-	char	*s3;
-
-	if (!s1 || !s2)
-		return (NULL);
-	s1_size = ft_strlen(s1);
-	s2_size = ft_strlen(s2);
-	s3 = malloc(sizeof(char) * (s1_size + s2_size + 1));
-	if (!s3)
-		return (NULL);
-	copy_strings(s3, s1, s2);
-	free(s1);
-	return (s3);
-}
-
-static int	check_limiter(char *str, char *limiter)
-{
-	if (!str)
-	{
-		write(STDERR_FILENO,
-			"minishell: warning: here-document delimited by end-of-file\n", 60);
-		return (1);
-	}
-	if (ft_strcmp(str, limiter) == 0)
-	{
-		free(str);
-		return (1);
-	}
-	return (0);
+	if (var_name)
+		free(var_name);
+	return (i + 1);
 }
 
 static char	*expand_heredoc_line(char *line, t_env *env_list)
 {
-	char	*var_name;
-	char	*var_value;
 	char	*new_line;
 	int		i;
-	int		var_end;
 
 	i = 0;
 	new_line = ft_strdup(line);
 	while (new_line && (size_t)i < ft_strlen(new_line))
 	{
 		if (new_line[i] == '$')
-		{
-			var_name = get_var_name(new_line, i, &var_end);
-			if (var_name && ft_strlen(var_name) > 0)
-			{
-				if (ft_strcmp(var_name, "?") == 0)
-					var_value = ft_itoa(get_current_exit_status());
-				else
-					var_value = get_env_value(env_list, var_name);
-				if (!var_value)
-					var_value = ft_strdup("");
-				new_line = replace_dollar_var(new_line, i, var_end, var_value);
-				i += ft_strlen(var_value);
-				free(var_value);
-			}
-			else
-				i++;
-			if (var_name)
-				free(var_name);
-		}
+			i = process_dollar_variable(&new_line, i, env_list);
 		else
 			i++;
 	}
 	return (new_line);
 }
 
+static void	process_heredoc_line(int pipe_fd, char *str, int should_expand,
+		t_env *env_list)
+{
+	char	*processed_line;
+	char	*line_with_newline;
+
+	if (should_expand)
+		processed_line = expand_heredoc_line(str, env_list);
+	else
+		processed_line = ft_strdup(str);
+	line_with_newline = ft_strjoin_heredoc(processed_line, "\n");
+	if (line_with_newline)
+	{
+		write(pipe_fd, line_with_newline, ft_strlen(line_with_newline));
+		free(line_with_newline);
+	}
+}
+
 static void	run_heredoc(int pipe_fd, char *limiter, int should_expand,
 		t_env *env_list)
 {
 	char	*str;
-	char	*processed_line;
-	char	*line_with_newline;
 
 	while (1)
 	{
 		str = readline("> ");
 		if (check_limiter(str, limiter))
 			break ;
-		if (should_expand)
-			processed_line = expand_heredoc_line(str, env_list);
-		else
-			processed_line = ft_strdup(str);
-		line_with_newline = ft_strjoin_heredoc(processed_line, "\n");
-		if (line_with_newline)
-		{
-			write(pipe_fd, line_with_newline, ft_strlen(line_with_newline));
-			free(line_with_newline);
-		}
+		process_heredoc_line(pipe_fd, str, should_expand, env_list);
 		free(str);
 	}
 }

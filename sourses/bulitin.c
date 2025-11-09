@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:20 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/09 16:56:40 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/09 21:10:59 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,67 +92,6 @@ void	ft_cd(t_command *cmd, t_env *env)
 	}
 	else
 		set_exit_status(0);
-}
-
-static int	has_valid_format(char *str, int *i)
-{
-	if (str[*i] == '+' || str[*i] == '-')
-	{
-		if (str[*i] == '+' && *(str + 1) == '+')
-			return (0);
-		if (str[*i] == '-' && *(str + 1) == '-')
-			return (0);
-		(*i)++;
-	}
-	if (!str[*i])
-		return (0);
-	return (1);
-}
-
-static int	check_overflow(char *str, int i, int sign)
-{
-	long	result;
-
-	result = 0;
-	while (str[i])
-	{
-		if (!ft_isdigit(str[i]))
-			return (0);
-		if (sign == 1)
-		{
-			if (result > LONG_MAX / 10 || (result == LONG_MAX / 10 && str[i]
-					- '0' > LONG_MAX % 10))
-				return (0);
-		}
-		else
-		{
-			if (result > -(LONG_MIN / 10) || (result == -(LONG_MIN / 10)
-					&& str[i] - '0' > -(LONG_MIN % 10)))
-				return (0);
-		}
-		result = result * 10 + (str[i] - '0');
-		i++;
-	}
-	return (1);
-}
-
-int	is_numeric(char *str)
-{
-	int	i;
-	int	sign;
-
-	if (!str || !*str)
-		return (0);
-	i = 0;
-	sign = 1;
-	if (!has_valid_format(str, &i))
-		return (0);
-	if (str[0] == '-')
-		sign = -1;
-	if (str[0] == '+' || str[0] == '-')
-		return (check_overflow(str, 1, sign));
-	else
-		return (check_overflow(str, 0, sign));
 }
 
 void	ft_env(t_env *env)

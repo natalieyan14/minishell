@@ -6,17 +6,15 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:17 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/07 19:26:09 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/09 21:15:14 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-char	*read_multiline_input(void)
+static char	*read_initial_line(void)
 {
 	char		*line;
-	char		*full_line;
-	int			is_interactive;
 	static int	first_call = 1;
 
 	if (isatty(STDIN_FILENO))
@@ -30,6 +28,16 @@ char	*read_multiline_input(void)
 		}
 		line = readline("");
 	}
+	return (line);
+}
+
+char	*read_multiline_input(void)
+{
+	char	*line;
+	char	*full_line;
+	int		is_interactive;
+
+	line = read_initial_line();
 	if (!line)
 		return (NULL);
 	full_line = ft_strdup(line);

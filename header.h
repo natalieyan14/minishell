@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 21:24:38 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/09 16:55:49 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/09 21:24:10 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,13 @@ typedef struct s_append_data
 	int							end;
 }								t_append_data;
 
+typedef struct s_pipe_ctx
+{
+	int							**pipes;
+	int							cmd_count;
+	t_env						**env_list;
+}								t_pipe_ctx;
+
 int								ft_env_lstsize(t_env *lst);
 char							*ft_strjoin_env(const char *s1, const char *s2,
 									char sep);
@@ -156,6 +163,11 @@ int								handle_heredoc(char *limiter, int should_expand,
 									t_env *env_list);
 int								process_heredocs(t_token *tokens, int count,
 									t_env *env_list);
+void							copy_strings(char *dest, char *s1, char *s2);
+char							*ft_strjoin_heredoc(char *s1, char *s2);
+char							*get_variable_value(char *var_name,
+									t_env *env_list);
+int								check_limiter(char *str, char *limiter);
 
 int								setup_redirections(t_command *cmd);
 int								validate_redir(t_input_redir *input_list);
@@ -197,6 +209,18 @@ void							exec_cmd_list(t_command *cmd_list, char **env);
 void							exec_command(char **cmd, char **envp);
 int								execute_pipeline(t_command *cmd_list,
 									t_env **env_list);
+int								count_commands(t_command *cmd_list);
+void							exec_child(t_command *cmd, t_pipe_ctx *ctx,
+									int i);
+void							close_all_pipes(int **pipes, int cmd_count);
+int								setup_pipes(int **pipes, int cmd_count);
+void							manage_pipes_cleanup(int **pipes, int cmd_count,
+									int free_mem);
+void							setup_child_io(int **pipes, int i,
+									int cmd_count);
+void							execute_child_pipeline(t_command *current,
+									t_pipe_ctx *ctx, int i);
+int								wait_for_children(pid_t *pids, int cmd_count);
 char							*find_executable_in_path(char *cmd,
 									t_env *env_list);
 char							*find_executable_in_envp(char *cmd,
@@ -240,6 +264,11 @@ int								export_variable(t_env **env, char *key,
 int								process_export_arg(t_env **env, char *arg);
 int								is_valid_identifier(char *str);
 int								is_numeric(char *str);
+int								update_existing_var(t_env *cur, char *val);
+char							*duplicate_value(char *val);
+int								init_env_strings(t_env *new, char *key,
+									char *val);
+t_env							*create_new_env(char *key, char *val);
 void							print_exported_vars(t_env *env);
 void							toggle_quotes(char c, int *sq, int *dq);
 int								is_forbidden_char(char c);
@@ -259,5 +288,21 @@ char							*append_continuation(char *full_line,
 									char *continuation);
 char							*read_continuation_line(char *full_line,
 									int is_interactive);
+int								**create_pipes(int pipe_count);
+void							cleanup_pipes(int **pipes, int pipe_count);
+int								wait_and_cleanup(int **pipes, pid_t *pids,
+									int cmd_count);
+int								cleanup_and_error(int **pipes, pid_t *pids,
+									int pipe_count);
+int								fork_error(int **pipes, pid_t *pids,
+									int pipe_count);
+void							exec_external(t_command *cmd, t_env **env);
+int								exec_single_command(t_command *cmd,
+									t_env **env_list);
+int								handle_empty_command(t_command *cmd);
+int								exec_external_single(t_command *cmd,
+									t_env **env_list);
+void							exec_child_single(t_command *cmd,
+									char **env_array);
 
 #endif

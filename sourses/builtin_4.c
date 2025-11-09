@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 22:33:35 by armtoros          #+#    #+#             */
-/*   Updated: 2025/11/09 16:53:14 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/09 21:24:10 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	ft_exit_error(char *arg)
 	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-	exit(2);
+	exit(255);
 }
 
 void	ft_exit(t_command *cmd)
@@ -69,59 +69,6 @@ void	ft_exit(t_command *cmd)
 	ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
 	set_exit_status(1);
 	return ;
-}
-
-static int	update_existing_var(t_env *cur, char *val)
-{
-	char	*dup_val;
-
-	dup_val = NULL;
-	if (val)
-	{
-		dup_val = ft_strdup(val);
-		if (!dup_val)
-			return (1);
-	}
-	free(cur->value);
-	cur->value = dup_val;
-	return (0);
-}
-
-static char	*duplicate_value(char *val)
-{
-	if (!val)
-		return (NULL);
-	return (ft_strdup(val));
-}
-
-static int	init_env_strings(t_env *new, char *key, char *val)
-{
-	new->key = ft_strdup(key);
-	if (!new->key)
-		return (0);
-	new->value = duplicate_value(val);
-	if (val && !new->value)
-	{
-		free(new->key);
-		return (0);
-	}
-	return (1);
-}
-
-static t_env	*create_new_env(char *key, char *val)
-{
-	t_env	*new;
-
-	new = malloc(sizeof(*new));
-	if (!new)
-		return (NULL);
-	if (!init_env_strings(new, key, val))
-	{
-		free(new);
-		return (NULL);
-	}
-	new->next = NULL;
-	return (new);
 }
 
 static void	add_env_to_list(t_env **env, t_env *new)
