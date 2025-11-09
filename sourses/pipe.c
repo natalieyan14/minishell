@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 18:29:33 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/08 20:48:14 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/09 17:19:58 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ static int	exec_single_command(t_command *cmd, t_env **env_list)
 			{
 				ft_putstr_fd("minishell: ", STDERR_FILENO);
 				ft_putstr_fd(cmd->argc[0], STDERR_FILENO);
-				ft_putstr_fd(": command not found\n", STDERR_FILENO);
+				ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
 				exit(127);
 			}
 			if (execve(executable, cmd->argc, env_array) == -1)
@@ -264,7 +264,7 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 				{
 					ft_putstr_fd("minishell: ", STDERR_FILENO);
 					ft_putstr_fd(current->argc[0], STDERR_FILENO);
-					ft_putstr_fd(": command not found\n", STDERR_FILENO);
+					ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
 					exit(127);
 				}
 				envp = list_to_array(*env_list);

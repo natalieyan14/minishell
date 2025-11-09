@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect4.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 01:50:33 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/07 19:46:15 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/09 17:19:58 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	exec_child_process(t_command *cmd, char **envp)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->argc[0], STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
 		exit(127);
 	}
 	if (execve(executable, cmd->argc, envp) == -1)

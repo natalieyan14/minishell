@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:54 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/27 12:16:48 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/09 17:05:36 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,29 @@ void	free_string_array(char **array)
 	free(array);
 }
 
+static void	increment_shlvl(t_env **env_list)
+{
+	char	*shlvl_str;
+	int		shlvl_val;
+	char	*new_shlvl;
+
+	shlvl_str = get_env_value(*env_list, "SHLVL");
+	if (shlvl_str)
+	{
+		shlvl_val = ft_atoi(shlvl_str);
+		free(shlvl_str);
+	}
+	else
+		shlvl_val = 0;
+	shlvl_val++;
+	new_shlvl = ft_itoa(shlvl_val);
+	if (new_shlvl)
+	{
+		export_variable(env_list, "SHLVL", new_shlvl);
+		free(new_shlvl);
+	}
+}
+
 t_env	*init_env(char **envp)
 {
 	t_env	*env_list;
@@ -53,6 +76,7 @@ t_env	*init_env(char **envp)
 		add_env_node(&env_list, envp[i]);
 		i++;
 	}
+	increment_shlvl(&env_list);
 	return (env_list);
 }
 

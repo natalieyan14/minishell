@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 04:00:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/08 18:32:44 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/09 16:57:11 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static int	check_next(t_token *t, int i)
 		|| (t[i].type == T_OUT_REDIR && t[i + 1].type != T_OUT_FILE)
 		|| (t[i].type == T_APPEND_REDIR && t[i + 1].type != T_APPEND_FILE)
 		|| (t[i].type == T_HEREDOC && t[i + 1].type != T_LIMITER))
-		return (err_message("syntax error ", t[i + 1].str, "'\n"),
-			set_exit_status(2), -1);
+		return (err_message("syntax error near unexpected token `", t[i
+					+ 1].str, "'\n"), set_exit_status(2), -1);
 	return (1);
 }
 

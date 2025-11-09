@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 21:52:42 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/09 14:24:07 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/09 17:00:41 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,16 @@ static void	export_error(char *arg)
 static int	parse_export_arg(char *arg, char **key, char **val)
 {
 	char	*eq;
+	char	*plus_eq;
 
 	eq = ft_strchr(arg, '=');
 	if (eq)
 	{
-		*key = ft_substr(arg, 0, eq - arg);
+		plus_eq = ft_strnstr(arg, "+=", eq - arg + 1);
+		if (plus_eq && plus_eq == eq - 1)
+			*key = ft_substr(arg, 0, plus_eq - arg);
+		else
+			*key = ft_substr(arg, 0, eq - arg);
 		*val = eq + 1;
 	}
 	else
@@ -89,7 +94,11 @@ int	is_valid_identifier(char *str)
 	while (str[i] && str[i] != '=')
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
+		{
+			if (str[i] == '+' && str[i + 1] == '=')
+				break ;
 			return (0);
+		}
 		i++;
 	}
 	return (1);

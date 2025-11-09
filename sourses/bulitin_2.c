@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bulitin_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:13 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/03 22:35:54 by armtoros         ###   ########.fr       */
+/*   Updated: 2025/11/09 17:11:41 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,55 @@ static void	remove_env_var(t_env **env, char *key)
 	}
 }
 
-void	ft_unset(t_env **env, char **argc)
+static void	unset_error(char *arg)
+{
+	ft_putstr_fd("minishell: unset: `", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+}
+
+static int	is_valid_unset_identifier(char *str)
 {
 	int	i;
 
+	if (!str || !*str)
+		return (0);
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (0);
 	i = 1;
-	while (argc[i])
+	while (str[i])
 	{
-		remove_env_var(env, argc[i]);
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (0);
 		i++;
 	}
-	set_exit_status(0);
+	return (1);
+}
+
+void	ft_unset(t_env **env, char **argc)
+{
+	int	i;
+	int	exit_code;
+
+	i = 1;
+	exit_code = 0;
+	if (!argc[1])
+	{
+		set_exit_status(0);
+		return ;
+	}
+	while (argc[i])
+	{
+		if (!is_valid_unset_identifier(argc[i]))
+		{
+			unset_error(argc[i]);
+			exit_code = 1;
+		}
+		else
+			remove_env_var(env, argc[i]);
+		i++;
+	}
+	set_exit_status(exit_code);
 }
 
 int	is_builtin(t_command *cmd)

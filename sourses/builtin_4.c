@@ -6,11 +6,34 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 22:33:35 by armtoros          #+#    #+#             */
-/*   Updated: 2025/11/09 14:26:37 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/09 16:53:14 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
+
+static long	ft_atol(const char *str)
+{
+	long	result;
+	int		sign;
+	int		i;
+
+	result = 0;
+	sign = 1;
+	i = 0;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (str[i] && ft_isdigit(str[i]))
+	{
+		result = result * 10 + (str[i] - '0');
+		i++;
+	}
+	return (result * sign);
+}
 
 void	ft_exit_error(char *arg)
 {
@@ -22,8 +45,8 @@ void	ft_exit_error(char *arg)
 
 void	ft_exit(t_command *cmd)
 {
-	int	status;
-	int	arg_count;
+	long	status;
+	int		arg_count;
 
 	arg_count = 0;
 	while (cmd->argc[arg_count])
@@ -39,8 +62,8 @@ void	ft_exit(t_command *cmd)
 			ft_exit_error(cmd->argc[1]);
 		if (arg_count == 1)
 		{
-			status = ft_atoi(cmd->argc[1]);
-			exit(status);
+			status = ft_atol(cmd->argc[1]);
+			exit((unsigned char)status);
 		}
 	}
 	ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
