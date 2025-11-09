@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 21:24:38 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/08 01:18:30 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/09 14:40:14 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ typedef struct s_tokenizer
 	int							dq;
 	int							quote_type;
 }								t_tokenizer;
+
 typedef struct s_input_redir
 {
 	char						*filename;

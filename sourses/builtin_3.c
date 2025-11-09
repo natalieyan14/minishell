@@ -6,38 +6,49 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 21:52:42 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/08 01:18:10 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/09 14:24:07 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-int	process_export_arg(t_env **env, char *arg)
+static void	export_error(char *arg)
+{
+	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+}
+
+static int	parse_export_arg(char *arg, char **key, char **val)
 {
 	char	*eq;
+
+	eq = ft_strchr(arg, '=');
+	if (eq)
+	{
+		*key = ft_substr(arg, 0, eq - arg);
+		*val = eq + 1;
+	}
+	else
+	{
+		*key = ft_strdup(arg);
+		*val = NULL;
+	}
+	return (*key != NULL);
+}
+
+int	process_export_arg(t_env **env, char *arg)
+{
 	char	*key;
 	char	*val;
 	int		ret;
 
 	if (!is_valid_identifier(arg))
 	{
-		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
-		ft_putstr_fd(arg, STDERR_FILENO);
-		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+		export_error(arg);
 		return (1);
 	}
-	eq = ft_strchr(arg, '=');
-	if (eq)
-	{
-		key = ft_substr(arg, 0, eq - arg);
-		val = eq + 1;
-	}
-	else
-	{
-		key = ft_strdup(arg);
-		val = NULL;
-	}
-	if (!key)
+	if (!parse_export_arg(arg, &key, &val))
 		return (1);
 	ret = export_variable(env, key, val);
 	free(key);
