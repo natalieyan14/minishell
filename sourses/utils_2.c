@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 00:55:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/03 22:41:02 by armtoros         ###   ########.fr       */
+/*   Updated: 2025/11/10 23:06:21 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,11 @@ char	*find_executable_in_path(char *cmd, t_env *env_list)
 	char	**paths;
 
 	if (ft_strchr(cmd, '/'))
-		return (ft_strdup(cmd));
+	{
+		if (access(cmd, F_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
 	path_env = get_env_value(env_list, "PATH");
 	if (!path_env)
 		return (NULL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_external.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:30:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/10 22:08:08 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/10 23:06:21 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	exec_external(t_command *cmd, t_env **env_list)
 {
 	char	*executable;
 	char	**envp;
+	int		exit_code;
 
 	if (!cmd || !cmd->argc || !cmd->argc[0])
 		exit(127);
@@ -31,9 +32,12 @@ void	exec_external(t_command *cmd, t_env **env_list)
 	}
 	if (execve(executable, cmd->argc, envp) == -1)
 	{
+		exit_code = 127;
+		if (errno == EACCES)
+			exit_code = 126;
 		free_string_array(envp);
 		free(executable);
 		perror("execve failed");
-		exit(127);
+		exit(exit_code);
 	}
 }
