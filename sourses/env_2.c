@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:54 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/09 17:05:36 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 01:59:25 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,9 @@ t_env	*init_env(char **envp)
 	return (env_list);
 }
 
-char	**list_to_array(t_env *env_list)
+void	update_underscore_var(t_env **env_list, char *cmd_path)
 {
-	return (env_to_array(env_list));
+	if (!env_list || !*env_list || !cmd_path)
+		return ;
+	export_variable(env_list, "_", cmd_path);
 }

@@ -6,11 +6,22 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:05:42 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/09 21:10:59 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 02:10:21 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
+
+static int	has_input_redirection(t_command *cmd)
+{
+	if (!cmd)
+		return (0);
+	if (cmd->input_list)
+		return (1);
+	if (cmd->ordered_redirs)
+		return (1);
+	return (0);
+}
 
 int	count_commands(t_command *cmd_list)
 {
@@ -27,9 +38,10 @@ int	count_commands(t_command *cmd_list)
 	return (count);
 }
 
-static void	setup_pipe_io(int **pipes, int i, int cmd_count)
+static void	setup_pipe_io(int **pipes, int i, int cmd_count, t_command *cmd)
 {
-	if (i > 0 && dup2(pipes[i - 1][0], STDIN_FILENO) == -1)
+	if (i > 0 && !has_input_redirection(cmd) && dup2(pipes[i - 1][0],
+		STDIN_FILENO) == -1)
 	{
 		perror("dup2 input failed");
 		exit(1);
@@ -57,7 +69,7 @@ void	close_all_pipes(int **pipes, int cmd_count)
 void	exec_child(t_command *cmd, t_pipe_ctx *ctx, int i)
 {
 	setup_child_signals();
-	setup_pipe_io(ctx->pipes, i, ctx->cmd_count);
+	setup_pipe_io(ctx->pipes, i, ctx->cmd_count, cmd);
 	close_all_pipes(ctx->pipes, ctx->cmd_count);
 	if (setup_ordered_redirections(cmd) < 0)
 		exit(1);

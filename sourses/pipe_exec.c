@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:32:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/09 21:10:59 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 02:09:22 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	setup_pipeline_resources(int cmd_count, int ***pipes, pid_t **pids)
 }
 
 static int	execute_pipeline_children(t_command *cmd_list, t_env **env_list,
-			int **pipes, pid_t *pids)
+		int **pipes, pid_t *pids)
 {
 	int			cmd_count;
 	int			i;
@@ -48,11 +48,38 @@ static int	execute_pipeline_children(t_command *cmd_list, t_env **env_list,
 	return (cmd_count);
 }
 
+static void	update_last_cmd_underscore(t_command *cmd_list, t_env **env_list)
+{
+	t_command	*last_cmd;
+	char		*executable;
+
+	last_cmd = cmd_list;
+	while (last_cmd && last_cmd->next)
+		last_cmd = last_cmd->next;
+	if (last_cmd && last_cmd->argc && last_cmd->argc[0])
+	{
+		if (is_builtin(last_cmd))
+		{
+			update_underscore_var(env_list, last_cmd->argc[0]);
+		}
+		else
+		{
+			executable = find_executable_in_path(last_cmd->argc[0], *env_list);
+			if (executable)
+			{
+				update_underscore_var(env_list, executable);
+				free(executable);
+			}
+		}
+	}
+}
+
 int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 {
 	int		cmd_count;
 	int		**pipes;
 	pid_t	*pids;
+	int		exit_status;
 
 	if (!cmd_list)
 		return (0);
@@ -66,5 +93,7 @@ int	execute_pipeline(t_command *cmd_list, t_env **env_list)
 	if (cmd_count <= 0)
 		return (1);
 	close_all_pipes(pipes, cmd_count);
-	return (wait_and_cleanup(pipes, pids, cmd_count));
+	exit_status = wait_and_cleanup(pipes, pids, cmd_count);
+	update_last_cmd_underscore(cmd_list, env_list);
+	return (exit_status);
 }

@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 21:24:38 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/09 21:24:10 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 02:19:29 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,6 @@ int								ft_env_lstsize(t_env *lst);
 char							*ft_strjoin_env(const char *s1, const char *s2,
 									char sep);
 char							**env_to_array(t_env *env_list);
-char							**list_to_array(t_env *env_list);
 void							print_env(char **env);
 void							add_env_node(t_env **env_list, char *env_line);
 void							free_env_list(t_env *env_list);
@@ -304,5 +303,14 @@ int								exec_external_single(t_command *cmd,
 									t_env **env_list);
 void							exec_child_single(t_command *cmd,
 									char **env_array);
+void							update_underscore_var(t_env **env_list,
+									char *cmd_path);
+int								exec_builtin_no_redirections(t_command *cmd,
+									t_env **env_list);
+int								exec_builtin_with_fork(t_command *cmd,
+									t_env **env_list);
+void							update_external_underscore(t_command *cmd,
+									t_env **env_list);
+int								handle_child_status(int status);
 
 #endif

@@ -6,104 +6,97 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:20 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/09 21:10:59 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 02:15:24 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-static int	is_n_flag(char *str)
+static void	update_pwd_vars(t_env *env, char *old_pwd, char *new_pwd)
 {
-	int	i;
+	t_env	*pwd_var;
+	t_env	*oldpwd_var;
 
-	if (!str || str[0] != '-')
-		return (0);
-	if (str[1] == '\0')
-		return (0);
-	i = 1;
-	while (str[i])
+	pwd_var = env;
+	while (pwd_var && ft_strcmp(pwd_var->key, "PWD") != 0)
+		pwd_var = pwd_var->next;
+	if (pwd_var)
 	{
-		if (str[i] != 'n')
-			return (0);
-		i++;
+		free(pwd_var->value);
+		pwd_var->value = ft_strdup(new_pwd);
 	}
-	return (1);
+	oldpwd_var = env;
+	while (oldpwd_var && ft_strcmp(oldpwd_var->key, "OLDPWD") != 0)
+		oldpwd_var = oldpwd_var->next;
+	if (oldpwd_var)
+	{
+		free(oldpwd_var->value);
+		oldpwd_var->value = ft_strdup(old_pwd);
+	}
 }
 
-void	ft_echo(char **argc)
+static char	*get_cd_path(t_command *cmd, t_env *env, char **oldpwd_ptr)
 {
-	int	i;
-	int	n_flag;
+	char	*oldpwd;
 
-	i = 1;
-	n_flag = 0;
-	while (argc[i] && is_n_flag(argc[i]))
+	if (!cmd->argc[1])
+		return (getenv("HOME"));
+	if (cmd->argc[1] && ft_strcmp(cmd->argc[1], "-") == 0)
 	{
-		n_flag = 1;
-		i++;
+		oldpwd = get_env_value(env, "OLDPWD");
+		if (!oldpwd)
+		{
+			ft_putstr_fd("cd: OLDPWD not set\n", STDERR_FILENO);
+			set_exit_status(1);
+			return (NULL);
+		}
+		*oldpwd_ptr = oldpwd;
+		ft_putstr_fd(oldpwd, STDOUT_FILENO);
+		ft_putstr_fd("\n", STDOUT_FILENO);
+		return (oldpwd);
 	}
-	while (argc[i])
-	{
-		ft_putstr_fd(argc[i], 1);
-		if (argc[i + 1])
-			write(1, " ", 1);
-		i++;
-	}
-	if (!n_flag)
-		write(1, "\n", 1);
-	set_exit_status(0);
+	return (cmd->argc[1]);
 }
 
-void	ft_pwd(void)
+static void	handle_cd_error(char *path)
 {
-	char	cwd[PATH_MAX];
+	ft_putstr_fd("cd: ", STDERR_FILENO);
+	ft_putstr_fd(path, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	perror("");
+	set_exit_status(1);
+}
 
-	if (getcwd(cwd, sizeof(cwd)))
-	{
-		ft_putstr_fd(cwd, 1);
-		ft_putstr_fd("\n", 1);
-	}
-	else
-		perror("pwd");
+static void	handle_cd_success(t_env *env, char *cwd)
+{
+	char	new_cwd[PATH_MAX];
+
+	if (getcwd(new_cwd, sizeof(new_cwd)))
+		update_pwd_vars(env, cwd, new_cwd);
 	set_exit_status(0);
 }
 
 void	ft_cd(t_command *cmd, t_env *env)
 {
 	char	*path;
+	char	*oldpwd;
+	char	cwd[PATH_MAX];
 
-	(void)env;
-	if (!cmd->argc[1])
-		path = getenv("HOME");
-	else
-		path = cmd->argc[1];
+	oldpwd = NULL;
+	path = get_cd_path(cmd, env, &oldpwd);
 	if (!path)
 	{
-		ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);
+		if (!cmd->argc[1])
+			ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);
 		set_exit_status(1);
+		return ;
 	}
-	else if (chdir(path) != 0)
-	{
-		ft_putstr_fd("cd: ", STDERR_FILENO);
-		ft_putstr_fd(path, STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
-		perror("");
-		set_exit_status(1);
-	}
+	if (!getcwd(cwd, sizeof(cwd)))
+		cwd[0] = '\0';
+	if (chdir(path) != 0)
+		handle_cd_error(path);
 	else
-		set_exit_status(0);
-}
-
-void	ft_env(t_env *env)
-{
-	t_env	*tmp;
-
-	tmp = env;
-	while (tmp)
-	{
-		if (tmp->value)
-			printf("%s=%s\n", tmp->key, tmp->value);
-		tmp = tmp->next;
-	}
-	set_exit_status(0);
+		handle_cd_success(env, cwd);
+	if (oldpwd)
+		free(oldpwd);
 }

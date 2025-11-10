@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 21:12:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/10 18:19:10 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 00:40:31 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,6 @@ static void	remove_env_var(t_env **env, char *key)
 	}
 }
 
-static void	unset_error(char *arg)
-{
-	ft_putstr_fd("minishell: unset: `", STDERR_FILENO);
-	ft_putstr_fd(arg, STDERR_FILENO);
-	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
-}
-
 static int	is_valid_unset_identifier(char *str)
 {
 	int	i;
@@ -69,30 +62,18 @@ static int	is_valid_unset_identifier(char *str)
 void	ft_unset(t_env **env, char **argc)
 {
 	int	i;
-	int	exit_status;
 
 	if (!argc || !argc[1])
 	{
 		set_exit_status(0);
 		return ;
 	}
-	exit_status = 0;
 	i = 1;
 	while (argc[i])
 	{
-		if (argc[i][0] == '\0')
-		{
-			unset_error(argc[i]);
-			exit_status = 1;
-		}
-		else if (!is_valid_unset_identifier(argc[i]))
-		{
-			unset_error(argc[i]);
-			exit_status = 1;
-		}
-		else
+		if (is_valid_unset_identifier(argc[i]))
 			remove_env_var(env, argc[i]);
 		i++;
 	}
-	set_exit_status(exit_status);
+	set_exit_status(0);
 }
