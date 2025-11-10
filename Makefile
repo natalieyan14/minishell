@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline -fsanitize=address
+LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline #-fsanitize=address
 
 LIBFT_DIR = Libft
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -17,12 +17,10 @@ SRC = sourses/tokenize.c sourses/tokenize_utils.c sourses/tokenize_handlers.c so
 
 OBJ = $(SRC:.c=.o)
 
-all: $(LIBFT) $(NAME)
-
-$(LIBFT):
-	make -C $(LIBFT_DIR)
+all: $(NAME)
 
 $(NAME): $(OBJ)
+	make -C Libft
 	$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) -o $(NAME)
 
 sourses/%.o: sourses/%.c

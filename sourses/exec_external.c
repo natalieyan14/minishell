@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_external.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:30:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/09 20:33:03 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/10 22:08:08 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ void	exec_external(t_command *cmd, t_env **env_list)
 		free_string_array(envp);
 		free(executable);
 		perror("execve failed");
-		exit(126);
+		exit(127);
 	}
 }
