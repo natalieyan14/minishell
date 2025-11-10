@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_4.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 22:33:35 by armtoros          #+#    #+#             */
-/*   Updated: 2025/11/09 21:24:10 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/10 17:36:41 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	ft_exit_error(char *arg)
 	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-	exit(255);
+	exit(2);
 }
 
 void	ft_exit(t_command *cmd)
