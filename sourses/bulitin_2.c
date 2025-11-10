@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:13 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/09 21:10:59 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/10 20:31:28 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	print_exported_vars(t_env *env)
 	tmp = env;
 	while (tmp)
 	{
-		if (tmp->value && ft_strlen(tmp->value) > 0)
+		if (tmp->value)
 		{
 			ft_putstr_fd("declare -x ", STDOUT_FILENO);
 			ft_putstr_fd(tmp->key, STDOUT_FILENO);
