@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_handlers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armtoros <armtoros@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 03:50:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/03 22:41:52 by armtoros         ###   ########.fr       */
+/*   Updated: 2025/11/10 18:19:10 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	handle_quotes(t_tokenizer *tok, char c)
 
 void	flush_buffer(t_tokenizer *tok)
 {
-	if (ft_strlen(tok->buf) > 0)
+	if (ft_strlen(tok->buf) > 0 || tok->quote_type != 0)
 	{
 		add_token_with_quotes(&tok->tokens, &tok->count, tok->buf,
 			tok->quote_type);

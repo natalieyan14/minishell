@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:06:31 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/02 17:19:56 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/10 18:19:10 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	handle_whitespace(t_tokenizer *tok)
 {
-	if (ft_strlen(tok->buf) > 0)
+	if (ft_strlen(tok->buf) > 0 || tok->quote_type != 0)
 	{
 		add_token_with_quotes(&tok->tokens, &tok->count, tok->buf,
 			tok->quote_type);
@@ -50,7 +50,7 @@ t_token	*tokenisation(char *input, int *out_count)
 	init_tokenizer(&tok);
 	while (input[tok.i])
 		process_character(&tok, input);
-	if (ft_strlen(tok.buf) > 0)
+	if (ft_strlen(tok.buf) > 0 || tok.quote_type != 0)
 		add_token_with_quotes(&tok.tokens, &tok.count, tok.buf, tok.quote_type);
 	free(tok.buf);
 	*out_count = tok.count;

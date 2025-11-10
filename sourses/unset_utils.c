@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 21:12:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/09 21:10:59 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/10 18:19:10 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ static int	is_valid_unset_identifier(char *str)
 
 	if (!str || !str[0])
 		return (0);
+	if (str[0] == '\0')
+		return (0);
 	if (!ft_isalpha(str[0]) && str[0] != '_')
 		return (0);
 	i = 1;
@@ -70,12 +72,20 @@ void	ft_unset(t_env **env, char **argc)
 	int	exit_status;
 
 	if (!argc || !argc[1])
+	{
+		set_exit_status(0);
 		return ;
+	}
 	exit_status = 0;
 	i = 1;
 	while (argc[i])
 	{
-		if (!is_valid_unset_identifier(argc[i]))
+		if (argc[i][0] == '\0')
+		{
+			unset_error(argc[i]);
+			exit_status = 1;
+		}
+		else if (!is_valid_unset_identifier(argc[i]))
 		{
 			unset_error(argc[i]);
 			exit_status = 1;

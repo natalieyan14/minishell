@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 23:46:05 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 00:09:42 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/10 18:19:10 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	handle_word_token(t_command *cmd, t_token *token, int *j)
 {
-	if (token->str && ft_strlen(token->str) > 0)
+	if (token->str)
 	{
 		cmd->argc[*j] = ft_strdup(token->str);
 		if (cmd->argc[*j])
