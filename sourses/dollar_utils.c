@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 00:45:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 00:51:11 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 10:09:25 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,26 @@ char	*replace_dollar_var(char *str, int start, int end, char *replacement)
 {
 	char	*before;
 	char	*after;
+	char	*res;
 
 	if (!replacement)
 		replacement = "";
 	before = ft_substr(str, 0, start);
 	if (!before)
+	{
+		free(str);
 		return (NULL);
+	}
 	after = ft_strdup(str + end);
 	if (!after)
 	{
 		free(before);
+		free(str);
 		return (NULL);
 	}
-	return (create_result_string(before, replacement, after));
+	{
+		res = create_result_string(before, replacement, after);
+		free(str);
+		return (res);
+	}
 }

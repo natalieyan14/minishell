@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 21:19:54 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/09 21:24:10 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 10:09:25 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,11 @@ static void	run_heredoc(int pipe_fd, char *limiter, int should_expand,
 	{
 		str = readline("> ");
 		if (check_limiter(str, limiter))
+		{
+			if (str)
+				free(str);
 			break ;
+		}
 		process_heredoc_line(pipe_fd, str, should_expand, env_list);
 		free(str);
 	}
