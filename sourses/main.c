@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:17 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/09 21:15:14 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 13:44:18 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,12 @@ static char	*read_initial_line(void)
 {
 	char		*line;
 	static int	first_call = 1;
+	char		*buf;
+	ssize_t		rd;
+	size_t		len;
+	char		c;
 
+	rd = 0;
 	if (isatty(STDIN_FILENO))
 		line = readline("minishell$ ");
 	else
@@ -26,7 +31,27 @@ static char	*read_initial_line(void)
 			write(1, "minishell$ \n", 12);
 			first_call = 0;
 		}
-		line = readline("");
+		buf = malloc(1);
+		if (!buf)
+			return (NULL);
+		len = 0;
+		while ((rd = read(STDIN_FILENO, &c, 1)) > 0)
+		{
+			if (c == '\n')
+				break ;
+			buf = realloc(buf, len + 2);
+			if (!buf)
+				return (NULL);
+			buf[len] = c;
+			len++;
+			buf[len] = '\0';
+		}
+		if (rd <= 0 && len == 0)
+		{
+			free(buf);
+			return (NULL);
+		}
+		line = buf;
 	}
 	return (line);
 }
