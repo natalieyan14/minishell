@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 23:18:58 by armtoros          #+#    #+#             */
-/*   Updated: 2025/11/08 18:09:11 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/11 15:11:27 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 int	handle_eof_error(char *full_line)
 {
 	write(STDERR_FILENO,
-		"minishell: unexpected EOF while looking for matching quote\n",
-		59);
+		"minishell: unexpected EOF while looking for matching quote\n", 59);
 	set_exit_status(2);
 	free(full_line);
 	return (0);
