@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 02:00:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/11 13:01:30 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 13:08:45 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_echo(char **argc)
 	}
 	while (argc[i])
 	{
-		ft_putstr_fd(argc[i], 2);
+		ft_putstr_fd(argc[i], 1);
 		if (argc[i + 1])
 			write(1, " ", 1);
 		i++;
@@ -60,8 +60,8 @@ void	ft_pwd(void)
 
 	if (getcwd(cwd, sizeof(cwd)))
 	{
-		ft_putstr_fd(cwd, 2);
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd(cwd, 1);
+		ft_putstr_fd("\n", 1);
 	}
 	else
 		perror("pwd");
