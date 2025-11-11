@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 00:17:41 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 00:51:11 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 12:55:38 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,22 @@
 
 static char	*get_var_value(t_env *env_list, char *var_name)
 {
+	char	*val;
+
 	if (ft_strcmp(var_name, "?") == 0)
 		return (ft_itoa(get_current_exit_status()));
-	return (get_env_value(env_list, var_name));
+	val = get_env_value(env_list, var_name);
+	if (!val)
+		return (NULL);
+	return (ft_strdup(val));
 }
 
 static void	replace_token_var(t_token *token, int dollar_pos, t_env *env_list)
 {
 	int		var_end;
 	char	*var_name;
-	char	*var_value;
 	char	*new_str;
+	char	*var_value;
 
 	var_name = get_var_name(token->str, dollar_pos, &var_end);
 	if (!var_name || ft_strlen(var_name) == 0)
