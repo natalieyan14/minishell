@@ -6,15 +6,15 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 04:10:44 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/29 21:13:59 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 13:15:13 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-extern int				rl_on_new_line(void);
+extern int	rl_on_new_line(void);
 
-volatile sig_atomic_t	g_signal_received = 0;
+int			g_signal_received = 0;
 
 static void	sigint_interactive(int sig)
 {
