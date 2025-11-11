@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 21:19:54 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/11 10:09:25 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 14:03:36 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,23 @@ static void	run_heredoc(int pipe_fd, char *limiter, int should_expand,
 		free(str);
 	}
 }
+
+// int	handle_heredoc(char *limiter, int should_expand, t_env *env_list)
+// {
+// 	int	pipe_fd[2];
+
+// 	if (!limiter)
+// 		return (-1);
+// 	if (pipe(pipe_fd) == -1)
+// 	{
+// 		perror("minishell: pipe error");
+// 		set_exit_status(1);
+// 		return (-1);
+// 	}
+// 	run_heredoc(pipe_fd[1], limiter, should_expand, env_list);
+// 	close(pipe_fd[1]);
+// 	return (pipe_fd[0]);
+// }
 
 int	handle_heredoc(char *limiter, int should_expand, t_env *env_list)
 {
