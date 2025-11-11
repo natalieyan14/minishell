@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:13 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/10 20:31:28 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 13:02:14 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,17 @@ void	print_exported_vars(t_env *env)
 	{
 		if (tmp->value)
 		{
-			ft_putstr_fd("declare -x ", STDOUT_FILENO);
-			ft_putstr_fd(tmp->key, STDOUT_FILENO);
-			ft_putstr_fd("=\"", STDOUT_FILENO);
-			ft_putstr_fd(tmp->value, STDOUT_FILENO);
-			ft_putstr_fd("\"\n", STDOUT_FILENO);
+			ft_putstr_fd("declare -x ", 2);
+			ft_putstr_fd(tmp->key, 2);
+			ft_putstr_fd("=\"", 2);
+			ft_putstr_fd(tmp->value, 2);
+			ft_putstr_fd("\"\n", 2);
 		}
 		else
 		{
-			ft_putstr_fd("declare -x ", STDOUT_FILENO);
-			ft_putstr_fd(tmp->key, STDOUT_FILENO);
-			ft_putstr_fd("\n", STDOUT_FILENO);
+			ft_putstr_fd("declare -x ", 2);
+			ft_putstr_fd(tmp->key, 2);
+			ft_putstr_fd("\n", 2);
 		}
 		tmp = tmp->next;
 	}

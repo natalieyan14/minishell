@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:20 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/11 02:15:24 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 13:02:48 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ static char	*get_cd_path(t_command *cmd, t_env *env, char **oldpwd_ptr)
 			return (NULL);
 		}
 		*oldpwd_ptr = oldpwd;
-		ft_putstr_fd(oldpwd, STDOUT_FILENO);
-		ft_putstr_fd("\n", STDOUT_FILENO);
+		ft_putstr_fd(oldpwd, 2);
+		ft_putstr_fd("\n", 2);
 		return (oldpwd);
 	}
 	return (cmd->argc[1]);
