@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_external.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:30:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/11 02:21:55 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 16:42:07 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ static void	handle_exec_not_found(char **envp, char *cmd_name)
 		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
 	else
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-	exit(127);
 }
 
 static int	handle_exec_access_error(char *executable, char *cmd_name)
@@ -32,7 +31,7 @@ static int	handle_exec_access_error(char *executable, char *cmd_name)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(cmd_name, STDERR_FILENO);
-		ft_putstr_fd(": is a directory\n", STDERR_FILENO);
+		ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
 	}
 	else
 	{

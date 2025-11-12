@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 21:24:38 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/11 14:03:15 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 13:15:13 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,6 @@ typedef struct s_redir
 {
 	char					*filename;
 	int						append;
-	int						type;
-	//int						fd;
-	int						should_expand;
 	struct s_redir			*next;
 }							t_redir;
 
