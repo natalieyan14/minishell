@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_4.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 22:33:35 by armtoros          #+#    #+#             */
-/*   Updated: 2025/11/13 13:18:44 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/13 16:38:51 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,26 @@ void	ft_exit_error(char *arg, t_env **env_list)
 	exit(2);
 }
 
-void	ft_exit(t_command *cmd, t_env **env_list)
+static void	do_exit_cleanup(int has_arg, char *arg, t_env **env_list)
 {
 	long	status;
+
+	if (has_arg)
+	{
+		status = ft_atol(arg);
+		clear_history();
+		if (env_list && *env_list)
+			free_env_list(*env_list);
+		exit((unsigned char)status);
+	}
+	clear_history();
+	if (env_list && *env_list)
+		free_env_list(*env_list);
+	exit(0);
+}
+
+void	ft_exit(t_command *cmd, t_env **env_list)
+{
 	int		arg_count;
 
 	arg_count = 0;
@@ -58,24 +75,13 @@ void	ft_exit(t_command *cmd, t_env **env_list)
 	if (isatty(STDIN_FILENO))
 		write(1, "exit\n", 5);
 	if (arg_count == 0)
-	{
-		clear_history();
-		if (env_list && *env_list)
-			free_env_list(*env_list);
-		exit(0);
-	}
+		do_exit_cleanup(0, NULL, env_list);
 	if (arg_count >= 1)
 	{
 		if (!is_numeric(cmd->argc[1]))
 			ft_exit_error(cmd->argc[1], env_list);
 		if (arg_count == 1)
-		{
-			status = ft_atol(cmd->argc[1]);
-			clear_history();
-			if (env_list && *env_list)
-				free_env_list(*env_list);
-			exit((unsigned char)status);
-		}
+			do_exit_cleanup(1, cmd->argc[1], env_list);
 	}
 	ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
 	set_exit_status(1);

@@ -6,7 +6,7 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 17:02:29 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/13 15:28:29 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/13 16:31:10 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,35 @@ t_toktype	find_type(char *str, t_token *tokens, int i)
 	return (T_WORD);
 }
 
+static int	apply_heredoc_fd(int fd, int *original_stdin)
+{
+	if (fd < 0)
+		return (-1);
+	if (*original_stdin < 0)
+	{
+		*original_stdin = dup(STDIN_FILENO);
+		if (*original_stdin < 0)
+		{
+			close(fd);
+			set_exit_status(1);
+			return (-1);
+		}
+	}
+	if (dup2(fd, STDIN_FILENO) < 0)
+	{
+		close(fd);
+		if (*original_stdin >= 0)
+		{
+			dup2(*original_stdin, STDIN_FILENO);
+			close(*original_stdin);
+		}
+		set_exit_status(1);
+		return (-1);
+	}
+	close(fd);
+	return (0);
+}
+
 int	process_heredocs(t_token *tokens, int count, t_env *env_list)
 {
 	int	i;
@@ -70,30 +99,8 @@ int	process_heredocs(t_token *tokens, int count, t_env *env_list)
 		{
 			fd = handle_heredoc(tokens[i + 1].str,
 					(tokens[i + 1].quote_type == 0), env_list);
-			if (fd < 0)
+			if (apply_heredoc_fd(fd, &original_stdin) < 0)
 				return (-1);
-			if (original_stdin < 0)
-			{
-				original_stdin = dup(STDIN_FILENO);
-				if (original_stdin < 0)
-				{
-					close(fd);
-					set_exit_status(1);
-					return (-1);
-				}
-			}
-			if (dup2(fd, STDIN_FILENO) < 0)
-			{
-				close(fd);
-				if (original_stdin >= 0)
-				{
-					dup2(original_stdin, STDIN_FILENO);
-					close(original_stdin);
-				}
-				set_exit_status(1);
-				return (-1);
-			}
-			close(fd);
 			i += 2;
 		}
 		else

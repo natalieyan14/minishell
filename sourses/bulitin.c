@@ -67,13 +67,17 @@ static void	handle_cd_error(char *path)
 	set_exit_status(1);
 }
 
-static void	handle_cd_success(t_env *env, char *cwd)
-{
-	char	new_cwd[PATH_MAX];
+/* merged into perform_chdir_and_update to reduce function count */
 
-	if (getcwd(new_cwd, sizeof(new_cwd)))
-		update_pwd_vars(env, cwd, new_cwd);
-	set_exit_status(0);
+static int	handle_too_many_args(t_command *cmd)
+{
+	if (cmd && cmd->argc && cmd->argc[1] && cmd->argc[2])
+	{
+		ft_putstr_fd("cd: too many arguments\n", STDERR_FILENO);
+		set_exit_status(1);
+		return (1);
+	}
+	return (0);
 }
 
 void	ft_cd(t_command *cmd, t_env *env)
@@ -97,12 +101,24 @@ void	ft_cd(t_command *cmd, t_env *env)
 		set_exit_status(1);
 		return ;
 	}
+    perform_chdir_and_update(env, path, oldpwd, cwd);
+}
+
+static void	perform_chdir_and_update(t_env *env, char *path,
+		char *oldpwd, char cwd[PATH_MAX])
+{
+	char	new_cwd[PATH_MAX];
+
 	if (!getcwd(cwd, sizeof(cwd)))
 		cwd[0] = '\0';
 	if (chdir(path) != 0)
 		handle_cd_error(path);
 	else
-		handle_cd_success(env, cwd);
+	{
+		if (getcwd(new_cwd, sizeof(new_cwd)))
+			update_pwd_vars(env, cwd, new_cwd);
+		set_exit_status(0);
+	}
 	if (oldpwd)
 		free(oldpwd);
 }
