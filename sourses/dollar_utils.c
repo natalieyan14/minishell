@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dollar_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 00:45:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/11 10:09:25 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/13 14:00:37 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,18 @@ char	*get_env_value(t_env *env_list, char *var_name)
 		env_list = env_list->next;
 	}
 	return (NULL);
+}
+
+char	*get_variable_value(char *var_name, t_env *env_list)
+{
+	char	*val;
+
+	if (ft_strcmp(var_name, "?") == 0)
+		return (ft_itoa(get_current_exit_status()));
+	val = get_env_value(env_list, var_name);
+	if (!val)
+		return (ft_strdup(""));
+	return (val);
 }
 
 char	*get_var_name(char *str, int start, int *end)
