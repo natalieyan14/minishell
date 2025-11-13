@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/09 20:31:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/13 15:48:17 by nharutyu         ###   ########.fr       */
+/*   Created: 2025/11/13 16:57:52 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/13 17:55:59 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,8 @@ int	exec_single_command(t_command *cmd, t_env **env_list)
 	if (cmd->argc[0] && (ft_strcmp(cmd->argc[0], ".") == 0
 			|| ft_strcmp(cmd->argc[0], "..") == 0))
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->argc[0], STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		ft_putstr_fd(":command not found\n", STDERR_FILENO);
 		set_exit_status(127);
 		return (127);
 	}

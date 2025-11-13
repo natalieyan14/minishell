@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/30 23:46:27 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 23:46:29 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/11/13 17:05:19 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/13 17:05:21 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

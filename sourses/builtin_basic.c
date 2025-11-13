@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_basic.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/11 02:00:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/11 13:08:45 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/11/13 16:56:25 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/13 16:56:28 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

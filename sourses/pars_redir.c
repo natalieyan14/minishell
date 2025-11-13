@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_redir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/29 23:46:44 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 00:02:52 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/11/13 17:00:11 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/13 17:00:14 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/30 23:49:48 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 23:49:50 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/11/13 17:07:41 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/13 17:07:43 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

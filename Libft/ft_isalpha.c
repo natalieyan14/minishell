@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/30 23:45:39 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 23:52:12 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/11/13 17:04:37 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/13 17:04:39 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

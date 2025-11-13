@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_status.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/28 21:35:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/28 22:44:57 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/11/13 16:58:10 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/13 16:58:12 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

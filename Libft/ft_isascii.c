@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/30 23:45:47 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 23:52:16 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/11/13 17:04:43 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/13 17:04:45 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

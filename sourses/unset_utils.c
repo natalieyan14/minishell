@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/09 21:12:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/11 00:40:31 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/11/13 17:02:22 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/13 17:02:24 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

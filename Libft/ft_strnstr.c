@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/30 23:50:05 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 23:51:41 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/11/13 17:08:33 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/13 17:08:35 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

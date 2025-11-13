@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/09 20:05:42 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/09 20:17:14 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/11/13 17:00:47 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/13 17:00:49 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

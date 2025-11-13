@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/30 23:45:53 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/10/30 23:53:03 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/11/13 17:04:55 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/13 17:04:57 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

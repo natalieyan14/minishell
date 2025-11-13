@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_handlers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/26 03:50:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/10 18:19:10 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/11/13 17:02:01 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/13 17:02:04 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/25 02:06:09 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/11 16:14:07 by natalieyan       ###   ########.fr       */
+/*   Created: 2025/11/13 17:01:14 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/13 17:01:17 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
