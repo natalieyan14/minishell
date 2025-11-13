@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_single.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:31:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/13 15:33:45 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/13 15:48:17 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ int	handle_empty_command(t_command *cmd)
 int	exec_single_command(t_command *cmd, t_env **env_list)
 {
 	int	ret;
-	int	ret;
 
 	if (!cmd)
 		return (0);
@@ -107,15 +106,9 @@ int	exec_single_command(t_command *cmd, t_env **env_list)
 		return (127);
 	}
 	if (is_builtin(cmd))
-	{
 		ret = handle_single_builtin(cmd, env_list);
-		set_exit_status(ret);
-		return (ret);
-	}
 	else
-	{
 		ret = handle_single_external(cmd, env_list);
-		set_exit_status(ret);
-		return (ret);
-	}
+	set_exit_status(ret);
+	return (ret);
 }

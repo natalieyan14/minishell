@@ -3,31 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:05:30 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/13 15:33:27 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/13 15:42:50 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-void	write_heredoc_line(int pipe_fd, char *processed_line)
-{
-	char	*line_with_newline;
-
-	line_with_newline = ft_strjoin(processed_line, "\n");
-	if (line_with_newline)
-	{
-		write(pipe_fd, line_with_newline, ft_strlen(line_with_newline));
-		free(line_with_newline);
-	}
-}
-
 void	process_heredoc_line(int pipe_fd, char *str, int should_expand,
 		t_env *env_list)
 {
 	char	*processed_line;
+	char	*line_with_newline;
 
 	if (should_expand)
 		processed_line = expand_heredoc_line(str, env_list);
@@ -35,7 +24,12 @@ void	process_heredoc_line(int pipe_fd, char *str, int should_expand,
 		processed_line = ft_strdup(str);
 	if (!processed_line)
 		return ;
-	write_heredoc_line(pipe_fd, processed_line);
+	line_with_newline = ft_strjoin(processed_line, "\n");
+	if (line_with_newline)
+	{
+		write(pipe_fd, line_with_newline, ft_strlen(line_with_newline));
+		free(line_with_newline);
+	}
 	free(processed_line);
 }
 
@@ -70,29 +64,32 @@ static int	read_line_from_stdin(char **out)
 	return (0);
 }
 
-int	read_and_process_line(int pipe_fd, char *limiter, int should_expand,
-		t_env *env_list)
+static int	handle_interactive_heredoc(int pipe_fd, char *limiter,
+		int should_expand, t_env *env_list)
 {
 	char	*str;
+
+	str = readline("> ");
+	if (!str)
+	{
+		handle_eof_warning(limiter);
+		return (1);
+	}
+	if (ft_strcmp(str, limiter) == 0)
+	{
+		free(str);
+		return (1);
+	}
+	process_heredoc_line(pipe_fd, str, should_expand, env_list);
+	free(str);
+	return (0);
+}
+
+static int	handle_stdin_heredoc(int pipe_fd, char *limiter,
+		int should_expand, t_env *env_list)
+{
 	char	*linebuf;
 
-	if (isatty(STDIN_FILENO))
-	{
-		str = readline("> ");
-		if (!str)
-		{
-			handle_eof_warning(limiter);
-			return (1);
-		}
-		if (ft_strcmp(str, limiter) == 0)
-		{
-			free(str);
-			return (1);
-		}
-		process_heredoc_line(pipe_fd, str, should_expand, env_list);
-		free(str);
-		return (0);
-	}
 	if (read_line_from_stdin(&linebuf) < 0)
 	{
 		handle_eof_warning(limiter);
@@ -106,6 +103,16 @@ int	read_and_process_line(int pipe_fd, char *limiter, int should_expand,
 	process_heredoc_line(pipe_fd, linebuf, should_expand, env_list);
 	free(linebuf);
 	return (0);
+}
+
+int	read_and_process_line(int pipe_fd, char *limiter, int should_expand,
+		t_env *env_list)
+{
+	if (isatty(STDIN_FILENO))
+		return (handle_interactive_heredoc(pipe_fd, limiter,
+			should_expand, env_list));
+	return (handle_stdin_heredoc(pipe_fd, limiter,
+		should_expand, env_list));
 }
 
 void	run_heredoc(int pipe_fd, char *limiter, int should_expand,

@@ -6,7 +6,7 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 12:22:51 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/13 15:18:01 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/13 16:02:19 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	handle_parent_process(pid_t pid, int pipe_fd[2])
 	if (WIFSIGNALED(status))
 	{
 		close(pipe_fd[0]);
+		write(STDOUT_FILENO, "\n", 1);
 		set_exit_status(128 + WTERMSIG(status));
 		return (-1);
 	}
@@ -66,6 +67,7 @@ int	handle_heredoc(char *limiter, int should_expand, t_env *env_list)
 {
 	int		pipe_fd[2];
 	pid_t	pid;
+	int		res;
 
 	if (!limiter)
 		return (-1);
@@ -74,10 +76,16 @@ int	handle_heredoc(char *limiter, int should_expand, t_env *env_list)
 		perror("minishell: pipe");
 		return (-1);
 	}
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
+	{
+		setup_interactive_signals();
 		return (handle_fork_error(pipe_fd));
+	}
 	if (pid == 0)
 		heredoc_child(pipe_fd, limiter, should_expand, env_list);
-	return (handle_parent_process(pid, pipe_fd));
+	res = handle_parent_process(pid, pipe_fd);
+	setup_interactive_signals();
+	return (res);
 }
