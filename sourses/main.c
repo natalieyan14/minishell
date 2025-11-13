@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:05:17 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/13 11:11:21 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/13 13:18:12 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ int	main(int argc, char **argv, char **envp)
 	exit_status = 0;
 	env_list = init_env(envp);
 	exit_status = run_shell(env_list);
-	/* free readline history to avoid reachable allocations in valgrind */
 	clear_history();
 	free_env_list(env_list);
 	return (exit_status);

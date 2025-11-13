@@ -3,81 +3,89 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/13 13:05:30 by natalieyan        #+#    #+#             */
+/*   Updated: 2025/11/13 13:32:17 by natalieyan       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc_write.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/09 21:20:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/12 21:44:41 by nharutyu         ###   ########.fr       */
+/*   Created: 2025/10/29 21:19:54 by natalieyan        #+#    #+#             */
+/*   Updated: 2025/11/12 21:42:08 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-void	copy_strings(char *dest, char *s1, char *s2)
+void	write_heredoc_line(int pipe_fd, char *processed_line)
 {
-	int	i;
-	int	j;
+	char	*line_with_newline;
 
-	i = 0;
-	while (s1 && s1[i])
+	line_with_newline = ft_strjoin(processed_line, "\n");
+	if (line_with_newline)
 	{
-		dest[i] = s1[i];
-		i++;
+		write(pipe_fd, line_with_newline, ft_strlen(line_with_newline));
+		free(line_with_newline);
 	}
-	j = 0;
-	while (s2 && s2[j])
-	{
-		dest[i + j] = s2[j];
-		j++;
-	}
-	dest[i + j] = '\0';
 }
 
-char	*ft_strjoin_heredoc(char *s1, char *s2)
+void	process_heredoc_line(int pipe_fd, char *str, int should_expand,
+		t_env *env_list)
 {
-	char	*result;
-	int		len1;
-	int		len2;
+	char	*processed_line;
 
-	if (!s1 && !s2)
-		return (NULL);
-	len1 = 0;
-	if (s1)
-		len1 = ft_strlen(s1);
-	len2 = 0;
-	if (s2)
-		len2 = ft_strlen(s2);
-	result = malloc(len1 + len2 + 1);
-	if (!result)
-		return (NULL);
-	copy_strings(result, s1, s2);
-	if (s1)
-		free(s1);
-	return (result);
+	if (should_expand)
+		processed_line = expand_heredoc_line(str, env_list);
+	else
+		processed_line = ft_strdup(str);
+	if (!processed_line)
+		return ;
+	write_heredoc_line(pipe_fd, processed_line);
+	free(processed_line);
 }
 
-int	check_limiter(char *str, char *limiter)
+void	handle_eof_warning(char *limiter)
 {
+	ft_putstr_fd("minishell: warning: here-document ", STDERR_FILENO);
+	ft_putstr_fd("delimited by end-of-file (wanted `", STDERR_FILENO);
+	ft_putstr_fd(limiter, STDERR_FILENO);
+	ft_putstr_fd("')\n", STDERR_FILENO);
+}
+
+int	read_and_process_line(int pipe_fd, char *limiter, int should_expand,
+		t_env *env_list)
+{
+	char	*str;
+
+	str = readline("> ");
 	if (!str)
 	{
-		ft_putstr_fd("minishell: warning: here-document delimited by",
-			STDERR_FILENO);
-		ft_putstr_fd(" end-of-file (wanted `", STDERR_FILENO);
-		ft_putstr_fd(limiter, STDERR_FILENO);
-		ft_putstr_fd("')\n", STDERR_FILENO);
+		handle_eof_warning(limiter);
 		return (1);
 	}
-	return (ft_strcmp(str, limiter) == 0);
+	if (ft_strcmp(str, limiter) == 0)
+	{
+		free(str);
+		return (1);
+	}
+	process_heredoc_line(pipe_fd, str, should_expand, env_list);
+	free(str);
+	return (0);
 }
 
-char	*get_variable_value(char *var_name, t_env *env_list)
+void	run_heredoc(int pipe_fd, char *limiter, int should_expand,
+		t_env *env_list)
 {
-	char	*var_value;
-
-	if (ft_strcmp(var_name, "?") == 0)
-		var_value = ft_itoa(get_current_exit_status());
-	else
-		var_value = get_env_value(env_list, var_name);
-	if (!var_value)
-		var_value = ft_strdup("");
-	return (var_value);
+	while (1)
+	{
+		if (read_and_process_line(pipe_fd, limiter, should_expand, env_list))
+			break ;
+	}
 }

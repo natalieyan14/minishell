@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 21:24:38 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/13 11:11:21 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/13 13:39:24 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-extern int				g_signal_received;
+extern int					g_signal_received;
 
 typedef enum e_toktype
 {
@@ -66,7 +66,7 @@ typedef struct s_redir
 	char					*filename;
 	int						append;
 	int						type;
-	//int						fd;
+	// int						fd;
 	int						should_expand;
 	struct s_redir			*next;
 }							t_redir;
@@ -227,21 +227,15 @@ size_t						ft_strlen(const char *s);
 int							ft_atoi(const char *str);
 int							err_message(const char *m1, const char *m2,
 								const char *m3);
-
 int							is_builtin(t_command *cmd);
 void						exec_builtin(t_command *cmd, t_env **env);
 void						ft_echo(char **argc);
 void						ft_cd(t_command *cmd, t_env *env);
 void						ft_pwd(void);
 void						ft_export(t_env **env, char **argc);
-
 void						ft_unset(t_env **env, char **argc);
 void						ft_env(t_env *env);
-void						ft_exit(t_command *cmd);
-
 void						ft_exit(t_command *cmd, t_env **env_list);
-
-
 void						setup_interactive_signals(void);
 void						setup_execution_signals(void);
 int							check_signal_status(void);
@@ -308,5 +302,29 @@ int							exec_builtin_with_fork(t_command *cmd,
 void						update_external_underscore(t_command *cmd,
 								t_env **env_list);
 int							handle_child_status(int status);
+
+// heredoc_expand.c
+int							process_dollar_variable(char **new_line, int i,
+								t_env *env_list);
+char						*expand_heredoc_line(char *line, t_env *env_list);
+
+// heredoc_write.c
+void						write_heredoc_line(int pipe_fd,
+								char *processed_line);
+void						process_heredoc_line(int pipe_fd, char *str,
+								int should_expand, t_env *env_list);
+void						handle_eof_warning(char *limiter);
+int							read_and_process_line(int pipe_fd, char *limiter,
+								int should_expand, t_env *env_list);
+void						run_heredoc(int pipe_fd, char *limiter,
+								int should_expand, t_env *env_list);
+
+// heredoc.c
+void						heredoc_child(int pipe_fd[2], char *limiter,
+								int should_expand, t_env *env_list);
+int							handle_parent_process(pid_t pid, int pipe_fd[2]);
+int							handle_fork_error(int pipe_fd[2]);
+int							handle_heredoc(char *limiter, int should_expand,
+								t_env *env_list);
 
 #endif
