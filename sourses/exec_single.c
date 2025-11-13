@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_single.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:31:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/13 14:37:14 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/13 15:33:45 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,15 @@ int	handle_empty_command(t_command *cmd)
 
 int	exec_single_command(t_command *cmd, t_env **env_list)
 {
+	int	ret;
+	int	ret;
+
 	if (!cmd)
 		return (0);
 	if (!cmd->argc || !cmd->argc[0] || ft_strlen(cmd->argc[0]) == 0)
 		return (handle_empty_command(cmd));
-	if (cmd->argc[0] && (ft_strcmp(cmd->argc[0], ".") == 0 ||
-			ft_strcmp(cmd->argc[0], "..") == 0))
+	if (cmd->argc[0] && (ft_strcmp(cmd->argc[0], ".") == 0
+			|| ft_strcmp(cmd->argc[0], "..") == 0))
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->argc[0], STDERR_FILENO);
@@ -105,13 +108,13 @@ int	exec_single_command(t_command *cmd, t_env **env_list)
 	}
 	if (is_builtin(cmd))
 	{
-		int ret = handle_single_builtin(cmd, env_list);
+		ret = handle_single_builtin(cmd, env_list);
 		set_exit_status(ret);
 		return (ret);
 	}
 	else
 	{
-		int ret = handle_single_external(cmd, env_list);
+		ret = handle_single_external(cmd, env_list);
 		set_exit_status(ret);
 		return (ret);
 	}

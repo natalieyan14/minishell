@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:05:30 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/13 15:25:08 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/13 15:33:27 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	write_heredoc_line(int pipe_fd, char *processed_line)
 }
 
 void	process_heredoc_line(int pipe_fd, char *str, int should_expand,
-	t_env *env_list)
+		t_env *env_list)
 {
 	char	*processed_line;
 
@@ -49,8 +49,8 @@ void	handle_eof_warning(char *limiter)
 
 static int	read_line_from_stdin(char **out)
 {
-	char    c;
-	ssize_t r;
+	char	c;
+	ssize_t	r;
 
 	*out = ft_strdup("");
 	if (!*out)
@@ -71,10 +71,10 @@ static int	read_line_from_stdin(char **out)
 }
 
 int	read_and_process_line(int pipe_fd, char *limiter, int should_expand,
-	t_env *env_list)
+		t_env *env_list)
 {
-	char    *str;
-	char    *linebuf;
+	char	*str;
+	char	*linebuf;
 
 	if (isatty(STDIN_FILENO))
 	{
@@ -93,7 +93,6 @@ int	read_and_process_line(int pipe_fd, char *limiter, int should_expand,
 		free(str);
 		return (0);
 	}
-
 	if (read_line_from_stdin(&linebuf) < 0)
 	{
 		handle_eof_warning(limiter);
@@ -110,7 +109,7 @@ int	read_and_process_line(int pipe_fd, char *limiter, int should_expand,
 }
 
 void	run_heredoc(int pipe_fd, char *limiter, int should_expand,
-	t_env *env_list)
+		t_env *env_list)
 {
 	while (1)
 	{
