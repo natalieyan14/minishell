@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 21:10:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/11 02:15:51 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/13 16:47:48 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,38 @@ t_env	*create_new_env(char *key, char *val)
 	}
 	new->next = NULL;
 	return (new);
+}
+
+int	handle_too_many_args(t_command *cmd)
+{
+	if (cmd && cmd->argc && cmd->argc[1] && cmd->argc[2])
+	{
+		ft_putstr_fd("cd: too many arguments\n", STDERR_FILENO);
+		set_exit_status(1);
+		return (1);
+	}
+	return (0);
+}
+
+long	ft_atol(const char *str)
+{
+	long	result;
+	int		sign;
+	int		i;
+
+	result = 0;
+	sign = 1;
+	i = 0;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (str[i] && ft_isdigit(str[i]))
+	{
+		result = result * 10 + (str[i] - '0');
+		i++;
+	}
+	return (result * sign);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bulitin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:20 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/13 15:25:08 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/13 16:51:29 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,17 +67,23 @@ static void	handle_cd_error(char *path)
 	set_exit_status(1);
 }
 
-/* merged into perform_chdir_and_update to reduce function count */
-
-static int	handle_too_many_args(t_command *cmd)
+static void	perform_chdir_and_update(t_env *env, char *path, char *oldpwd,
+		char cwd[PATH_MAX])
 {
-	if (cmd && cmd->argc && cmd->argc[1] && cmd->argc[2])
+	char	new_cwd[PATH_MAX];
+
+	if (!getcwd(cwd, PATH_MAX))
+		cwd[0] = '\0';
+	if (chdir(path) != 0)
+		handle_cd_error(path);
+	else
 	{
-		ft_putstr_fd("cd: too many arguments\n", STDERR_FILENO);
-		set_exit_status(1);
-		return (1);
+		if (getcwd(new_cwd, sizeof(new_cwd)))
+			update_pwd_vars(env, cwd, new_cwd);
+		set_exit_status(0);
 	}
-	return (0);
+	if (oldpwd)
+		free(oldpwd);
 }
 
 void	ft_cd(t_command *cmd, t_env *env)
@@ -101,24 +107,5 @@ void	ft_cd(t_command *cmd, t_env *env)
 		set_exit_status(1);
 		return ;
 	}
-    perform_chdir_and_update(env, path, oldpwd, cwd);
-}
-
-static void	perform_chdir_and_update(t_env *env, char *path,
-		char *oldpwd, char cwd[PATH_MAX])
-{
-	char	new_cwd[PATH_MAX];
-
-	if (!getcwd(cwd, sizeof(cwd)))
-		cwd[0] = '\0';
-	if (chdir(path) != 0)
-		handle_cd_error(path);
-	else
-	{
-		if (getcwd(new_cwd, sizeof(new_cwd)))
-			update_pwd_vars(env, cwd, new_cwd);
-		set_exit_status(0);
-	}
-	if (oldpwd)
-		free(oldpwd);
+	perform_chdir_and_update(env, path, oldpwd, cwd);
 }

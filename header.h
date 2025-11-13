@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 21:24:38 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/13 16:12:50 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/13 16:48:23 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,6 @@ void						add_env_node(t_env **env_list, char *env_line);
 void						free_env_list(t_env *env_list);
 void						free_string_array(char **array);
 t_env						*init_env(char **envp);
-
 t_toktype					find_type(char *str, t_token *tokens, int i);
 t_token						*tokenisation(char *input, int *out_count);
 int							if_invalid_input(t_token *t, int count);
@@ -146,7 +145,6 @@ char						**ft_split_input(char *line);
 void						free_tokens(t_token *tokens, int count);
 void						expand_dollar_vars(t_token *tokens, int count,
 								t_env *env_list);
-
 int							is_special_char(char c);
 void						append_char(char **buf, char c);
 void						add_token_with_quotes(t_token **tokens, int *count,
@@ -154,7 +152,6 @@ void						add_token_with_quotes(t_token **tokens, int *count,
 void						add_token(t_token **tokens, int *count, char *str);
 void						init_tokenizer(t_tokenizer *tok);
 void						flush_buffer(t_tokenizer *tok);
-
 void						handle_special_chars(t_tokenizer *tok, char *input);
 void						handle_quotes(t_tokenizer *tok, char c);
 
@@ -167,7 +164,7 @@ char						*ft_strjoin_heredoc(char *s1, char *s2);
 char						*get_variable_value(char *var_name,
 								t_env *env_list);
 int							check_limiter(char *str, char *limiter);
-
+int							handle_too_many_args(t_command *cmd);
 int							setup_redirections(t_command *cmd);
 int							validate_redir(t_input_redir *input_list);
 int							setup_output_redirect(t_redir *redir_list);
@@ -178,7 +175,6 @@ int							process_single_redir(t_ordered_redir *redir);
 int							validate_setup_helper(t_ordered_redir *redirs);
 int							setup_helper(t_ordered_redir *redirs);
 void						cleanup_fds(int *fds, int count);
-
 void						exec_cmd(t_command *cmd, char **envp);
 t_redir						*add_output_redir(t_redir **head, char *filename,
 								int append);
@@ -200,7 +196,6 @@ int							count_argc(t_token *tokens, int start, int end);
 void						init_command(t_command *cmd);
 int							fill_command(t_command *cmd, t_token *tokens,
 								int start, int end);
-
 t_command					*parse_tokens(t_token *tokens, int count);
 void						free_cmd_list(t_command *cmd_list);
 void						exec_cmd_list(t_command *cmd_list, char **env);
@@ -323,5 +318,6 @@ int							handle_parent_process(pid_t pid, int pipe_fd[2]);
 int							handle_fork_error(int pipe_fd[2]);
 int							handle_heredoc(char *limiter, int should_expand,
 								t_env *env_list);
+long						ft_atol(const char *str);
 
 #endif
