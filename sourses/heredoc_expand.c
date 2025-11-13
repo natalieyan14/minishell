@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 21:19:54 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/13 13:33:45 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/13 16:10:09 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,43 @@ char	*expand_heredoc_line(char *line, t_env *env_list)
 			i++;
 	}
 	return (new_line);
+}
+
+static int	handle_stdin_heredoc(int pipe_fd, char *limiter, int should_expand,
+		t_env *env_list)
+{
+	char	*linebuf;
+
+	if (read_line_from_stdin(&linebuf) < 0)
+	{
+		handle_eof_warning(limiter);
+		return (1);
+	}
+	if (ft_strcmp(linebuf, limiter) == 0)
+	{
+		free(linebuf);
+		return (1);
+	}
+	process_heredoc_line(pipe_fd, linebuf, should_expand, env_list);
+	free(linebuf);
+	return (0);
+}
+
+int	read_and_process_line(int pipe_fd, char *limiter, int should_expand,
+		t_env *env_list)
+{
+	if (isatty(STDIN_FILENO))
+		return (handle_interactive_heredoc(pipe_fd, limiter, should_expand,
+				env_list));
+	return (handle_stdin_heredoc(pipe_fd, limiter, should_expand, env_list));
+}
+
+void	run_heredoc(int pipe_fd, char *limiter, int should_expand,
+		t_env *env_list)
+{
+	while (1)
+	{
+		if (read_and_process_line(pipe_fd, limiter, should_expand, env_list))
+			break ;
+	}
 }

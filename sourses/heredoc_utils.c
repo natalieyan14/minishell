@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 13:05:30 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/13 15:42:50 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/13 16:12:02 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	handle_eof_warning(char *limiter)
 	ft_putstr_fd("')\n", STDERR_FILENO);
 }
 
-static int	read_line_from_stdin(char **out)
+int	read_line_from_stdin(char **out)
 {
 	char	c;
 	ssize_t	r;
@@ -64,8 +64,8 @@ static int	read_line_from_stdin(char **out)
 	return (0);
 }
 
-static int	handle_interactive_heredoc(int pipe_fd, char *limiter,
-		int should_expand, t_env *env_list)
+int	handle_interactive_heredoc(int pipe_fd, char *limiter, int should_expand,
+		t_env *env_list)
 {
 	char	*str;
 
@@ -83,44 +83,4 @@ static int	handle_interactive_heredoc(int pipe_fd, char *limiter,
 	process_heredoc_line(pipe_fd, str, should_expand, env_list);
 	free(str);
 	return (0);
-}
-
-static int	handle_stdin_heredoc(int pipe_fd, char *limiter,
-		int should_expand, t_env *env_list)
-{
-	char	*linebuf;
-
-	if (read_line_from_stdin(&linebuf) < 0)
-	{
-		handle_eof_warning(limiter);
-		return (1);
-	}
-	if (ft_strcmp(linebuf, limiter) == 0)
-	{
-		free(linebuf);
-		return (1);
-	}
-	process_heredoc_line(pipe_fd, linebuf, should_expand, env_list);
-	free(linebuf);
-	return (0);
-}
-
-int	read_and_process_line(int pipe_fd, char *limiter, int should_expand,
-		t_env *env_list)
-{
-	if (isatty(STDIN_FILENO))
-		return (handle_interactive_heredoc(pipe_fd, limiter,
-			should_expand, env_list));
-	return (handle_stdin_heredoc(pipe_fd, limiter,
-		should_expand, env_list));
-}
-
-void	run_heredoc(int pipe_fd, char *limiter, int should_expand,
-		t_env *env_list)
-{
-	while (1)
-	{
-		if (read_and_process_line(pipe_fd, limiter, should_expand, env_list))
-			break ;
-	}
 }

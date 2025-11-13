@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 21:24:38 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/13 13:39:24 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/13 16:12:50 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ typedef struct s_redir
 	char					*filename;
 	int						append;
 	int						type;
-	// int						fd;
 	int						should_expand;
 	struct s_redir			*next;
 }							t_redir;
@@ -302,13 +301,13 @@ int							exec_builtin_with_fork(t_command *cmd,
 void						update_external_underscore(t_command *cmd,
 								t_env **env_list);
 int							handle_child_status(int status);
-
-// heredoc_expand.c
 int							process_dollar_variable(char **new_line, int i,
 								t_env *env_list);
 char						*expand_heredoc_line(char *line, t_env *env_list);
-
-// heredoc_write.c
+int							handle_interactive_heredoc(int pipe_fd,
+								char *limiter, int should_expand,
+								t_env *env_list);
+int							read_line_from_stdin(char **out);
 void						write_heredoc_line(int pipe_fd,
 								char *processed_line);
 void						process_heredoc_line(int pipe_fd, char *str,
@@ -318,8 +317,6 @@ int							read_and_process_line(int pipe_fd, char *limiter,
 								int should_expand, t_env *env_list);
 void						run_heredoc(int pipe_fd, char *limiter,
 								int should_expand, t_env *env_list);
-
-// heredoc.c
 void						heredoc_child(int pipe_fd[2], char *limiter,
 								int should_expand, t_env *env_list);
 int							handle_parent_process(pid_t pid, int pipe_fd[2]);
