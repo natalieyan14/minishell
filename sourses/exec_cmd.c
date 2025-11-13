@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:33:09 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/09 17:19:58 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/12 21:07:11 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	exec_command(char **cmd, char **envp)
 		perror("fork failed");
 	else if (pid == 0)
 	{
+		setup_child_signals();
 		executable = find_executable_in_envp(cmd[0], envp);
 		if (!executable)
 		{

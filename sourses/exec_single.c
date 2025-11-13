@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:31:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/11 02:19:29 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 14:43:49 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,57 @@ static int	handle_single_external(t_command *cmd, t_env **env_list)
 	return (handle_child_status(status));
 }
 
+static int	handle_output_files(t_redir *output_list)
+{
+	t_redir	*curr;
+	int		fd;
+	int		flags;
+
+	curr = output_list;
+	while (curr)
+	{
+		flags = O_CREAT | O_WRONLY;
+		if (curr->append)
+			flags |= O_APPEND;
+		else
+			flags |= O_TRUNC;
+		fd = open(curr->filename, flags, 0644);
+		if (fd < 0)
+		{
+			perror(curr->filename);
+			set_exit_status(1);
+			return (1);
+		}
+		close(fd);
+		curr = curr->next;
+	}
+	return (0);
+}
+
+int	handle_empty_command(t_command *cmd)
+{
+	if (cmd->ordered_redirs)
+	{
+		if (validate_setup_helper(cmd->ordered_redirs) < 0)
+			return (1);
+		return (0);
+	}
+	if (cmd->input_list)
+	{
+		if (validate_redir(cmd->input_list) < 0)
+			return (1);
+	}
+	if (cmd->output_list)
+		return (handle_output_files(cmd->output_list));
+	return (0);
+}
+
 int	exec_single_command(t_command *cmd, t_env **env_list)
 {
 	if (!cmd)
 		return (0);
 	if (!cmd->argc || !cmd->argc[0] || ft_strlen(cmd->argc[0]) == 0)
-		return (0);
+		return (handle_empty_command(cmd));
 	if (is_builtin(cmd))
 		return (handle_single_builtin(cmd, env_list));
 	return (handle_single_external(cmd, env_list));

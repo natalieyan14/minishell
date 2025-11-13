@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 21:24:38 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/11 13:15:13 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/13 11:11:21 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-extern int					g_signal_received;
+extern int				g_signal_received;
 
 typedef enum e_toktype
 {
@@ -65,6 +65,9 @@ typedef struct s_redir
 {
 	char					*filename;
 	int						append;
+	int						type;
+	//int						fd;
+	int						should_expand;
 	struct s_redir			*next;
 }							t_redir;
 
@@ -235,6 +238,9 @@ void						ft_export(t_env **env, char **argc);
 void						ft_unset(t_env **env, char **argc);
 void						ft_env(t_env *env);
 void						ft_exit(t_command *cmd);
+
+void						ft_exit(t_command *cmd, t_env **env_list);
+
 
 void						setup_interactive_signals(void);
 void						setup_execution_signals(void);

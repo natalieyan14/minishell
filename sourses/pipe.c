@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:05:42 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/11 02:10:21 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/11 16:37:55 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	exec_child(t_command *cmd, t_pipe_ctx *ctx, int i)
 	setup_pipe_io(ctx->pipes, i, ctx->cmd_count, cmd);
 	close_all_pipes(ctx->pipes, ctx->cmd_count);
 	if (setup_ordered_redirections(cmd) < 0)
-		exit(1);
+		exit(0);
 	if (!cmd->argc || !cmd->argc[0] || ft_strlen(cmd->argc[0]) == 0)
 		exit(0);
 	if (is_builtin(cmd))

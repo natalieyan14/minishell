@@ -46,7 +46,7 @@ void	exec_builtin(t_command *cmd, t_env **env)
 	else if (!ft_strcmp(cmd->argc[0], "env"))
 		ft_env(*env);
 	else if (!ft_strcmp(cmd->argc[0], "exit"))
-		ft_exit(cmd);
+		ft_exit(cmd, env);
 }
 
 void	print_exported_vars(t_env *env)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 21:20:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/09 21:24:10 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/12 21:44:41 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

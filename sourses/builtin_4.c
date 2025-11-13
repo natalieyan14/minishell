@@ -6,7 +6,7 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 22:33:35 by armtoros          #+#    #+#             */
-/*   Updated: 2025/11/11 13:49:45 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/13 11:02:17 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,18 @@ static long	ft_atol(const char *str)
 	return (result * sign);
 }
 
-void	ft_exit_error(char *arg)
+void	ft_exit_error(char *arg, t_env **env_list)
 {
 	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+	clear_history();
+	if (env_list && *env_list)
+		free_env_list(*env_list);
 	exit(2);
 }
 
-void	ft_exit(t_command *cmd)
+void	ft_exit(t_command *cmd, t_env **env_list)
 {
 	long	status;
 	int		arg_count;
@@ -55,14 +58,22 @@ void	ft_exit(t_command *cmd)
 	if (isatty(STDIN_FILENO))
 		write(1, "exit\n", 5);
 	if (arg_count == 0)
+	{
+		clear_history();
+		if (env_list && *env_list)
+			free_env_list(*env_list);
 		exit(0);
+	}
 	if (arg_count >= 1)
 	{
 		if (!is_numeric(cmd->argc[1]))
-			ft_exit_error(cmd->argc[1]);
+			ft_exit_error(cmd->argc[1], env_list);
 		if (arg_count == 1)
 		{
 			status = ft_atol(cmd->argc[1]);
+			clear_history();
+			if (env_list && *env_list)
+				free_env_list(*env_list);
 			exit((unsigned char)status);
 		}
 	}
