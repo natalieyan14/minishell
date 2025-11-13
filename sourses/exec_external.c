@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_external.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:30:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/13 12:21:23 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/13 14:34:08 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,12 @@ void	exec_external(t_command *cmd, t_env **env_list)
 	if (!cmd || !cmd->argc || !cmd->argc[0])
 		exit(127);
 	envp = env_to_array(*env_list);
+	if (cmd->argc[0] && (ft_strcmp(cmd->argc[0], ".") == 0 
+	|| ft_strcmp(cmd->argc[0], "..") == 0))
+	{
+		handle_exec_not_found(envp, cmd->argc[0]);
+		exit(127);
+	}
 	executable = find_executable_in_path(cmd->argc[0], *env_list);
 	if (!executable)
 	{

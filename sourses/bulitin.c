@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bulitin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 02:04:20 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/11 13:02:48 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/13 15:25:08 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,12 @@ void	ft_cd(t_command *cmd, t_env *env)
 	char	*oldpwd;
 	char	cwd[PATH_MAX];
 
+	if (cmd && cmd->argc && cmd->argc[1] && cmd->argc[2])
+	{
+		ft_putstr_fd("cd: too many arguments\n", STDERR_FILENO);
+		set_exit_status(1);
+		return ;
+	}
 	oldpwd = NULL;
 	path = get_cd_path(cmd, env, &oldpwd);
 	if (!path)

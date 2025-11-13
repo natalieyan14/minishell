@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_single.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:31:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/11 14:43:49 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/13 14:37:14 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,25 @@ int	exec_single_command(t_command *cmd, t_env **env_list)
 		return (0);
 	if (!cmd->argc || !cmd->argc[0] || ft_strlen(cmd->argc[0]) == 0)
 		return (handle_empty_command(cmd));
+	if (cmd->argc[0] && (ft_strcmp(cmd->argc[0], ".") == 0 ||
+			ft_strcmp(cmd->argc[0], "..") == 0))
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(cmd->argc[0], STDERR_FILENO);
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		set_exit_status(127);
+		return (127);
+	}
 	if (is_builtin(cmd))
-		return (handle_single_builtin(cmd, env_list));
-	return (handle_single_external(cmd, env_list));
+	{
+		int ret = handle_single_builtin(cmd, env_list);
+		set_exit_status(ret);
+		return (ret);
+	}
+	else
+	{
+		int ret = handle_single_external(cmd, env_list);
+		set_exit_status(ret);
+		return (ret);
+	}
 }
