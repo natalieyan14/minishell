@@ -6,7 +6,7 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 16:57:12 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/13 16:57:15 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/14 16:17:51 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	*get_var_value(t_env *env_list, char *var_name)
 	val = get_env_value(env_list, var_name);
 	if (!val)
 		return (NULL);
-	return (ft_strdup(val));
+	return (val);
 }
 
 static void	replace_token_var(t_token *token, int dollar_pos, t_env *env_list)

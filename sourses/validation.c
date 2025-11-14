@@ -3,14 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   validation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:02:48 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/13 21:20:33 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/13 21:32:25 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
+
+static int	handle_syntax_error_newline(void)
+{
+	err_message("minishell: syntax error near `newline'", "", "");
+	set_exit_status(2);
+	return (-1);
+}
+
+static int	handle_syntax_error_pipe(void)
+{
+	err_message("minishell: syntax error near unexpected token `|'", "", "");
+	set_exit_status(2);
+	return (-1);
+}
+
+static int	handle_syntax_error_unexpected(void)
+{
+	err_message("minishell: syntax error near unexpected token", "", "");
+	set_exit_status(2);
+	return (-1);
+}
 
 static int	check_next(t_token *t, int i)
 {
@@ -48,25 +69,4 @@ int	if_invalid_input(t_token *t, int count)
 		i++;
 	}
 	return (1);
-}
-
-static int	handle_syntax_error_newline(void)
-{
-	err_message("minishell: syntax error near `newline'", "", "");
-	set_exit_status(2);
-	return (-1);
-}
-
-static int	handle_syntax_error_pipe(void)
-{
-	err_message("minishell: syntax error near unexpected token `|'", "", "");
-	set_exit_status(2);
-	return (-1);
-}
-
-static int	handle_syntax_error_unexpected(void)
-{
-	err_message("minishell: syntax error near unexpected token", "", "");
-	set_exit_status(2);
-	return (-1);
 }
