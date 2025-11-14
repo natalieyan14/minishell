@@ -6,7 +6,7 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:02:15 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/13 17:02:17 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/14 20:16:14 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ static void	process_character(t_tokenizer *tok, char *input)
 		handle_special_chars(tok, input);
 	else
 	{
+		if ((tok->quote_type != 0) && tok->sq == 0 && tok->dq == 0)
+			tok->quote_type = 0;
 		append_char(&tok->buf, c);
 		tok->i++;
 	}

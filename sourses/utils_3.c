@@ -6,7 +6,7 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:02:36 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/13 17:02:39 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/14 17:57:21 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,10 @@ int	process_heredocs(t_token *tokens, int count, t_env *env_list)
 		{
 			fd = handle_heredoc(tokens[i + 1].str,
 					(tokens[i + 1].quote_type == 0), env_list);
+			if (fd < 0)
+				return (-2);
 			if (apply_heredoc_fd(fd, &original_stdin) < 0)
-				return (-1);
+				return (-2);
 			i += 2;
 		}
 		else

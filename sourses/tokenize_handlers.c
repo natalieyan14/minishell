@@ -6,7 +6,7 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:02:01 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/13 17:02:04 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/14 20:01:08 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	handle_quotes(t_tokenizer *tok, char c)
 {
 	if (c == '\'' && tok->dq == 0)
 	{
-		if (!tok->sq)
+		if (!tok->sq && ft_strlen(tok->buf) == 0)
 			tok->quote_type = 1;
 		tok->sq = !tok->sq;
 		tok->i++;
@@ -60,7 +60,7 @@ void	handle_quotes(t_tokenizer *tok, char c)
 	}
 	if (c == '"' && tok->sq == 0)
 	{
-		if (!tok->dq)
+		if (!tok->dq && ft_strlen(tok->buf) == 0)
 			tok->quote_type = 2;
 		tok->dq = !tok->dq;
 		tok->i++;
