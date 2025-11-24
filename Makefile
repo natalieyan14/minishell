@@ -9,6 +9,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 
 SRC = \
     sourses/tokenize.c sourses/tokenize_utils.c sourses/tokenize_handlers.c \
+    sourses/tokenize_type.c \
     sourses/validation.c \
     sourses/env.c sourses/env_2.c \
     sourses/main.c sourses/main_utils1.c sourses/main_utils2.c sourses/main_utils3.c \
@@ -17,6 +18,7 @@ SRC = \
     sourses/utils.c sourses/utils_2.c \
     sourses/cmd_exec.c sourses/exec_cmd.c \
     sourses/exec_external.c sourses/exec_single.c \
+    sourses/exec_utils.c \
     sourses/pipe.c sourses/pipe_utils.c sourses/pipe_exec.c \
     sourses/redirect.c sourses/redirect3.c sourses/redirect4.c sourses/redirect5.c \
     sourses/redirect_helper.c \

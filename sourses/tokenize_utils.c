@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:02:08 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/22 23:04:28 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/24 18:09:47 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	append_char(char **buf, char c)
 }
 
 void	add_token_with_quotes(t_token **tokens, int *count, char *str,
-		int quote_type, int no_space)
+	t_tokenizer *tok)
 {
 	t_token	*tmp;
 
@@ -51,14 +51,14 @@ void	add_token_with_quotes(t_token **tokens, int *count, char *str,
 	if (!(*tokens)[*count].str)
 		exit(1);
 	(*tokens)[*count].type = find_type((*tokens)[*count].str, *tokens, *count);
-	(*tokens)[*count].quote_type = quote_type;
-	(*tokens)[*count].no_space = no_space;
+	(*tokens)[*count].quote_type = tok->quote_type;
+	(*tokens)[*count].no_space = tok->pending_no_space;
 	(*count)++;
 }
 
-void	add_token(t_token **tokens, int *count, char *str)
+void	add_token(t_token **tokens, int *count, char *str, t_tokenizer *tok)
 {
-	add_token_with_quotes(tokens, count, str, 0, 0);
+	add_token_with_quotes(tokens, count, str, tok);
 }
 
 void	init_tokenizer(t_tokenizer *tok)
