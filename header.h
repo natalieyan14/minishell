@@ -6,7 +6,7 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 21:26:17 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/24 15:12:13 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/24 15:42:54 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-extern int					g_signal_received;
+extern volatile sig_atomic_t 	g_signal_received;
 
 typedef enum e_toktype
 {
