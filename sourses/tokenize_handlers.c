@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_handlers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:02:01 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/24 18:15:55 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/24 18:22:33 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ void	handle_special_chars(t_tokenizer *tok, char *input)
 	c = input[tok->i];
 	flush_buffer(tok);
 	if ((c == '<' && input[tok->i + 1] == '<') || (c == '>' && input[tok->i
-				+ 1] == '>') || (c == '|'
-			&& input[tok->i + 1] == '|') || (c == '&'
+				+ 1] == '>') || (c == '|' && input[tok->i + 1] == '|') || (c == '&'
 			&& input[tok->i + 1] == '&'))
 		process_double_char(tok, input, c);
 	else
@@ -72,30 +71,4 @@ static void	handle_double_quote(t_tokenizer *tok)
 	}
 	tok->dq = !tok->dq;
 	tok->i++;
-}
-
-void	handle_quotes(t_tokenizer *tok, char c)
-{
-	if (c == '\'' && tok->dq == 0)
-	{
-		handle_single_quote(tok);
-		return ;
-	}
-	if (c == '"' && tok->sq == 0)
-	{
-		handle_double_quote(tok);
-		return ;
-	}
-}
-
-void	flush_buffer(t_tokenizer *tok)
-{
-	if (ft_strlen(tok->buf) > 0 || tok->quote_type != 0)
-	{
-		add_token_with_quotes(&tok->tokens, &tok->count, tok->buf, tok);
-		free(tok->buf);
-		tok->buf = ft_strdup("");
-		tok->quote_type = 0;
-		tok->pending_no_space = 0;
-	}
 }

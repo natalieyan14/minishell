@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:02:15 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/24 18:09:47 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/24 18:20:56 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,30 @@ t_token	*tokenisation(char *input, int *out_count)
 	free(tok.buf);
 	*out_count = tok.count;
 	return (tok.tokens);
+}
+
+void	handle_quotes(t_tokenizer *tok, char c)
+{
+	if (c == '\'' && tok->dq == 0)
+	{
+		handle_single_quote(tok);
+		return ;
+	}
+	if (c == '"' && tok->sq == 0)
+	{
+		handle_double_quote(tok);
+		return ;
+	}
+}
+
+void	flush_buffer(t_tokenizer *tok)
+{
+	if (ft_strlen(tok->buf) > 0 || tok->quote_type != 0)
+	{
+		add_token_with_quotes(&tok->tokens, &tok->count, tok->buf, tok);
+		free(tok->buf);
+		tok->buf = ft_strdup("");
+		tok->quote_type = 0;
+		tok->pending_no_space = 0;
+	}
 }

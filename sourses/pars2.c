@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:00:29 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/24 18:12:53 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/24 18:19:26 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ static int	handle_redir_token(t_command *cmd, t_token *token, int pos)
 static int	join_prev_if_no_space(t_command *cmd, t_token *tokens, int start,
 		int *j)
 {
-	char    *tmp;
+	char	*tmp;
 
-	if (start > 0 && tokens[start - 1].type == T_WORD &&
-		tokens[start - 1].no_space && *j > 0 && cmd->argc[*j - 1])
+	if (start > 0 && tokens[start - 1].type == T_WORD && tokens[start
+			- 1].no_space && *j > 0 && cmd->argc[*j - 1])
 	{
 		tmp = ft_strjoin(cmd->argc[*j - 1], tokens[start].str);
 		if (!tmp)
@@ -54,8 +54,8 @@ static int	join_prev_if_no_space(t_command *cmd, t_token *tokens, int start,
 
 int	fill_command(t_command *cmd, t_token *tokens, int start, int end)
 {
-	int		j;
-	int		ret;
+	int	j;
+	int	ret;
 
 	j = 0;
 	while (start < end)
@@ -87,16 +87,4 @@ void	init_command(t_command *cmd)
 	cmd->output_list = NULL;
 	cmd->ordered_redirs = NULL;
 	cmd->next = NULL;
-}
-
-int	handle_input_redir(t_command *cmd, t_token *token, int pos)
-{
-	if (!add_input_redir(&cmd->input_list, token->str))
-		return (-1);
-	if (!add_ordered_redir(&cmd->ordered_redirs, REDIR_INPUT, token->str, pos))
-		return (-1);
-	if (cmd->input)
-		free(cmd->input);
-	cmd->input = ft_strdup(token->str);
-	return (0);
 }

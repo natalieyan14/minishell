@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 21:26:17 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/24 18:10:43 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/24 18:21:23 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,11 +148,10 @@ void							free_tokens(t_token *tokens, int count);
 void							expand_dollar_vars(t_token *tokens, int count,
 									t_env *env_list);
 int								is_special_char(char c);
-void	append_char(char **buf, char c);
-void	add_token_with_quotes(t_token **tokens,
-									int *count, char *str,
-									t_tokenizer *tok);
-void	add_token(t_token **tokens, int *count,
+void							append_char(char **buf, char c);
+void							add_token_with_quotes(t_token **tokens,
+									int *count, char *str, t_tokenizer *tok);
+void							add_token(t_token **tokens, int *count,
 									char *str, t_tokenizer *tok);
 void							init_tokenizer(t_tokenizer *tok);
 void							flush_buffer(t_tokenizer *tok);
