@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:02:15 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/14 20:16:14 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/24 17:46:42 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@ static void	handle_whitespace(t_tokenizer *tok)
 	if (ft_strlen(tok->buf) > 0 || tok->quote_type != 0)
 	{
 		add_token_with_quotes(&tok->tokens, &tok->count, tok->buf,
-			tok->quote_type);
+			tok->quote_type, tok->pending_no_space);
 		free(tok->buf);
 		tok->buf = ft_strdup("");
 		tok->quote_type = 0;
+		tok->pending_no_space = 0;
 	}
 	tok->i++;
 }
@@ -39,7 +40,10 @@ static void	process_character(t_tokenizer *tok, char *input)
 	else
 	{
 		if ((tok->quote_type != 0) && tok->sq == 0 && tok->dq == 0)
-			tok->quote_type = 0;
+		{
+			tok->pending_no_space = 1;
+			flush_buffer(tok);
+		}
 		append_char(&tok->buf, c);
 		tok->i++;
 	}
@@ -53,7 +57,11 @@ t_token	*tokenisation(char *input, int *out_count)
 	while (input[tok.i])
 		process_character(&tok, input);
 	if (ft_strlen(tok.buf) > 0 || tok.quote_type != 0)
-		add_token_with_quotes(&tok.tokens, &tok.count, tok.buf, tok.quote_type);
+	{
+		add_token_with_quotes(&tok.tokens, &tok.count, tok.buf, tok.quote_type,
+			tok.pending_no_space);
+		tok.pending_no_space = 0;
+	}
 	free(tok.buf);
 	*out_count = tok.count;
 	return (tok.tokens);

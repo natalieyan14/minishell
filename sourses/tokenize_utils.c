@@ -34,25 +34,31 @@ void	append_char(char **buf, char c)
 }
 
 void	add_token_with_quotes(t_token **tokens, int *count, char *str,
-		int quote_type)
+		int quote_type, int no_space)
 {
 	t_token	*tmp;
 
-	tmp = realloc(*tokens, sizeof(t_token) * (*count + 1));
+	tmp = malloc(sizeof(t_token) * (*count + 1));
 	if (!tmp)
 		exit(1);
+	if (*tokens)
+	{
+		ft_memcpy(tmp, *tokens, sizeof(t_token) * (*count));
+		free(*tokens);
+	}
 	*tokens = tmp;
 	(*tokens)[*count].str = ft_strdup(str);
 	if (!(*tokens)[*count].str)
 		exit(1);
 	(*tokens)[*count].type = find_type((*tokens)[*count].str, *tokens, *count);
 	(*tokens)[*count].quote_type = quote_type;
+	(*tokens)[*count].no_space = no_space;
 	(*count)++;
 }
 
 void	add_token(t_token **tokens, int *count, char *str)
 {
-	add_token_with_quotes(tokens, count, str, 0);
+	add_token_with_quotes(tokens, count, str, 0, 0);
 }
 
 void	init_tokenizer(t_tokenizer *tok)

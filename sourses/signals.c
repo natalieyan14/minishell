@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:01:49 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/24 15:42:54 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/24 17:46:27 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,33 +56,4 @@ void	setup_execution_signals(void)
 	g_signal_received = 0;
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
-}
-
-void	setup_child_signals(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-}
-
-int	check_signal_status(void)
-{
-	if (g_signal_received == SIGINT)
-		return (130);
-	if (g_signal_received == SIGQUIT)
-		return (131);
-	return (0);
-}
-
-void	handle_child_signal_exit(int status)
-{
-	if (WIFSIGNALED(status))
-	{
-		int sig = WTERMSIG(status);
-		if (sig == SIGQUIT)
-			write(STDOUT_FILENO, "Quit\n", 5);
-		set_exit_status(128 + sig);
-	}
-	else
-		set_exit_status(WEXITSTATUS(status));
-	g_signal_received = 0;
 }

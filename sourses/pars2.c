@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:00:29 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/13 17:00:32 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/24 17:49:54 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,26 @@ static int	handle_redir_token(t_command *cmd, t_token *token, int pos)
 
 int	fill_command(t_command *cmd, t_token *tokens, int start, int end)
 {
-	int	j;
-	int	ret;
+	int		j;
+	int		ret;
+	char	*tmp;
 
 	j = 0;
 	while (start < end)
 	{
 		ret = 0;
 		if (tokens[start].type == T_WORD)
-			ret = handle_word_token(cmd, &tokens[start], &j);
+		{
+			if (start > 0 && tokens[start - 1].type == T_WORD && tokens[start
+					- 1].no_space && j > 0 && cmd->argc[j - 1])
+			{
+				tmp = ft_strjoin(cmd->argc[j - 1], tokens[start].str);
+				free(cmd->argc[j - 1]);
+				cmd->argc[j - 1] = tmp;
+			}
+			else
+				ret = handle_word_token(cmd, &tokens[start], &j);
+		}
 		else if (tokens[start].type == T_IN_FILE
 			|| tokens[start].type == T_OUT_FILE
 			|| tokens[start].type == T_APPEND_FILE)

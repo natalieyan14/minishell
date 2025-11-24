@@ -54,6 +54,11 @@ void	handle_quotes(t_tokenizer *tok, char c)
 	{
 		if (!tok->sq && ft_strlen(tok->buf) == 0)
 			tok->quote_type = 1;
+		if (!tok->sq && ft_strlen(tok->buf) > 0)
+		{
+			tok->pending_no_space = 1;
+			flush_buffer(tok);
+		}
 		tok->sq = !tok->sq;
 		tok->i++;
 		return ;
@@ -62,6 +67,11 @@ void	handle_quotes(t_tokenizer *tok, char c)
 	{
 		if (!tok->dq && ft_strlen(tok->buf) == 0)
 			tok->quote_type = 2;
+		if (!tok->dq && ft_strlen(tok->buf) > 0)
+		{
+			tok->pending_no_space = 1;
+			flush_buffer(tok);
+		}
 		tok->dq = !tok->dq;
 		tok->i++;
 		return ;
@@ -73,9 +83,10 @@ void	flush_buffer(t_tokenizer *tok)
 	if (ft_strlen(tok->buf) > 0 || tok->quote_type != 0)
 	{
 		add_token_with_quotes(&tok->tokens, &tok->count, tok->buf,
-			tok->quote_type);
+			tok->quote_type, tok->pending_no_space);
 		free(tok->buf);
 		tok->buf = ft_strdup("");
 		tok->quote_type = 0;
+		tok->pending_no_space = 0;
 	}
 }
