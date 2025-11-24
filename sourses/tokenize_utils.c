@@ -6,16 +6,11 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:02:08 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/24 18:09:47 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/24 18:34:29 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
-
-int	is_special_char(char c)
-{
-	return (c == '|' || c == '<' || c == '>' || c == '&');
-}
 
 void	append_char(char **buf, char c)
 {
@@ -70,4 +65,5 @@ void	init_tokenizer(t_tokenizer *tok)
 	tok->sq = 0;
 	tok->dq = 0;
 	tok->quote_type = 0;
+	tok->pending_no_space = 0;
 }

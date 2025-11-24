@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:01:49 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/24 17:46:27 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/24 18:30:36 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-volatile sig_atomic_t	g_signal_received = 0;
+int	g_signal_received = 0;
 
 static void	sigint_interactive(int sig)
 {

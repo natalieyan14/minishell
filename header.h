@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 21:26:17 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/24 18:21:23 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/24 18:30:36 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-extern volatile sig_atomic_t	g_signal_received;
+extern int	g_signal_received;
 
 typedef enum e_toktype
 {
