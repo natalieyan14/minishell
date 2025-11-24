@@ -6,7 +6,7 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 21:26:17 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/13 21:26:19 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/24 15:12:13 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,6 +232,7 @@ void						ft_env(t_env *env);
 void						ft_exit(t_command *cmd, t_env **env_list);
 void						setup_interactive_signals(void);
 void						setup_execution_signals(void);
+void						setup_heredoc_signals(void);
 int							check_signal_status(void);
 void						set_exit_status(int status);
 int							get_current_exit_status(void);
@@ -318,6 +319,8 @@ int							handle_parent_process(pid_t pid, int pipe_fd[2]);
 int							handle_fork_error(int pipe_fd[2]);
 int							handle_heredoc(char *limiter, int should_expand,
 								t_env *env_list);
+int							collect_heredoc_fd(t_token *tokens, int i,
+								t_env *env_list, int *last_fd);
 long						ft_atol(const char *str);
 
 #endif

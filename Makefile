@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror 
 LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline
 
 LIBFT_DIR = Libft
@@ -13,7 +13,7 @@ SRC = sourses/tokenize.c sourses/tokenize_utils.c sourses/tokenize_handlers.c so
       sourses/utils.c sourses/utils_2.c sourses/utils_3.c sourses/cmd_exec.c sourses/exec_cmd.c sourses/bulitin.c sourses/bulitin_2.c \
 	  sourses/dollar.c sourses/dollar_utils.c sourses/heredoc.c sourses/heredoc_utils.c sourses/heredoc_expand.c sourses/redirect.c \
 	  sourses/redirect3.c sourses/redirect4.c sourses/redirect5.c sourses/pipe.c sourses/pipe_utils.c sourses/exec_external.c sourses/exec_single.c \
-	  sourses/pipe_exec.c sourses/signals.c sourses/signals2.c sourses/exit_status.c sourses/builtin_3.c sourses/builtin_4.c sourses/builtin_utils.c \
+	  sourses/pipe_exec.c sourses/signals.c sourses/exit_status.c sourses/builtin_3.c sourses/builtin_4.c sourses/builtin_utils.c \
 	  sourses/builtin_basic.c sourses/exec_utils.c sourses/unset_utils.c sourses/export_utils.c sourses/redirect_helper.c
 
 OBJ = $(SRC:.c=.o)

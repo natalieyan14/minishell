@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_3.c                                          :+:      :+:    :+:   */
+/*   tokenize_type.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/13 17:02:36 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/14 17:57:21 by nharutyu         ###   ########.fr       */
+/*   Created: 2025/11/22 23:20:00 by natalieyan        #+#    #+#             */
+/*   Updated: 2025/11/22 23:03:23 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,61 +54,4 @@ t_toktype	find_type(char *str, t_token *tokens, int i)
 	if (i > 0)
 		return (check_file_type(tokens, i));
 	return (T_WORD);
-}
-
-static int	apply_heredoc_fd(int fd, int *original_stdin)
-{
-	if (fd < 0)
-		return (-1);
-	if (*original_stdin < 0)
-	{
-		*original_stdin = dup(STDIN_FILENO);
-		if (*original_stdin < 0)
-		{
-			close(fd);
-			set_exit_status(1);
-			return (-1);
-		}
-	}
-	if (dup2(fd, STDIN_FILENO) < 0)
-	{
-		close(fd);
-		if (*original_stdin >= 0)
-		{
-			dup2(*original_stdin, STDIN_FILENO);
-			close(*original_stdin);
-		}
-		set_exit_status(1);
-		return (-1);
-	}
-	close(fd);
-	return (0);
-}
-
-int	process_heredocs(t_token *tokens, int count, t_env *env_list)
-{
-	int	i;
-	int	original_stdin;
-	int	fd;
-
-	i = 0;
-	original_stdin = -1;
-	while (i < count - 1)
-	{
-		if (tokens[i].type == T_HEREDOC && tokens[i + 1].type == T_LIMITER)
-		{
-			fd = handle_heredoc(tokens[i + 1].str,
-					(tokens[i + 1].quote_type == 0), env_list);
-			if (fd < 0)
-				return (-2);
-			if (apply_heredoc_fd(fd, &original_stdin) < 0)
-				return (-2);
-			i += 2;
-		}
-		else
-			i++;
-	}
-	if (original_stdin >= 0)
-		set_exit_status(0);
-	return (original_stdin);
 }
