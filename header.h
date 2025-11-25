@@ -6,7 +6,7 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 21:26:17 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/24 18:30:36 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/25 13:30:50 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,13 @@ typedef struct s_pipe_ctx
 	int							cmd_count;
 	t_env						**env_list;
 }								t_pipe_ctx;
+
+typedef struct s_process_data
+{
+	int	start;
+	int	end;
+	int	j;
+}	t_process_data;
 
 int								ft_env_lstsize(t_env *lst);
 char							*ft_strjoin_env(const char *s1, const char *s2,

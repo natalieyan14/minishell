@@ -6,7 +6,7 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 16:59:34 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/14 17:57:21 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/25 11:28:47 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ t_command	*prepare_commands(t_token *tokens, int token_count,
 					t_env *env_list, int *original_stdin)
 {
 	t_command	*cmd_list;
+
+    
 
 	expand_dollar_vars(tokens, token_count, env_list);
 	*original_stdin = process_heredocs(tokens, token_count, env_list);

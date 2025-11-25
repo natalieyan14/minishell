@@ -6,20 +6,20 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:02:01 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/24 18:38:43 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/25 13:28:20 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-static void	add_token_for_char(t_tokenizer *tok, char c, int is_double)
+static void	add_token_for_char(t_tokenizer *tok, char *input, char c,
+	int is_double)
 {
 	if (is_double)
 	{
 		char tmp_buf[3];
-
 		tmp_buf[0] = c;
-		tmp_buf[1] = tok->buf[tok->i + 1];
+	tmp_buf[1] = input[tok->i + 1];
 		tmp_buf[2] = '\0';
 		add_token(&tok->tokens, &tok->count, tmp_buf, tok);
 		tok->i += 2;
@@ -45,9 +45,9 @@ void	handle_special_chars(t_tokenizer *tok, char *input)
 			&& input[tok->i + 1] == '>') || (c == '|'
 			&& input[tok->i + 1] == '|')
 		|| (c == '&' && input[tok->i + 1] == '&'))
-		add_token_for_char(tok, c, 1);
+		add_token_for_char(tok, input, c, 1);
 	else
-		add_token_for_char(tok, c, 0);
+		add_token_for_char(tok, input, c, 0);
 }
 
 static void	handle_single_quote(t_tokenizer *tok)

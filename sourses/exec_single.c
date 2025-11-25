@@ -6,7 +6,7 @@
 /*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 16:57:52 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/13 17:55:59 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/25 12:22:58 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,20 +94,25 @@ int	exec_single_command(t_command *cmd, t_env **env_list)
 
 	if (!cmd)
 		return (0);
-	if (!cmd->argc || !cmd->argc[0] || ft_strlen(cmd->argc[0]) == 0)
+	if (!cmd->argc || !cmd->argc[0])
 		return (handle_empty_command(cmd));
 	if (cmd->argc[0] && (ft_strcmp(cmd->argc[0], ".") == 0
-			|| ft_strcmp(cmd->argc[0], "..") == 0))
+			|| ft_strcmp(cmd->argc[0], "..") == 0
+			|| ft_strcmp(cmd->argc[0], "") == 0))
 	{
-		ft_putstr_fd(cmd->argc[0], STDERR_FILENO);
-		ft_putstr_fd(":command not found\n", STDERR_FILENO);
-		set_exit_status(127);
-		return (127);
+		if (ft_strcmp(cmd->argc[0], "") == 0)
+			ft_putstr_fd("Command '' not found, but can be installed with:\n",
+				STDERR_FILENO);
+		else
+		{
+			ft_putstr_fd(cmd->argc[0], STDERR_FILENO);
+			ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		}
+		return (set_exit_status(127), 127);
 	}
 	if (is_builtin(cmd))
 		ret = handle_single_builtin(cmd, env_list);
 	else
 		ret = handle_single_external(cmd, env_list);
-	set_exit_status(ret);
-	return (ret);
+	return (set_exit_status(ret), ret);
 }
