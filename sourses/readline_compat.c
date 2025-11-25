@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline_compat.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/22 23:00:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2025/11/24 15:22:34 by nharutyu         ###   ########.fr       */
+/*   Created: 2025/11/22 23:00:00 by nharutyu          #+#    #+#             */
+/*   Updated: 2025/11/25 13:37:42 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

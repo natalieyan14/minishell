@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pars2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 13:30:22 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/25 13:30:24 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/25 13:45:42 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-static int	handle_word_token(t_command *cmd, t_token *token, int *idx)
+int	handle_word_token(t_command *cmd, t_token *token, int *idx)
 {
 	if (token->str && (ft_strlen(token->str) > 0 || token->quote_type != 0))
 	{
@@ -24,14 +24,12 @@ static int	handle_word_token(t_command *cmd, t_token *token, int *idx)
 	return (0);
 }
 
-static int	join_prev_if_no_space(t_command *cmd, t_token *tokens,
-		int pos, int *idx)
+int	join_prev_if_no_space(t_command *cmd, t_token *tokens, int pos, int *idx)
 {
 	char	*tmp;
 
-	if (pos > 0 && tokens[pos - 1].type == T_WORD
-		&& tokens[pos - 1].no_space && tokens[pos - 1].str
-		&& ft_strlen(tokens[pos - 1].str) > 0 && *idx > 0
+	if (pos > 0 && tokens[pos - 1].type == T_WORD && tokens[pos - 1].no_space
+		&& tokens[pos - 1].str && ft_strlen(tokens[pos - 1].str) > 0 && *idx > 0
 		&& cmd->argc[*idx - 1])
 	{
 		tmp = ft_strjoin(cmd->argc[*idx - 1], tokens[pos].str);
@@ -44,7 +42,7 @@ static int	join_prev_if_no_space(t_command *cmd, t_token *tokens,
 	return (0);
 }
 
-static char	*get_merged_start(t_token *tokens, int start)
+char	*get_merged_start(t_token *tokens, int start)
 {
 	if (tokens[start].str)
 		return (ft_strdup(tokens[start].str));
@@ -52,7 +50,7 @@ static char	*get_merged_start(t_token *tokens, int start)
 		return (ft_strdup(""));
 }
 
-static char	*merge_adjacent_words(t_token *tokens, int start, int end,
+char	*merge_adjacent_words(t_token *tokens, int start, int end,
 		int *next_out)
 {
 	int		i;
@@ -63,8 +61,8 @@ static char	*merge_adjacent_words(t_token *tokens, int start, int end,
 	merged = get_merged_start(tokens, start);
 	if (!merged)
 		return (NULL);
-	while (i < end && tokens[i].type == T_WORD
-		&& (tokens[i].no_space || tokens[i - 1].no_space))
+	while (i < end && tokens[i].type == T_WORD && (tokens[i].no_space
+			|| tokens[i - 1].no_space))
 	{
 		if (tokens[i].str)
 			tmp = ft_strjoin(merged, tokens[i].str);
@@ -80,8 +78,7 @@ static char	*merge_adjacent_words(t_token *tokens, int start, int end,
 	return (merged);
 }
 
-static int	handle_redirection(t_command *cmd, t_token *tokens,
-		int start, int end)
+int	handle_redirection(t_command *cmd, t_token *tokens, int start, int end)
 {
 	int		next;
 	int		ret;
@@ -107,69 +104,4 @@ static int	handle_redirection(t_command *cmd, t_token *tokens,
 	if (ret < 0)
 		return (-1);
 	return (next);
-}
-
-static int	process_redir_token(t_command *cmd, t_token *tokens,
-		int *start, int end)
-{
-	int	next;
-
-	next = handle_redirection(cmd, tokens, *start, end);
-	if (next < 0)
-		return (-1);
-	*start = next - 1;
-	return (0);
-}
-
-static int	process_word(t_command *cmd, t_token *tokens, int *start, int *j)
-{
-	int	ret;
-
-	ret = join_prev_if_no_space(cmd, tokens, *start, j);
-	if (ret == 0)
-		ret = handle_word_token(cmd, &tokens[*start], j);
-	return (ret);
-}
-
-static int	process_token(t_command *cmd, t_token *tokens, t_process_data *data)
-{
-	int	ret;
-
-	ret = 0;
-	if (tokens[data->start].type == T_WORD)
-		ret = process_word(cmd, tokens, &data->start, &data->j);
-	else if (tokens[data->start].type == T_IN_FILE
-		|| tokens[data->start].type == T_OUT_FILE
-		|| tokens[data->start].type == T_APPEND_FILE)
-		ret = process_redir_token(cmd, tokens, &data->start, data->end);
-	return (ret);
-}
-
-int	fill_command(t_command *cmd, t_token *tokens, int start, int end)
-{
-	t_process_data	data;
-	int				ret;
-
-	data.j = 0;
-	data.start = start;
-	data.end = end;
-	while (data.start < data.end)
-	{
-		ret = process_token(cmd, tokens, &data);
-		if (ret < 0)
-			return (-1);
-		data.start++;
-	}
-	cmd->argc[data.j] = NULL;
-	return (0);
-}
-
-void	init_command(t_command *cmd)
-{
-	cmd->argc = NULL;
-	cmd->input = NULL;
-	cmd->input_list = NULL;
-	cmd->output_list = NULL;
-	cmd->ordered_redirs = NULL;
-	cmd->next = NULL;
 }

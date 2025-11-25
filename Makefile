@@ -13,7 +13,7 @@ SRC = \
     sourses/validation.c \
     sourses/env.c sourses/env_2.c \
     sourses/main.c sourses/main_utils1.c sourses/main_utils2.c sourses/main_utils3.c \
-    sourses/pars.c sourses/pars2.c sourses/pars3.c \
+    sourses/pars.c sourses/pars2.c sourses/pars4.c sourses/pars3.c \
     sourses/pars_cmd.c sourses/pars_redir.c sourses/pars_utils.c \
     sourses/utils.c sourses/utils_2.c \
     sourses/cmd_exec.c sourses/exec_cmd.c \

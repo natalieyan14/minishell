@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 16:59:34 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/25 11:28:47 by nharutyu         ###   ########.fr       */
+/*   Updated: 2025/11/25 13:38:03 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,10 @@ t_token	*tokenize_and_validate(char *line, int *token_count)
 	return (tokens);
 }
 
-t_command	*prepare_commands(t_token *tokens, int token_count,
-					t_env *env_list, int *original_stdin)
+t_command	*prepare_commands(t_token *tokens, int token_count, t_env *env_list,
+		int *original_stdin)
 {
 	t_command	*cmd_list;
-
-    
 
 	expand_dollar_vars(tokens, token_count, env_list);
 	*original_stdin = process_heredocs(tokens, token_count, env_list);
@@ -63,7 +61,8 @@ int	handle_input(char *line, t_env **env_list)
 	tokens = tokenize_and_validate(line, &token_count);
 	if (!tokens)
 		return (0);
-	cmd_list = prepare_commands(tokens, token_count,*env_list, &original_stdin);
+	cmd_list = prepare_commands(tokens, token_count, *env_list,
+			&original_stdin);
 	if (!cmd_list)
 	{
 		free_tokens(tokens, token_count);
