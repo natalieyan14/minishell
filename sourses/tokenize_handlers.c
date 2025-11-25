@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_handlers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nharutyu <nharutyu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:02:01 by nharutyu          #+#    #+#             */
-/*   Updated: 2025/11/25 13:47:19 by natalieyan       ###   ########.fr       */
+/*   Updated: 2025/11/25 14:02:43 by nharutyu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static void	add_token_for_char(t_tokenizer *tok, char *input, char c,
 		int is_double)
 {
 	char	tmp_buf[3];
-	char	tmp_buf[2];
 
 	if (is_double)
 	{
@@ -41,9 +40,10 @@ void	handle_special_chars(t_tokenizer *tok, char *input)
 
 	c = input[tok->i];
 	flush_buffer(tok);
-	if ((c == '<' && input[tok->i + 1] == '<') || (c == '>' && input[tok->i
-			+ 1] == '>') || (c == '|' && input[tok->i + 1] == '|') || (c == '&'
-			&& input[tok->i + 1] == '&'))
+	if ((c == '<' && input[tok->i + 1] == '<')
+		|| (c == '>' && input[tok->i + 1] == '>')
+		|| (c == '|' && input[tok->i + 1] == '|')
+		|| (c == '&' && input[tok->i + 1] == '&'))
 		add_token_for_char(tok, input, c, 1);
 	else
 		add_token_for_char(tok, input, c, 0);
